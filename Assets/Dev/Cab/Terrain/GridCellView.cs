@@ -22,7 +22,7 @@ public class GridCellView : MonoBehaviour
     private void Refresh()
     {
 
-        if (Data.CurrentUnit != null)
+        /*if (Data.CurrentUnit != null)
         {
             //有单位时显示
             
@@ -36,7 +36,7 @@ public class GridCellView : MonoBehaviour
         {
             //无建筑物时显示逻辑
             
-        }
+        }*/
     }
     /// <summary>
     /// 鼠标点击逻辑
