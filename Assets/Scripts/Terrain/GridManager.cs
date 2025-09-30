@@ -96,7 +96,7 @@ public class GridManager : MonoBehaviour
     /// <summary>
     /// 世界坐标 → 格子
     /// </summary>
-    public GridCell GetCellAtWorld(Vector3 worldPos)
+    public GridCell WorldToCell(Vector3 worldPos)
     {
         int x = Mathf.FloorToInt((worldPos.x - origin.x) / cellSize);
         int y = Mathf.FloorToInt((worldPos.y - origin.y) / cellSize);
