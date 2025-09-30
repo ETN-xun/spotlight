@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// 挂载预制体上，用来处理格子数据以及点击逻辑
 /// </summary>
-public class GridCellView : MonoBehaviour
+public class GridCellController : MonoBehaviour
 {
     public GridCell Data { get; private set; }
 

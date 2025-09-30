@@ -14,7 +14,10 @@ public class GridManager : MonoBehaviour
 
     [Header("Prefabs")]
     public GameObject cellPrefab;             //可视化格子预制体
-    public Transform cellsParent;             //存放格子对象的父节点
+    public Transform cellsParent; //存放格子对象的父节点
+
+    [Header("Terrain Library")]
+    public TerrainDataSO[] terrainLibrary; //存放预制地形类型
 
     private GridCell[,] grid;           //网格地图
 
@@ -62,7 +65,7 @@ public class GridManager : MonoBehaviour
                     obj.name = $"Cell_{x}_{y}";
                     
                     //绑定格子数据
-                    var view = obj.GetComponent<GridCellView>();
+                    var view = obj.GetComponent<GridCellController>();
                     if (view != null) view.Init(cellData);
                 }
             }
@@ -101,5 +104,37 @@ public class GridManager : MonoBehaviour
         int x = Mathf.FloorToInt((worldPos.x - origin.x) / cellSize);
         int y = Mathf.FloorToInt((worldPos.y - origin.y) / cellSize);
         return GetCell(x, y);
+    }
+    /// <summary>
+    /// 网格地形生成
+    /// </summary>
+    public void PlaceTerrain(GridCell cell, TerrainDataSO terrainData)
+    {
+        if (cell == null || terrainData == null) return;
+
+        // 更新网格数据
+        cell.TerrainData = terrainData;
+
+        // 生成网格上的地形
+        if (terrainData.terrainPrefab != null)
+        {
+            GameObject obj = Instantiate(terrainData.terrainPrefab, 
+                CellToWorld(cell.Coordinate), 
+                Quaternion.identity, 
+                cellsParent);
+            //cell.ObjectOnCell = obj.GetComponent<DestructibleObject>();
+        }
+    }
+    /// <summary>
+    /// 地形随机放置
+    /// </summary>
+    public void GenerateRandomTerrain()
+    {
+        foreach (var c in grid)
+        {
+            int r = Random.Range(0, 3); //0=平原,1=山,2=森林
+            TerrainDataSO t = terrainLibrary[r];
+            PlaceTerrain(c, t);
+        }
     }
 }
