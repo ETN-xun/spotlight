@@ -10,6 +10,7 @@ public class GridCellController : MonoBehaviour
 
     public void Init(GridCell cell)
     {
+        cell.GridCellController = this;
         Data = cell;
         transform.position = GridManager.Instance.CellToWorld(cell.Coordinate);
         Refresh();

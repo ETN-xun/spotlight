@@ -112,17 +112,14 @@ public class GridManager : MonoBehaviour
     {
         if (cell == null || terrainData == null) return;
 
-        // 更新网格数据
         cell.TerrainData = terrainData;
 
-        // 生成网格上的地形
         if (terrainData.terrainPrefab != null)
         {
             GameObject obj = Instantiate(terrainData.terrainPrefab, 
                 CellToWorld(cell.Coordinate), 
                 Quaternion.identity, 
                 cellsParent);
-            //cell.ObjectOnCell = obj.GetComponent<DestructibleObject>();
         }
     }
     /// <summary>
@@ -136,5 +133,30 @@ public class GridManager : MonoBehaviour
             TerrainDataSO t = terrainLibrary[r];
             PlaceTerrain(c, t);
         }
+    }
+    
+    /// <summary>
+    /// 放置物体
+    /// </summary>
+    public bool PlaceUnit(Vector2Int coord, Unit unitPrefab)
+    {
+        var cell = GetCell(coord);
+        if (cell == null || cell.CurrentUnit != null) return false;
+        
+        Unit unit = Instantiate(unitPrefab, CellToWorld(coord), Quaternion.identity);
+        
+        unit.PlaceAt(cell);
+        return true;
+    }
+    /// <summary>
+    /// 移动物体
+    /// </summary>
+    public bool MoveUnit(Vector2Int targetCoord,Unit unit)
+    {
+        var targetCell = GetCell(targetCoord);
+        if (targetCell == null || targetCell.CurrentUnit != null) return false;
+
+        unit.MoveTo(targetCell);
+        return true;
     }
 }
