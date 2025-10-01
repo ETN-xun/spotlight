@@ -107,11 +107,6 @@ namespace View
                     return;
                 }
                 var canvas = viewGo.GetComponent<Canvas>() ?? viewGo.AddComponent<Canvas>();
-
-                if (viewGo.GetComponent<GraphicRaycaster>() is null)
-                {
-                    viewGo.AddComponent<GraphicRaycaster>();
-                }
                 canvas.overrideSorting = true;
                 canvas.sortingOrder = viewInfo.SortingOrder;
                 view = viewGo.GetComponent<IBaseView>();

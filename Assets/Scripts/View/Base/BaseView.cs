@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace View.Base
 {
-    public abstract class   BaseView : MonoBehaviour, IBaseView
+    public abstract class BaseView : MonoBehaviour, IBaseView
     {
         public int ViewId { get; set; }
         public bool IsInit { get; set; }
