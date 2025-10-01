@@ -17,6 +17,12 @@ public class GridCellController : MonoBehaviour
         
     }
 
+    public void Highlight(bool isHighlight)
+    {
+        // TEMP;
+        GetComponent<SpriteRenderer>().color = isHighlight ? Color.blue : Color.white;
+    }
+
     /// <summary>
     /// 刷新格子的外观
     /// </summary>
