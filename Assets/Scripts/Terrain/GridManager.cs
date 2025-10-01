@@ -87,6 +87,27 @@ public class GridManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 检查坐标是否在有效的网格范围内
+    /// </summary>
+    /// <param name="coord">要检查的坐标</param>
+    /// <returns>如果坐标在有效范围内返回true，否则返回false</returns>
+    public bool IsValidPosition(Vector2Int coord)
+    {
+        return coord.x >= 0 && coord.x < cols && coord.y >= 0 && coord.y < rows;
+    }
+
+    /// <summary>
+    /// 检查坐标是否在有效的网格范围内
+    /// </summary>
+    /// <param name="x">X坐标</param>
+    /// <param name="y">Y坐标</param>
+    /// <returns>如果坐标在有效范围内返回true，否则返回false</returns>
+    public bool IsValidPosition(int x, int y)
+    {
+        return x >= 0 && x < cols && y >= 0 && y < rows;
+    }
+
+    /// <summary>
     /// 格子坐标 → 世界坐标
     /// </summary>
     public Vector3 CellToWorld(Vector2Int coord)

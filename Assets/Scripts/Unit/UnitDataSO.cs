@@ -2,23 +2,67 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 单位数据ScriptableObject
+/// 配置单位的基础属性和技能
+/// </summary>
 [CreateAssetMenu(fileName = "UnitData", menuName = "Game/UnitData")]
 public class UnitDataSO : ScriptableObject
 {
-    [Header("基础")]
-    public string unitName;     //单位名称
-    public Sprite unitSprite; //美术表现
-    public bool isEnemy;      
+    [Header("基础信息")]
+    [Tooltip("单位唯一ID")]
+    public string unitID;
+    
+    [Tooltip("单位名称")]
+    public string unitName;
+    
+    [Tooltip("单位描述")]
+    [TextArea(2, 3)]
+    public string description;
+    
+    [Tooltip("单位图标/头像")]
+    public Sprite unitSprite;
+    
+    [Tooltip("单位预制体")]
+    public GameObject unitPrefab;
+    
+    [Tooltip("是否为敌方单位")]
+    public bool isEnemy;
 
-    [Header("属性")]
-    public int maxHP;
-    public int moveRange;     //移动范围
-    public int attackRange;   //攻击范围
-    public int energyCost;    //消耗能量
+    [Header("基础属性")]
+    [Tooltip("最大生命值")]
+    public int maxHP = 3;
+    
+    [Tooltip("移动范围")]
+    public int moveRange = 2;
+    
+    [Tooltip("基础攻击范围")]
+    public int attackRange = 1;
+    
+    [Tooltip("移动消耗的能量")]
+    public int movementEnergyCost = 1;
 
-    [Header("类型")] 
-    public bool canDestroy;
+    [Header("战斗属性")]
+    [Tooltip("基础攻击力")]
+    public int baseDamage = 1;
+    
+    [Tooltip("是否可以被摧毁")]
+    public bool canDestroy = true;
+    
+    [Tooltip("碰撞伤害")]
+    public int collisionDamage = 1;
 
-    /* [Header("技能")]
-     public SkillDataSO[] skills; //技能列表*/
+    [Header("技能")]
+    [Tooltip("单位拥有的技能列表")]
+    public SkillDataSO[] skills;
+    
+    [Header("AI设置(仅敌方单位)")]
+    [Tooltip("AI优先级权重")]
+    public float aiPriority = 1.0f;
+    
+    [Tooltip("攻击建筑的优先级")]
+    public float buildingTargetPriority = 2.0f;
+    
+    [Tooltip("攻击单位的优先级")]
+    public float unitTargetPriority = 1.0f;
 }
