@@ -47,4 +47,28 @@ public class Unit : MonoBehaviour
         if (CurrentCell != null) CurrentCell.CurrentUnit = null;
         Destroy(gameObject);
     }
+    
+    public List<GridCell> GetMoveRange()
+    {
+        List<GridCell> result = new List<GridCell>();
+        int range = data.moveRange;
+
+        for (int dx = -range; dx <= range; dx++)
+        {
+            for (int dy = -range; dy <= range; dy++)
+            {
+                int dist = Mathf.Abs(dx) + Mathf.Abs(dy); 
+                if (dist <= range)
+                {
+                    var target = GridManager.Instance.GetCell(CurrentCell.Coordinate + new Vector2Int(dx, dy));
+                    if (target != null && target.CurrentUnit == null)
+                    {
+                        result.Add(target);
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
 }
