@@ -9,32 +9,81 @@ namespace Action
     {
         private void OnEnable()
         {
-            MessageCenter.Subscribe(Defines.GridCellClickActionEvent, OnGridCellClicked);
-            MessageCenter.Subscribe(Defines.GridCellClickCanceledActionEvent, OnGridCellClickCanceled);
+            MessageCenter.Subscribe(Defines.SelectUnitActionEvent, OnSelectUnit);
+            MessageCenter.Subscribe(Defines.DeselectUnitActionEvent, OnDeselectUnit);
         }
         
         private void OnDisable()
         {
-            MessageCenter.Unsubscribe(Defines.GridCellClickActionEvent, OnGridCellClicked);
-            MessageCenter.Unsubscribe(Defines.GridCellClickCanceledActionEvent, OnGridCellClickCanceled);
+            MessageCenter.Unsubscribe(Defines.SelectUnitActionEvent, OnSelectUnit);
+            MessageCenter.Unsubscribe(Defines.DeselectUnitActionEvent, OnDeselectUnit);
         }
 
-        private void OnGridCellClicked(object[] obj)
+        private void Update()
         {
-            Debug.Log("Action : OnGridCellClicked");
-            if (obj[0] is not GridCell cell) return;
-            if (cell.CurrentUnit is null) return;
+            switch (GameManager.Instance.CurrentGameState)
+            {
+                case GameState.Deployment:
+                    HandleDeploymentState();
+                    break;
+                case GameState.EnemyTurn:
+                    HandleEnemyTurnState();
+                    break;
+                case GameState.PlayerTurn:
+                    HandlePlayerTurnState();
+                    break;
+                case GameState.GameOver:
+                    HandleGameOverState();
+                    break;
+                default: 
+                    break;
+            }
+        }
+        
+        private void HandleDeploymentState()
+        {
             
+        }
+        
+        private void HandleEnemyTurnState()
+        {
+            
+        }
+
+        private void HandlePlayerTurnState()
+        {
+            
+        }
+        
+        private void HandleGameOverState()
+        {
+            
+        }
+
+        private void OnSelectUnit(object[] obj)
+        {
+            if (obj[0] is not GridCell cell) return;
+            // if (cell.CurrentUnit is null) return;
             cell.GridCellController.Highlight(true);
+            var moveRangeCells = cell.CurrentUnit.GetMoveRange();
+            foreach (var gridCell in moveRangeCells)
+            {
+                gridCell.GridCellController.Highlight(true);
+            }
             ViewManager.Instance.OpenView(ViewType.UnitView, cell.CurrentUnit);
         }
         
-        private void OnGridCellClickCanceled(object[] obj)
+        private void OnDeselectUnit(object[] obj)
         {
             if (obj[0] is not GridCell cell) return;
             if (cell.CurrentUnit is null) return;
 
             cell.GridCellController.Highlight(false);
+            var moveRangeCells = cell.CurrentUnit.GetMoveRange();
+            foreach (var gridCell in moveRangeCells)
+            {
+                gridCell.GridCellController.Highlight(false);
+            }
             ViewManager.Instance.CloseView(ViewType.UnitView);
         }
     }

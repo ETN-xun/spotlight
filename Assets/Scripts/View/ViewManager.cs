@@ -100,7 +100,7 @@ namespace View
             
             if (view is null)
             {
-                var viewGo = Instantiate(Resources.Load<GameObject>($"View/{viewInfo.PrefabName}"), viewInfo.ParentTransform);
+                var viewGo = Instantiate(Resources.Load<GameObject>($"Prefab/View/{viewInfo.PrefabName}"), viewInfo.ParentTransform);
                 if (viewGo is null)
                 {
                     Debug.LogError($"Failed to load view prefab: {viewInfo.PrefabName}");

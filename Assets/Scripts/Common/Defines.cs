@@ -4,7 +4,7 @@ namespace Common
     {
         public const string GridCellHighlightEvent = "GridCellHighlightEvent";
         
-        public const string GridCellClickActionEvent = "GridCellClickActionEvent";
-        public const string GridCellClickCanceledActionEvent = "GridCellClickCanceledActionEvent";
+        public const string SelectUnitActionEvent = "GridCellClickActionEvent";
+        public const string DeselectUnitActionEvent = "GridCellClickCanceledActionEvent";
     }
 }
