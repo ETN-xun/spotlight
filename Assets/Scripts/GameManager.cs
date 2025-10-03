@@ -32,13 +32,25 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    #region 游戏状态
+        #region 游戏状态
     [SerializeField] private GameState _currentGameState = GameState.Deployment;
+    private GameStateBase _currentStateInstance;
+    
+    // 状态实例字典
+    private DeploymentState _deploymentState;
+    private EnemyTurnState _enemyTurnState;
+    private PlayerTurnState _playerTurnState;
+    private GameOverState _gameOverState;
     
     /// <summary>
     /// 当前游戏状态（只读）
     /// </summary>
     public GameState CurrentGameState => _currentGameState;
+    
+    /// <summary>
+    /// 当前状态实例（只读）
+    /// </summary>
+    public GameStateBase CurrentStateInstance => _currentStateInstance;
     #endregion
 
     #region 回合管理
@@ -110,6 +122,12 @@ public class GameManager : MonoBehaviour
         InitializeGame();
     }
 
+    
+    private void Update()
+    {
+        // 调用当前状态的Update方法
+        _currentStateInstance?.Update();
+    }
     private void Start()
     {
         // 开始游戏
@@ -121,6 +139,9 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 初始化游戏
     /// </summary>
+    /// <summary>
+    /// 初始化游戏
+    /// </summary>
     private void InitializeGame()
     {
         _currentGameState = GameState.Deployment;
@@ -128,20 +149,50 @@ public class GameManager : MonoBehaviour
         _isCoreDestroyed = false;
         _allEnemiesDefeated = false;
         
+        // 初始化状态实例
+        InitializeStates();
+        
         Debug.Log("GameManager: 游戏初始化完成");
     }
     
+    /// <summary>
+    /// 初始化所有状态实例
+    /// </summary>
+    private void InitializeStates()
+    {
+        _deploymentState = new DeploymentState(this);
+        _enemyTurnState = new EnemyTurnState(this);
+        _playerTurnState = new PlayerTurnState(this);
+        _gameOverState = new GameOverState(this);
+        
+        // 设置初始状态
+        _currentStateInstance = _deploymentState;
+        
+        Debug.Log("GameManager: 状态实例初始化完成");
+    }
+    
+    /// <summary>
+    /// 开始游戏
+    /// </summary>
     /// <summary>
     /// 开始游戏
     /// </summary>
     private void StartGame()
     {
         Debug.Log("GameManager: 游戏开始 - 进入部署阶段");
+        
+        // 调用初始状态的Enter方法
+        _currentStateInstance?.Enter();
+        
         OnTurnStarted?.Invoke(_currentTurn);
     }
     #endregion
 
     #region 状态管理
+    /// <summary>
+    /// 改变游戏状态
+    /// </summary>
+    /// <param name="newState">新的游戏状态</param>
     /// <summary>
     /// 改变游戏状态
     /// </summary>
@@ -163,15 +214,46 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        // 退出当前状态
+        _currentStateInstance?.Exit();
+        
+        // 更新状态
         _currentGameState = newState;
+        _currentStateInstance = GetStateInstance(newState);
         
         Debug.Log($"GameManager: 状态转换 {oldState} -> {newState}");
+        
+        // 进入新状态
+        _currentStateInstance?.Enter();
         
         // 处理状态转换逻辑
         HandleStateTransition(oldState, newState);
         
         // 触发状态改变事件
         OnGameStateChanged?.Invoke(oldState, newState);
+    }
+    
+    /// <summary>
+    /// 根据状态枚举获取对应的状态实例
+    /// </summary>
+    /// <param name="state">状态枚举</param>
+    /// <returns>状态实例</returns>
+    private GameStateBase GetStateInstance(GameState state)
+    {
+        switch (state)
+        {
+            case GameState.Deployment:
+                return _deploymentState;
+            case GameState.EnemyTurn:
+                return _enemyTurnState;
+            case GameState.PlayerTurn:
+                return _playerTurnState;
+            case GameState.GameOver:
+                return _gameOverState;
+            default:
+                Debug.LogError($"GameManager: 未知状态 {state}");
+                return null;
+        }
     }
     
     /// <summary>
@@ -357,9 +439,17 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 重新开始游戏
     /// </summary>
+    /// <summary>
+    /// 重新开始游戏
+    /// </summary>
     public void RestartGame()
     {
         Debug.Log("GameManager: 重新开始游戏");
+        
+        // 退出当前状态
+        _currentStateInstance?.Exit();
+        
+        // 重新初始化游戏
         InitializeGame();
         StartGame();
     }
