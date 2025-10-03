@@ -29,21 +29,7 @@ public class GridCellController : MonoBehaviour
     private void Refresh()
     {
 
-        /*if (Data.CurrentUnit != null)
-        {
-            //有单位时显示
-            
-        }
-        else if (Data.ObjectOnCell != null)
-        {   
-            //有建筑物时显示逻辑
-            
-        }
-        else
-        {
-            //无建筑物时显示逻辑
-            
-        }*/
+        
     }
     /// <summary>
     /// 鼠标点击逻辑
