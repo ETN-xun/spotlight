@@ -8,11 +8,13 @@ public class GridCell
     public TerrainDataSO TerrainData;        // 地形数据
     public Unit CurrentUnit;                 // 当前格子上的单位 (可空)
     public GridCellController GridCellController;
+    public DestructibleObject ObjectOnCell;
 
     public GridCell(Vector2Int coord)
     {
         Coordinate = coord;
         TerrainData = null;
         CurrentUnit = null;
+        ObjectOnCell = null;
     }
 }

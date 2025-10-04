@@ -141,6 +141,8 @@ public class GridManager : MonoBehaviour
                 CellToWorld(cell.Coordinate), 
                 Quaternion.identity, 
                 cellsParent);
+            cell.ObjectOnCell = obj.GetComponent<DestructibleObject>();
+            
         }
     }
     /// <summary>
