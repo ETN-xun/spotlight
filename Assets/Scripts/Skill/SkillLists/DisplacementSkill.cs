@@ -19,19 +19,7 @@ public class DisplacementSkill : Skill
             direction = -direction;
         }
         
-        Vector2Int newPos = targetCell.Coordinate + direction * data.displacementDistance;
-        if (gridManager.IsValidPosition(newPos))
-        {
-            GridCell newCell = gridManager.GetCell(newPos);
-
-            if (newCell.CurrentUnit == null) // 确保不会和其他单位重叠
-            {
-                targetUnit.MoveTo(newCell);
-            }
-            else
-            {
-            }
-        }
+        MovementSystem.Instance.MoveUnit(targetUnit, direction, data.displacementDistance);
     }
 }
 
