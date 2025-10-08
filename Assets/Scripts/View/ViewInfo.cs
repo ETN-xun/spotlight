@@ -13,8 +13,10 @@ namespace View
     public enum ViewType
     {
         SceneLoadingView,
-        UnitView,
+        UnitInfoView,
         TestView,
+        DeploymentView,
+        UnitDeploymentView,
     }
-    
+
 }

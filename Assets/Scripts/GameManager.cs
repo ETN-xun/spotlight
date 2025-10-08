@@ -1,4 +1,5 @@
 using System;
+using Common;
 using UnityEngine;
 
 /// <summary>
@@ -32,7 +33,7 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-        #region 游戏状态
+    #region 游戏状态
     [SerializeField] private GameState _currentGameState = GameState.Deployment;
     private GameStateBase _currentStateInstance;
     
@@ -183,7 +184,7 @@ public class GameManager : MonoBehaviour
         
         // 调用初始状态的Enter方法
         _currentStateInstance?.Enter();
-        
+        // Bug: 不应触发回合开始事件
         OnTurnStarted?.Invoke(_currentTurn);
     }
     #endregion
@@ -227,10 +228,10 @@ public class GameManager : MonoBehaviour
         _currentStateInstance?.Enter();
         
         // 处理状态转换逻辑
-        HandleStateTransition(oldState, newState);
+        // HandleStateTransition(oldState, newState);
         
         // 触发状态改变事件
-        OnGameStateChanged?.Invoke(oldState, newState);
+        // OnGameStateChanged?.Invoke(oldState, newState);
     }
     
     /// <summary>
@@ -316,7 +317,8 @@ public class GameManager : MonoBehaviour
     private void HandleEnemyTurnStart()
     {
         Debug.Log($"GameManager: 敌人回合开始 - 第{_currentTurn}回合");
-        // 这里将来会调用敌人AI系统
+        // 调用敌人AI系统
+        // AI.EnemyAIExecutor.EnsureInstance().RunEnemyTurn();
     }
     
     /// <summary>

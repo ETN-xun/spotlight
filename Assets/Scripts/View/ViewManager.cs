@@ -8,23 +8,12 @@ namespace View
 {
     public sealed class ViewManager : MonoBehaviour
     {
-        // 1. 初始化各种 View
-        // 2. 供外界拿到 View 的接口
         public static ViewManager Instance { get; private set; }
         
-        /// <summary>
-        /// 所有的 View 信息
-        /// </summary>
         private readonly Dictionary<int, ViewInfo> _views = new (); 
-        /// <summary>
-        /// 所有在场景中显示的 View
-        /// </summary>
-        private readonly Dictionary<int, IBaseView> _openViews = new ();
-        /// <summary>
-        /// 所有已加载的 View (包含打开和关闭的)
-        /// </summary>
-        private readonly Dictionary<int, IBaseView> _cacheViews = new ();
-        
+        // 支持多实例，key: viewType_instanceKey
+        private readonly Dictionary<string, IBaseView> _openViews = new ();
+        private readonly Dictionary<string, IBaseView> _cacheViews = new ();
 
         private void Awake()
         {
@@ -45,17 +34,29 @@ namespace View
                 ParentTransform = transform
             });
 
-            RegisterView(ViewType.UnitView, new ViewInfo()
+            RegisterView(ViewType.UnitInfoView, new ViewInfo()
             {
-                PrefabName = "UnitView",
+                PrefabName = "UnitInfoView",
                 SortingOrder = 1,
+                ParentTransform = transform
+            });
+            
+            RegisterView(ViewType.DeploymentView, new ViewInfo()
+            {
+                PrefabName = "DeploymentView",
+                SortingOrder = 2,
                 ParentTransform = transform
             });
         }
 
         private void Start()
         {
-            
+
+        }
+
+        private string GetViewKey(ViewType viewType, int instanceKey = 0)
+        {
+            return $"{(int)viewType}_{instanceKey}";
         }
 
         /// <summary>
@@ -63,7 +64,7 @@ namespace View
         /// </summary>
         /// <param name="viewType"></param>
         /// <param name="viewInfo"></param>
-        private void RegisterView(ViewType viewType, ViewInfo viewInfo)
+        public void RegisterView(ViewType viewType, ViewInfo viewInfo)
         {
             RegisterView((int)viewType, viewInfo);
         }
@@ -81,22 +82,25 @@ namespace View
         /// 移除 View
         /// </summary>
         /// <param name="viewType"></param>
-        public void RemoveView(ViewType viewType)
+        public void RemoveView(ViewType viewType, int instanceKey = 0)
         {
-            _views.Remove((int)viewType);
-            _openViews.Remove((int)viewType);
-            _cacheViews.Remove((int)viewType);
+            var key = GetViewKey(viewType, instanceKey);
+            _views.Remove((int) viewType);
+            _openViews.Remove(key);
+            _cacheViews.Remove(key);
         }
 
         /// <summary>
         /// 显示 View
         /// </summary>
         /// <param name="viewType"></param>
+        /// <param name="instanceKey"></param>
         /// <param name="args"></param>
-        public void OpenView(ViewType viewType, params object[] args)
+        public void OpenView(ViewType viewType, int instanceKey = 0, params object[] args)
         {
-            var view = GetView(viewType);
+            var key = GetViewKey(viewType, instanceKey);
             var viewInfo = _views[(int)viewType];
+            var view = GetView(viewType, instanceKey);
             
             if (view is null)
             {
@@ -117,11 +121,10 @@ namespace View
                     return;
                 }
                 view.ViewId = (int)viewType;
-                _cacheViews.Add((int)viewType, view);
-                
+                _cacheViews.Add(key, view);
             }
 
-            if (!_openViews.TryAdd((int)viewType, view))
+            if (!_openViews.TryAdd(key, view))
             {
                 return;
             }
@@ -137,26 +140,27 @@ namespace View
 
             view.Open(args);
         }
-        
+
         /// <summary>
         /// 关闭 View
         /// </summary>
         /// <param name="viewType"></param>
+        /// <param name="instanceKey"></param>
         /// <param name="args"></param>
-        public void CloseView(ViewType viewType, params object[] args)
+        public void CloseView(ViewType viewType, int instanceKey = 0, params object[] args)
         {
-            if (!IsOpen(viewType)) return;
+            var key = GetViewKey(viewType, instanceKey);
+            if (!IsOpen(viewType, instanceKey)) return;
             
-            var view = GetView(viewType);
+            var view = GetView(viewType, instanceKey);
             if (view is null)
             {
-                Debug.LogWarning($"View of type {viewType} is not open.");
+                Debug.LogWarning($"View of type {viewType} (instanceKey={instanceKey}) is not open.");
                 return;
             }
 
             view.Close(args);
-            
-            _openViews.Remove((int)viewType);
+            _openViews.Remove(key);
         }
         
         /// <summary>
@@ -170,48 +174,59 @@ namespace View
             }
             _openViews.Clear();
         }
-        
+
         /// <summary>
         /// 销毁 View
         /// </summary>
         /// <param name="viewType"></param>
-        public void DestroyView(ViewType viewType)
+        /// <param name="instanceKey"></param>
+        public void DestroyView(ViewType viewType, int instanceKey = 0)
         {
-            var view = GetView(viewType);
+            var key = GetViewKey(viewType, instanceKey);
+            var view = GetView(viewType, instanceKey);
             if (view is null)
             {
-                Debug.LogWarning($"View of type {viewType} does not exist.");
+                Debug.LogWarning($"View of type {viewType} (instanceKey={instanceKey}) does not exist.");
                 return;
             }
 
             view.Destroy();
-            _cacheViews.Remove((int)viewType);
-            UnregisterView(viewType);
+            _cacheViews.Remove(key);
         }
 
         /// <summary>
         /// View 是否打开
         /// </summary>
         /// <param name="viewType"></param>
+        /// <param name="instanceKey"></param>
         /// <returns></returns>
-        private bool IsOpen(ViewType viewType)
+        private bool IsOpen(ViewType viewType, int instanceKey = 0)
         {
-            return _openViews.ContainsKey((int)viewType);
+            var key = GetViewKey(viewType, instanceKey);
+            return _openViews.ContainsKey(key);
         }
 
         /// <summary>
         /// 得到 View
         /// </summary>
         /// <param name="viewType"></param>
+        /// <param name="instanceKey"></param>
         /// <returns></returns>
-        private IBaseView GetView(ViewType viewType)
+        public IBaseView GetView(ViewType viewType, int instanceKey = 0)
         {
-            if (_openViews.TryGetValue((int)viewType, out var view) || _cacheViews.TryGetValue((int)viewType, out view))
+            var key = GetViewKey(viewType, instanceKey);
+            if (_openViews.TryGetValue(key, out var view) || _cacheViews.TryGetValue(key, out view))
             {
                 return view;
             }
 
             return null;
+        }
+        
+        public T GetView<T>(ViewType viewType, int instanceKey = 0) where T : class, IBaseView
+        {
+            var view = GetView(viewType, instanceKey);
+            return view as T;
         }
 
         private void RegisterView(int viewType, ViewInfo viewInfo)
