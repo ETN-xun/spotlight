@@ -17,6 +17,7 @@ public class Unit : MonoBehaviour
     {
         if (data == null) return;
         currentHP = data.maxHP;
+        GetComponent<SpriteRenderer>().sprite = data.unitSprite;
     }
 
     public void PlaceAt(GridCell cell)

@@ -4,7 +4,7 @@ using View.Base;
 
 namespace View.GameViews
 {
-    public class UnitView : BaseView
+    public class UnitInfoView : BaseView
     {
         public override void Open(params object[] args)
         {

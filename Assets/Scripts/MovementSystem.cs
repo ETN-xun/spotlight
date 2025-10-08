@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MovementSystem : MonoBehaviour
@@ -103,6 +104,115 @@ public class MovementSystem : MonoBehaviour
             yield return new WaitForSeconds(0.05f);
         }
 
+        onComplete?.Invoke();
+    }
+
+    /// <summary>
+    /// 基于A*算法查找路径
+    /// </summary>
+    public List<GridCell> FindPath(GridCell start, GridCell end)
+    {
+        var openSet = new List<GridCell>();
+        var closedSet = new HashSet<GridCell>();
+        var cameFrom = new Dictionary<GridCell, GridCell>();
+        var gScore = new Dictionary<GridCell, int>();
+        var fScore = new Dictionary<GridCell, int>();
+        
+        openSet.Add(start);
+        gScore[start] = 0;
+        fScore[start] = Heuristic(start, end);
+
+        while (openSet.Count > 0)
+        {
+            // 取fScore最小的cell
+            var current = openSet[0];
+            foreach (var cell in openSet.Where(cell => fScore.ContainsKey(cell) && fScore[cell] < fScore[current]))
+            {
+                current = cell;
+            }
+            if (current == end)
+                return ReconstructPath(cameFrom, current);
+
+            openSet.Remove(current);
+            closedSet.Add(current);
+
+            foreach (var neighbor in GetNeighbors(current))
+            {
+                if (closedSet.Contains(neighbor) || !IsCellWalkable(neighbor))
+                    continue;
+                int tentativeG = gScore[current] + 1;
+                if (!openSet.Contains(neighbor))
+                    openSet.Add(neighbor);
+                else if (tentativeG >= (gScore.ContainsKey(neighbor) ? gScore[neighbor] : int.MaxValue))
+                    continue;
+                cameFrom[neighbor] = current;
+                gScore[neighbor] = tentativeG;
+                fScore[neighbor] = tentativeG + Heuristic(neighbor, end);
+            }
+        }
+        return null; // 无法到达
+    }
+
+    private int Heuristic(GridCell a, GridCell b)
+    {
+        // 曼哈顿距离
+        return Mathf.Abs(a.Coordinate.x - b.Coordinate.x) + Mathf.Abs(a.Coordinate.y - b.Coordinate.y);
+    }
+
+    private List<GridCell> ReconstructPath(Dictionary<GridCell, GridCell> cameFrom, GridCell current)
+    {
+        var path = new List<GridCell> { current };
+        while (cameFrom.ContainsKey(current))
+        {
+            current = cameFrom[current];
+            path.Insert(0, current);
+        }
+        return path;
+    }
+
+    private List<GridCell> GetNeighbors(GridCell cell)
+    {
+        var neighbors = new List<GridCell>();
+        Vector2Int[] dirs = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
+        foreach (var dir in dirs)
+        {
+            Vector2Int pos = cell.Coordinate + dir;
+            if (GridManager.Instance.IsValidPosition(pos))
+            {
+                var neighbor = GridManager.Instance.GetCell(pos);
+                if (neighbor != null)
+                    neighbors.Add(neighbor);
+            }
+        }
+        return neighbors;
+    }
+
+    private bool IsCellWalkable(GridCell cell)
+    {
+        // 可根据你的规则扩展
+        return cell.CurrentUnit == null && (cell.TerrainData == null || cell.TerrainData.terrainType != TerrainType.Abyss);
+    }
+
+    /// <summary>
+    /// 基于A*路径的单位移动
+    /// </summary>
+    public void MoveUnit(Unit unit, GridCell targetCell, System.Action onComplete = null)
+    {
+        if (unit == null || unit.CurrentCell == null || targetCell == null) return;
+        var path = FindPath(unit.CurrentCell, targetCell);
+        if (path == null || path.Count < 2) return;
+        StartCoroutine(MoveUnitByPathCoroutine(unit, path, onComplete));
+    }
+
+    private IEnumerator MoveUnitByPathCoroutine(Unit unit, List<GridCell> path, System.Action onComplete)
+    {
+        for (int i = 1; i < path.Count; i++)
+        {
+            var nextCell = path[i];
+            if (!IsCellWalkable(nextCell)) yield break;
+            unit.MoveTo(nextCell);      // TODO: 替换为 MoveUnit
+            yield return new WaitForSeconds(0.05f);
+        }
         onComplete?.Invoke();
     }
 }

@@ -6,5 +6,7 @@ namespace Common
         
         public const string SelectUnitActionEvent = "GridCellClickActionEvent";
         public const string DeselectUnitActionEvent = "GridCellClickCanceledActionEvent";
+        
+        public const string ClickDeployUnitEvent = "ClickDeployUnitEvent";
     }
 }

@@ -12,11 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5907fe0d4ae767b4291f44fedc3d1d08, type: 3}
   m_Name: TestUnitData
   m_EditorClassIdentifier: 
+  unitID: 1
   unitName: TestName
-  unitSprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  description: 
+  unitSprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224,
+    type: 3}
+  unitPrefab: {fileID: 5232480781568626486, guid: 502aad738f5874fb6b675fc73a9d4b47,
+    type: 3}
   isEnemy: 0
   maxHP: 100
   moveRange: 5
   attackRange: 0
-  energyCost: 0
+  movementEnergyCost: 1
+  baseDamage: 1
   canDestroy: 0
+  collisionDamage: 1
+  skills: []
+  aiPriority: 1
+  buildingTargetPriority: 2
+  unitTargetPriority: 1

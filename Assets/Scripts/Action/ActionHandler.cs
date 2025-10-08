@@ -1,12 +1,16 @@
-using System;
 using Common;
 using UnityEngine;
+using UnityEngine.UI;
 using View;
+using View.Base;
+using View.GameViews;
 
 namespace Action
 {
     public class ActionHandler : MonoBehaviour
     {
+        
+        
         private void OnEnable()
         {
             MessageCenter.Subscribe(Defines.SelectUnitActionEvent, OnSelectUnit);
@@ -21,42 +25,6 @@ namespace Action
 
         private void Update()
         {
-            switch (GameManager.Instance.CurrentGameState)
-            {
-                case GameState.Deployment:
-                    HandleDeploymentState();
-                    break;
-                case GameState.EnemyTurn:
-                    HandleEnemyTurnState();
-                    break;
-                case GameState.PlayerTurn:
-                    HandlePlayerTurnState();
-                    break;
-                case GameState.GameOver:
-                    HandleGameOverState();
-                    break;
-                default: 
-                    break;
-            }
-        }
-        
-        private void HandleDeploymentState()
-        {
-            
-        }
-        
-        private void HandleEnemyTurnState()
-        {
-            
-        }
-
-        private void HandlePlayerTurnState()
-        {
-            
-        }
-        
-        private void HandleGameOverState()
-        {
             
         }
 
@@ -70,7 +38,7 @@ namespace Action
             {
                 gridCell.GridCellController.Highlight(true);
             }
-            ViewManager.Instance.OpenView(ViewType.UnitView, cell.CurrentUnit);
+            ViewManager.Instance.OpenView(ViewType.UnitInfoView, 0, cell.CurrentUnit);
         }
         
         private void OnDeselectUnit(object[] obj)
@@ -84,8 +52,9 @@ namespace Action
             {
                 gridCell.GridCellController.Highlight(false);
             }
-            ViewManager.Instance.CloseView(ViewType.UnitView);
+            ViewManager.Instance.CloseView(ViewType.UnitInfoView);
         }
+        
+        
     }
-    
 }
