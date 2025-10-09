@@ -1,5 +1,6 @@
 using System.Collections;
 using Common;
+using Level;
 using UnityEngine;
 using View;
 using View.GameViews;
@@ -9,9 +10,10 @@ using View.GameViews;
 /// </summary>
 public class DeploymentState : GameStateBase
 {
-    private bool _isClickDeployUnit;
     private UnitDataSO _unitData;
-    
+    private bool _isClickDeployUnit;
+    private int _deployedUnitCount;
+
     public DeploymentState(GameManager gameManager) : base(gameManager)
     {
     }
@@ -34,10 +36,10 @@ public class DeploymentState : GameStateBase
                 var worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 var cell = GridManager.Instance.WorldToCell(worldPoint);
                 if (cell is null) return;
+                _deployedUnitCount++;
                 var unit = _unitData.unitPrefab.GetComponent<Unit>();
                 GridManager.Instance.PlaceUnit(cell.Coordinate, unit);
                 var view = ViewManager.Instance.GetView<UnitDeploymentView>(ViewType.UnitDeploymentView, int.Parse(_unitData.unitID));
-                // if (view is null) return;
                 view.DisableViewClick();
                 _isClickDeployUnit = false;
             }
@@ -46,11 +48,10 @@ public class DeploymentState : GameStateBase
                 _isClickDeployUnit = false;
             }
         }
-        
 
-        if (Input.GetKeyDown(KeyCode.Space))
+
+        if (_deployedUnitCount == LevelManager.Instance.GetLevelData().playerUnits.Count)
         {
-            Debug.Log("部署阶段结束，进入敌人回合");
             gameManager.ChangeGameState(GameState.EnemyTurn);
         }
     }
