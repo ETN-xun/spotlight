@@ -24,29 +24,8 @@ namespace View
             else
             {
                 Instance = this;
-                DontDestroyOnLoad(this.gameObject);
             }
             
-            RegisterView(ViewType.TestView, new ViewInfo()
-            {
-                PrefabName = "TestView",
-                SortingOrder = 0,
-                ParentTransform = transform
-            });
-
-            RegisterView(ViewType.UnitInfoView, new ViewInfo()
-            {
-                PrefabName = "UnitInfoView",
-                SortingOrder = 1,
-                ParentTransform = transform
-            });
-            
-            RegisterView(ViewType.DeploymentView, new ViewInfo()
-            {
-                PrefabName = "DeploymentView",
-                SortingOrder = 2,
-                ParentTransform = transform
-            });
         }
 
         private void Start()

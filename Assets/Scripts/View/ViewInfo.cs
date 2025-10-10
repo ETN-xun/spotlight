@@ -17,6 +17,7 @@ namespace View
         TestView,
         DeploymentView,
         UnitDeploymentView,
+        MainMenuView,
     }
 
 }

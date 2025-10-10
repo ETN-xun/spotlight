@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Level;
 
 /// <summary>
 /// 数据管理器
@@ -22,7 +23,7 @@ public class DataManager : MonoBehaviour
                 {
                     GameObject go = new GameObject("DataManager");
                     _instance = go.AddComponent<DataManager>();
-                    DontDestroyOnLoad(go);
+                    // DontDestroyOnLoad(go);
                 }
             }
             return _instance;
@@ -39,6 +40,9 @@ public class DataManager : MonoBehaviour
     
     [Tooltip("地形数据资源路径")]
     public string terrainDataPath = "Data/Terrains";
+    
+    [Tooltip("关卡数据资源路径")]
+    public string levelDataPath = "Data/Levels";
 
     [Header("数据集合")]
     [Tooltip("所有单位数据")]
@@ -49,11 +53,15 @@ public class DataManager : MonoBehaviour
     
     [Tooltip("所有地形数据")]
     public List<TerrainDataSO> allTerrainData = new List<TerrainDataSO>();
+    
+    [Tooltip("所有关卡数据")]
+    public List<LevelDataSO> allLevelData = new List<LevelDataSO>();
 
     // 数据字典，用于快速查找
     private Dictionary<string, UnitDataSO> unitDataDict = new Dictionary<string, UnitDataSO>();
     private Dictionary<string, SkillDataSO> skillDataDict = new Dictionary<string, SkillDataSO>();
     private Dictionary<string, TerrainDataSO> terrainDataDict = new Dictionary<string, TerrainDataSO>();
+    private Dictionary<string, LevelDataSO> levelDataDict = new Dictionary<string, LevelDataSO>();
 
     #region Unity生命周期
     private void Awake()
@@ -62,7 +70,7 @@ public class DataManager : MonoBehaviour
         if (_instance == null)
         {
             _instance = this;
-            DontDestroyOnLoad(gameObject);
+            // DontDestroyOnLoad(gameObject);
             InitializeData();
         }
         else if (_instance != this)
@@ -102,6 +110,10 @@ public class DataManager : MonoBehaviour
         TerrainDataSO[] terrainDataArray = Resources.LoadAll<TerrainDataSO>(terrainDataPath);
         allTerrainData = new List<TerrainDataSO>(terrainDataArray);
         Debug.Log($"加载了 {allTerrainData.Count} 个地形数据");
+        
+        // 加载关卡数据
+        LevelDataSO[] levelDataArray = Resources.LoadAll<LevelDataSO>(levelDataPath);
+        allLevelData = new List<LevelDataSO>(levelDataArray);
     }
 
     /// <summary>
@@ -159,6 +171,23 @@ public class DataManager : MonoBehaviour
                 }
             }
         }
+
+        // 构建关卡数据字典
+        levelDataDict.Clear();
+        foreach (var levelData in allLevelData)
+        {
+            if (!string.IsNullOrEmpty(levelData.levelId))
+            {
+                if (!levelDataDict.ContainsKey(levelData.levelId))
+                {
+                    levelDataDict.Add(levelData.levelId, levelData);
+                }
+                else
+                {
+                    Debug.LogWarning($"重复的关卡ID: {levelData.levelId}");
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -202,6 +231,14 @@ public class DataManager : MonoBehaviour
             if (string.IsNullOrEmpty(terrainData.terrainID))
             {
                 Debug.LogError($"地形数据缺少ID: {terrainData.name}");
+            }
+        }
+
+        foreach (var levelData in allLevelData)
+        {
+            if (string.IsNullOrEmpty(levelData.levelId))
+            {
+                Debug.LogError($"关卡数据缺少ID: {levelData.name}");
             }
         }
     }
@@ -309,6 +346,27 @@ public class DataManager : MonoBehaviour
         return allSkillData.Where(s => s.skillType == skillType).ToList();
     }
     #endregion
+
+    public LevelDataSO GetLevelData(string levelId)
+    {
+        if (string.IsNullOrEmpty(levelId))
+        {
+            Debug.LogWarning("尝试获取地形数据时传入了空的ID");
+            return null;
+        }
+
+        levelDataDict.TryGetValue(levelId, out LevelDataSO levelDataSo);
+        if (levelDataSo == null)
+        {
+            Debug.LogWarning($"未找到ID为 {levelId} 的地形数据");
+        }
+        return levelDataSo;
+    }
+    
+    // public LevelDataSO GetCurrentLevelData()
+    // {
+    //     
+    // }
 
     #region 数据重载
     /// <summary>
