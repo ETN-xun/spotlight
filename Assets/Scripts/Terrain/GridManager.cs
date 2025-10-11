@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class GridManager : MonoBehaviour
 {
@@ -13,13 +14,13 @@ public class GridManager : MonoBehaviour
     public Vector3 origin = Vector3.zero;     //网格起点(左下角)
 
     [Header("Prefabs")]
-    public GameObject cellPrefab;             //可视化格子预制体
-    public Transform cellsParent; //存放格子对象的父节点
+    public Tilemap terrainTilemap; //绘制地形
+    public Tilemap objectTilemap; //绘制建筑或障碍物
 
     [Header("Terrain Library")]
     public TerrainDataSO[] terrainLibrary; //存放预制地形类型
 
-    private GridCell[,] grid;           //网格地图
+    private Dictionary<Vector2Int, GridCell> gridDict = new Dictionary<Vector2Int, GridCell>();        //网格地图
 
     private void Awake()
     {
@@ -33,88 +34,115 @@ public class GridManager : MonoBehaviour
 
     private void Start()
     {
-        GenerateGrid();
+        //从 Tilemap 构建地图
+        if (terrainTilemap != null)
+            BuildGridFromTilemap();
+        else
+            GenerateGrid(); 
     }
+    /// <summary>
+    /// 生成地形
+    /// </summary>
+    private void BuildGridFromTilemap(Tilemap terrainTilemap)
+    {
+        gridDict.Clear();
 
+        foreach (var pos in terrainTilemap.cellBounds.allPositionsWithin)
+        {
+            Vector3Int tilePos = new Vector3Int(pos.x, pos.y, pos.z);
+            if (!terrainTilemap.HasTile(tilePos))
+                continue;
+
+            Vector2Int coord = new Vector2Int(pos.x, pos.y);
+            GridCell cell = new GridCell(coord);
+
+            // 绑定地形数据
+            TileBase terrainTile = terrainTilemap.GetTile(tilePos);
+            cell.TerrainData = GetTerrainDataFromTile(terrainTile);
+
+            // 绑定建筑数据
+            if (objectTilemap != null && objectTilemap.HasTile(tilePos))
+            {
+                TileBase objectTile = objectTilemap.GetTile(tilePos);
+                cell.ObjectOnCell = GetDestructibleObjectFromTile(objectTile);
+            }
+
+            gridDict[coord] = cell;
+        }
+
+        cols = terrainTilemap.size.x;
+        rows = terrainTilemap.size.y;
+    }
     /// <summary>
     /// 生成 8x8 网格
     /// </summary>
     public void GenerateGrid()
     {
-        grid = new GridCell[cols, rows];
-
-        if (cellsParent == null)
-        {
-            GameObject parent = new GameObject("Cells");
-            parent.transform.SetParent(transform);
-            cellsParent = parent.transform;
-        }
+        gridDict.Clear();
 
         for (int x = 0; x < cols; x++)
         {
             for (int y = 0; y < rows; y++)
             {
-                var coord = new Vector2Int(x, y);
-                var cellData = new GridCell(coord);
-                grid[x, y] = cellData;
-                
-                if (cellPrefab != null)
-                {
-                    Vector3 worldPos = CellToWorld(coord);
-                    GameObject obj = Instantiate(cellPrefab, worldPos, Quaternion.identity, cellsParent);
-                    obj.name = $"Cell_{x}_{y}";
-                    
-                    //绑定格子数据
-                    var view = obj.GetComponent<GridCellController>();
-                    if (view != null) view.Init(cellData);
-                }
+                Vector2Int coord = new Vector2Int(x, y);
+                GridCell cell = new GridCell(coord);
+                gridDict[coord] = cell;
             }
         }
     }
+    /// <summary>
+    /// 按照Tile名称查找TerrainDataSO
+    /// </summary>
+    /// <param name="tile"></param>
+    /// <returns></returns>
+    private TerrainDataSO GetTerrainDataFromTile(TileBase tile)
+    {
+        if (tile == null) return null;
+        string tileName = tile.name.ToLower();
 
+        foreach (var t in terrainLibrary)
+        {
+            if (tileName.Contains(t.terrainName.ToLower()))
+                return t;
+        }
+
+        return null; 
+    }
+    /// <summary>
+    /// 从Tile名称查找建筑物
+    /// </summary>
+    /// <param name="tile"></param>
+    /// <returns></returns>
+    private DestructibleObject GetDestructibleObjectFromTile(TileBase tile)
+    {
+        //暂定
+        return null;
+    }
     /// <summary>
     /// 按坐标获取格子
     /// </summary>
     public GridCell GetCell(Vector2Int coord)
     {
-        return GetCell(coord.x, coord.y);
-    }
-
-    private GridCell GetCell(int x, int y)
-    {
-        if (x < 0 || x >= cols || y < 0 || y >= rows) return null;
-        return grid[x, y];
+        gridDict.TryGetValue(coord, out var cell);
+        return cell;
     }
 
     /// <summary>
-    /// 检查坐标是否在有效的网格范围内
+    /// 检查位置是否合法
     /// </summary>
-    /// <param name="coord">要检查的坐标</param>
-    /// <returns>如果坐标在有效范围内返回true，否则返回false</returns>
-    public bool IsValidPosition(Vector2Int coord)
-    {
-        return coord.x >= 0 && coord.x < cols && coord.y >= 0 && coord.y < rows;
-    }
-
-    /// <summary>
-    /// 检查坐标是否在有效的网格范围内
-    /// </summary>
-    /// <param name="x">X坐标</param>
-    /// <param name="y">Y坐标</param>
-    /// <returns>如果坐标在有效范围内返回true，否则返回false</returns>
-    public bool IsValidPosition(int x, int y)
-    {
-        return x >= 0 && x < cols && y >= 0 && y < rows;
-    }
+    /// <param name="coord"></param>
+    /// <returns></returns>
+    public bool IsValidPosition(Vector2Int coord) => gridDict.ContainsKey(coord);
 
     /// <summary>
     /// 格子坐标 → 世界坐标
     /// </summary>
     public Vector3 CellToWorld(Vector2Int coord)
     {
-        float worldX = origin.x + coord.x * cellSize + cellSize * 0.5f;
-        float worldY = origin.y + coord.y * cellSize + cellSize * 0.5f;
-        return new Vector3(worldX, worldY, origin.z);
+        if (terrainTilemap != null)
+            return terrainTilemap.CellToWorld((Vector3Int)coord) + terrainTilemap.tileAnchor;
+
+        return default;
     }
 
     /// <summary>
@@ -122,40 +150,13 @@ public class GridManager : MonoBehaviour
     /// </summary>
     public GridCell WorldToCell(Vector3 worldPos)
     {
-        int x = Mathf.FloorToInt((worldPos.x - origin.x) / cellSize);
-        int y = Mathf.FloorToInt((worldPos.y - origin.y) / cellSize);
-        return GetCell(x, y);
-    }
-    /// <summary>
-    /// 网格地形生成
-    /// </summary>
-    public void PlaceTerrain(GridCell cell, TerrainDataSO terrainData)
-    {
-        if (cell == null || terrainData == null) return;
-
-        cell.TerrainData = terrainData;
-
-        if (terrainData.terrainPrefab != null)
+        if (terrainTilemap != null)
         {
-            GameObject obj = Instantiate(terrainData.terrainPrefab, 
-                CellToWorld(cell.Coordinate), 
-                Quaternion.identity, 
-                cellsParent);
-            cell.ObjectOnCell = obj.GetComponent<DestructibleObject>();
-            
+            Vector3Int cellPos = terrainTilemap.WorldToCell(worldPos);
+            return GetCell((Vector2Int)cellPos);
         }
-    }
-    /// <summary>
-    /// 地形随机放置
-    /// </summary>
-    public void GenerateRandomTerrain()
-    {
-        foreach (var c in grid)
-        {
-            int r = Random.Range(0, 3); //0=平原,1=山,2=森林
-            TerrainDataSO t = terrainLibrary[r];
-            PlaceTerrain(c, t);
-        }
+
+        return null;
     }
     
     /// <summary>
