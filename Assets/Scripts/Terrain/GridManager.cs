@@ -33,7 +33,7 @@ public class GridManager : MonoBehaviour
 
     private void Start()
     {
-        GenerateGrid();
+        // GenerateGrid();
     }
 
     /// <summary>
@@ -41,6 +41,14 @@ public class GridManager : MonoBehaviour
     /// </summary>
     public void GenerateGrid()
     {
+        if (cellsParent != null)
+        {
+            for (var i = cellsParent.childCount - 1; i >= 0; i--)
+            {
+                DestroyImmediate(cellsParent.GetChild(i).gameObject);
+            }
+        }
+        
         grid = new GridCell[cols, rows];
 
         if (cellsParent == null)

@@ -363,10 +363,6 @@ public class DataManager : MonoBehaviour
         return levelDataSo;
     }
     
-    // public LevelDataSO GetCurrentLevelData()
-    // {
-    //     
-    // }
 
     #region 数据重载
     /// <summary>

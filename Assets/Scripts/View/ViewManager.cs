@@ -33,9 +33,9 @@ namespace View
 
         }
 
-        private string GetViewKey(ViewType viewType, int instanceKey = 0)
+        private string GetViewKey(ViewType viewType, string instanceKey = "")
         {
-            return $"{(int)viewType}_{instanceKey}";
+            return $"{viewType}_{instanceKey}";
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace View
         /// 移除 View
         /// </summary>
         /// <param name="viewType"></param>
-        public void RemoveView(ViewType viewType, int instanceKey = 0)
+        public void RemoveView(ViewType viewType, string instanceKey = "")
         {
             var key = GetViewKey(viewType, instanceKey);
             _views.Remove((int) viewType);
@@ -75,7 +75,7 @@ namespace View
         /// <param name="viewType"></param>
         /// <param name="instanceKey"></param>
         /// <param name="args"></param>
-        public void OpenView(ViewType viewType, int instanceKey = 0, params object[] args)
+        public void OpenView(ViewType viewType, string instanceKey = "", params object[] args)
         {
             var key = GetViewKey(viewType, instanceKey);
             var viewInfo = _views[(int)viewType];
@@ -89,9 +89,6 @@ namespace View
                     Debug.LogError($"Failed to load view prefab: {viewInfo.PrefabName}");
                     return;
                 }
-                var canvas = viewGo.GetComponent<Canvas>() ?? viewGo.AddComponent<Canvas>();
-                canvas.overrideSorting = true;
-                canvas.sortingOrder = viewInfo.SortingOrder;
                 view = viewGo.GetComponent<IBaseView>();
                 if (view is null)
                 {
@@ -126,7 +123,7 @@ namespace View
         /// <param name="viewType"></param>
         /// <param name="instanceKey"></param>
         /// <param name="args"></param>
-        public void CloseView(ViewType viewType, int instanceKey = 0, params object[] args)
+        public void CloseView(ViewType viewType, string instanceKey = "", params object[] args)
         {
             var key = GetViewKey(viewType, instanceKey);
             if (!IsOpen(viewType, instanceKey)) return;
@@ -159,7 +156,7 @@ namespace View
         /// </summary>
         /// <param name="viewType"></param>
         /// <param name="instanceKey"></param>
-        public void DestroyView(ViewType viewType, int instanceKey = 0)
+        public void DestroyView(ViewType viewType, string instanceKey = "")
         {
             var key = GetViewKey(viewType, instanceKey);
             var view = GetView(viewType, instanceKey);
@@ -179,7 +176,7 @@ namespace View
         /// <param name="viewType"></param>
         /// <param name="instanceKey"></param>
         /// <returns></returns>
-        private bool IsOpen(ViewType viewType, int instanceKey = 0)
+        private bool IsOpen(ViewType viewType, string instanceKey = "")
         {
             var key = GetViewKey(viewType, instanceKey);
             return _openViews.ContainsKey(key);
@@ -191,7 +188,7 @@ namespace View
         /// <param name="viewType"></param>
         /// <param name="instanceKey"></param>
         /// <returns></returns>
-        public IBaseView GetView(ViewType viewType, int instanceKey = 0)
+        public IBaseView GetView(ViewType viewType, string instanceKey = "")
         {
             var key = GetViewKey(viewType, instanceKey);
             if (_openViews.TryGetValue(key, out var view) || _cacheViews.TryGetValue(key, out view))
@@ -202,7 +199,7 @@ namespace View
             return null;
         }
         
-        public T GetView<T>(ViewType viewType, int instanceKey = 0) where T : class, IBaseView
+        public T GetView<T>(ViewType viewType, string instanceKey = "") where T : class, IBaseView
         {
             var view = GetView(viewType, instanceKey);
             return view as T;

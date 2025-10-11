@@ -17,7 +17,7 @@ namespace View.GameViews
 
         private void OnNewGameBtnClick()
         {
-            SceneLoadManager.Instance.LoadScene(SceneType.TestScene);
+            SceneLoadManager.Instance.LoadScene(SceneType.LevelSelect);
         }
 
         private void OnExitGameBtnClick()

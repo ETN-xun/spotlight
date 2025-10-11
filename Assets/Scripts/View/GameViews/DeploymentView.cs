@@ -30,7 +30,7 @@ namespace View.GameViews
             base.Open(args);
             foreach (var unitData in _playerUnitsData)
             {
-                ViewManager.Instance.OpenView(ViewType.UnitDeploymentView, int.Parse(unitData.unitID), unitData);
+                ViewManager.Instance.OpenView(ViewType.UnitDeploymentView, unitData.unitID, unitData);
             }
         }
 
@@ -39,7 +39,7 @@ namespace View.GameViews
             base.Close(args);
            foreach (var unitData in _playerUnitsData)
            {
-                ViewManager.Instance.CloseView(ViewType.UnitDeploymentView, int.Parse(unitData.unitID), unitData);
+                ViewManager.Instance.CloseView(ViewType.UnitDeploymentView, unitData.unitID, unitData);
            }
         }
     }
