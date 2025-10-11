@@ -65,15 +65,20 @@ namespace View.Base
             _canvas.enabled = visible;
         }
 
-        public GameObject Find(string goName)
+
+        private GameObject Find(string goName)
         {
             if (_cacheGameObjects.TryGetValue(goName, out var go))
-            {
                 return go;
-            }
-            _cacheGameObjects.Add(goName, transform.Find(goName).gameObject);
-            return _cacheGameObjects[goName];
+
+            var tf = transform.Find(goName);
+            if (tf == null) return null;
+
+            _cacheGameObjects[goName] = tf.gameObject;
+            return tf.gameObject;
         }
+
+        
         
         public T Find<T>(string goName) where T : Component
         {

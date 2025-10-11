@@ -140,9 +140,6 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 初始化游戏
     /// </summary>
-    /// <summary>
-    /// 初始化游戏
-    /// </summary>
     private void InitializeGame()
     {
         _currentGameState = GameState.Deployment;
@@ -172,20 +169,15 @@ public class GameManager : MonoBehaviour
         Debug.Log("GameManager: 状态实例初始化完成");
     }
     
-    /// <summary>
-    /// 开始游戏
-    /// </summary>
-    /// <summary>
-    /// 开始游戏
-    /// </summary>
     private void StartGame()
     {
         Debug.Log("GameManager: 游戏开始 - 进入部署阶段");
+        // 生成地图格子
+        GridManager.Instance.GenerateGrid();
+        // 生成敌方单位
         
         // 调用初始状态的Enter方法
         _currentStateInstance?.Enter();
-        // Bug: 不应触发回合开始事件
-        OnTurnStarted?.Invoke(_currentTurn);
     }
     #endregion
 

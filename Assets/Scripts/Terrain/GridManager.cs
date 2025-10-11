@@ -43,7 +43,7 @@ public class GridManager : MonoBehaviour
     /// <summary>
     /// 生成地形
     /// </summary>
-    private void BuildGridFromTilemap(Tilemap terrainTilemap)
+    private void BuildGridFromTilemap()
     {
         gridDict.Clear();
 

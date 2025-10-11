@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AI
+namespace Enemy.AI
 {
     /// <summary>
     /// 敌方AI的意图数据组件：挂在每个敌方单位上，存储当前候选意图与被选中意图

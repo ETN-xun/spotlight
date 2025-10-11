@@ -1,13 +1,25 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Level
 {
+    public enum LevelType
+    {
+        Tutorial,
+        Normal,
+        Boss
+    }
+    
     public class LevelManager : MonoBehaviour
     {
         public static LevelManager Instance { get; private set; }
         
         [SerializeField]
-        private LevelDataSO _currentLevelData;
+        private LevelDataSO _currentLevel;
+        
+        private List<LevelDataSO> _levels;
+        
+        // private 
         
         private void Awake()
         {
@@ -19,9 +31,19 @@ namespace Level
             Instance = this;
         }
 
-        public LevelDataSO GetLevelData()
+        public void SetCurrentLevel(LevelDataSO levelData)
         {
-            return _currentLevelData;
+            _currentLevel = levelData;
+        }
+
+        public LevelDataSO GetCurrentLevel()
+        {
+            return _currentLevel;
+        }
+
+        private void LoadAllLevelData()
+        {
+            _levels = DataManager.Instance.allLevelData;
         }
     }
 }

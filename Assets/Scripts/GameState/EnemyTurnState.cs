@@ -58,8 +58,6 @@ public class EnemyTurnState : GameStateBase
     /// </summary>
     private void FinishEnemyTurn()
     {
-        Debug.Log("敌人回合完成，切换到玩家回合");
-        gameManager.ChangeGameState(GameState.PlayerTurn);
-        // gameManager.EndCurrentTurn();
+        gameManager.EndCurrentTurn();
     }
 }

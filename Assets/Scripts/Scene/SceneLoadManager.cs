@@ -9,7 +9,8 @@ namespace Scene
         MainMenu,
         LevelSelect,
         Gameplay,
-        TestScene
+        TestScene,
+        Demo
     }
     public class SceneLoadManager : MonoBehaviour
     {

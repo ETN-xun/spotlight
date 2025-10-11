@@ -2,10 +2,25 @@ using System;
 using Scene;
 using UnityEngine;
 using View;
+using Object = UnityEngine.Object;
 
-
+/// <summary>
+/// 控制整个游戏流程的管理器
+/// </summary>
 public class GameAppManager : MonoBehaviour
 {
+    
+    // [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    // static void LoadGameAppManager()
+    // {
+    //     if (FindObjectOfType<GameAppManager>() != null) return;
+    //     var prefab = Resources.Load<GameObject>("Prefab/GameAppManager");
+    //     if (prefab != null)
+    //         Instantiate(prefab);
+    //     else
+    //         new GameObject("GameAppManager").AddComponent<GameAppManager>();
+    // }
+    
     private void Awake()
     {
         if (FindObjectsOfType<GameAppManager>().Length > 1)
@@ -21,6 +36,7 @@ public class GameAppManager : MonoBehaviour
     private void Start()
     {
 #if !UNITY_EDITOR
+        ViewManager.Instance.CloseAllViews();
         SceneLoadManager.Instance.LoadScene(SceneType.MainMenu);
 #endif
     }
@@ -45,28 +61,35 @@ public class GameAppManager : MonoBehaviour
         {
             PrefabName = "TestView",
             SortingOrder = 0,
-            ParentTransform = transform
+            ParentTransform = transform.Find("ViewManager")
         });
 
         ViewManager.Instance.RegisterView(ViewType.UnitInfoView, new ViewInfo()
         {
             PrefabName = "UnitInfoView",
             SortingOrder = 1,
-            ParentTransform = transform
+            ParentTransform = transform.Find("ViewManager")
         });
             
         ViewManager.Instance.RegisterView(ViewType.DeploymentView, new ViewInfo()
         {
             PrefabName = "DeploymentView",
             SortingOrder = 2,
-            ParentTransform = transform
+            ParentTransform = transform.Find("ViewManager")
         });
 
         ViewManager.Instance.RegisterView(ViewType.MainMenuView, new ViewInfo()
         {
             PrefabName = "MainMenuView",
             SortingOrder = 999,
-            ParentTransform = transform
+            ParentTransform = transform.Find("ViewManager")
         });
+        
+        ViewManager.Instance.RegisterView(ViewType.LevelSelectView, new ViewInfo()
+        {
+            PrefabName = "LevelSelectView",
+            ParentTransform = transform.Find("ViewManager")
+        });
+        
     }
 }

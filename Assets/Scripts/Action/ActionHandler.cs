@@ -38,7 +38,7 @@ namespace Action
             {
                 gridCell.GridCellController.Highlight(true);
             }
-            ViewManager.Instance.OpenView(ViewType.UnitInfoView, 0, cell.CurrentUnit);
+            ViewManager.Instance.OpenView(ViewType.UnitInfoView, "", cell.CurrentUnit);
         }
         
         private void OnDeselectUnit(object[] obj)
