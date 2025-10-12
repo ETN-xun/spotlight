@@ -158,9 +158,6 @@ public class DataManagerExample : MonoBehaviour
         var displacementSkills = DataManager.Instance.GetSkillsByType(SkillType.Displacement);
         Debug.Log($"位移类技能数量: {displacementSkills.Count}");
         
-        // 获取山脉地形
-        var mountainTerrains = DataManager.Instance.GetTerrainDataByType(TerrainType.Mountain);
-        Debug.Log($"山脉地形数量: {mountainTerrains.Count}");
     }
 
     /// <summary>

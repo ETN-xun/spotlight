@@ -14,16 +14,19 @@ public class SpawnSkill : Skill
             return;
         }
 
-        if (data.spawnPrefab != null)
+        if (gridManager.objectTilemap != null && data.spawnTile != null)
         {
-            GameObject obj = GameObject.Instantiate(data.spawnPrefab, gridManager.CellToWorld(targetCell.Coordinate), Quaternion.identity);
-            DestructibleObject destructible = obj.GetComponent<DestructibleObject>();
-            if (destructible != null)
-            {
-                destructible.maxHP = data.spawnHealth;
-                destructible.currentHP = data.spawnHealth;
-            }
+            Vector3Int tilePos = new Vector3Int(targetCell.Coordinate.x, targetCell.Coordinate.y, 0);
+            gridManager.objectTilemap.SetTile(tilePos, data.spawnTile);
+
+            // 建筑逻辑数据
+            DestructibleObject destructible = new DestructibleObject( 
+                hits: data.spawnHits,
+                name: data.skillName,
+                coord: targetCell.Coordinate
+            );
             targetCell.ObjectOnCell = destructible;
         }
+
     }
 }

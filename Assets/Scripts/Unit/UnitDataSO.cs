@@ -33,6 +33,9 @@ public class UnitDataSO : ScriptableObject
     [Tooltip("最大生命值")]
     public int maxHP = 3;
     
+    [Tooltip("受到攻击次数")]
+    public int Hits = 2;
+    
     [Tooltip("移动范围")]
     public int moveRange = 2;
     
@@ -41,13 +44,19 @@ public class UnitDataSO : ScriptableObject
     
     [Tooltip("移动消耗的能量")]
     public int movementEnergyCost = 1;
+    
+    [Tooltip("能量")]
+    public int Energy = 1;
+    
+    [Tooltip("每回合恢复的能量")]
+    public int RecoverEnergy = 0;
 
     [Header("战斗属性")]
     [Tooltip("基础攻击力")]
     public int baseDamage = 1;
     
     [Tooltip("是否可以被摧毁")]
-    public bool canDestroy = true;
+    public bool canDestroy = false;
     
     [Tooltip("碰撞伤害")]
     public int collisionDamage = 1;
