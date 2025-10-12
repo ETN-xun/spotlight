@@ -62,28 +62,26 @@ public class MovementSystem : MonoBehaviour
                 switch (type)
                 {
                     case TerrainType.Plain:
+                        //轻微像素效果
                         
                         break;
-                    case TerrainType.Abyss:
+                    case TerrainType.CorrosionTile:
+                        //造成一点伤害
+                        unit.TakeDamage(1);
+                        //造成异常效果
                         
                         break;
-                    case TerrainType.Forest:
-                        
-                        break;
-                    case TerrainType.Lava:
-                        
-                        break;
-                    case TerrainType.Mountain:
-                        
-                        break;
-                    case TerrainType.Spring:
-                        
-                        break;
-                    case TerrainType.ExplosiveBarrel:
+                    case TerrainType.BugTile:
+                        //交换攻击力与生命
+                        unit.data.baseDamage = unit.data.baseDamage + unit.data.maxHP;
+                        unit.data.maxHP = unit.data.baseDamage - unit.data.maxHP;
+                        unit.data.baseDamage = unit.data.baseDamage - unit.data.maxHP;
+                        //造成异常效果
 
                         break;
-                    case TerrainType.MagneticField:
-                        
+                    case TerrainType.RegisterTile:
+                        //每回合回复两点能量
+                        unit.data.RecoverEnergy += 2;
                         break;
                 }
             }
@@ -91,10 +89,7 @@ public class MovementSystem : MonoBehaviour
             //撞到建筑
             if (nextCell.ObjectOnCell != null)
             {
-                DestructibleObject obj = nextCell.ObjectOnCell;
-
-                obj.TakeDamage(unit.data.baseDamage);
-
+                nextCell.ObjectOnCell.TakeDamage();
                 yield break;
             }
             
@@ -189,8 +184,7 @@ public class MovementSystem : MonoBehaviour
 
     private bool IsCellWalkable(GridCell cell)
     {
-        // 可根据你的规则扩展
-        return cell.CurrentUnit == null && (cell.TerrainData == null || cell.TerrainData.terrainType != TerrainType.Abyss);
+        return cell.CurrentUnit == null && cell.ObjectOnCell == null;
     }
 
     /// <summary>

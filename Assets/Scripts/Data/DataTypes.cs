@@ -29,44 +29,24 @@ public enum SkillType
 public enum TerrainType
 {
     /// <summary>
-    /// 平原 - 基础地形
+    /// 数据平原：无特殊效果，有轻微像素抖动 
     /// </summary>
     Plain,
     
     /// <summary>
-    /// 山脉 - 阻挡地形
+    /// 腐蚀区块：对停留单位造成一点伤害并施加状态异常效果
     /// </summary>
-    Mountain,
+    CorrosionTile,
     
     /// <summary>
-    /// 森林 - 减速地形
+    /// Bug格子:停留在格子上的单位生命值和攻击力数值调换，并施加状态异常效果
     /// </summary>
-    Forest,
+    BugTile,
     
     /// <summary>
-    /// 岩浆 - 致命地形
+    /// 缓存区：占领后每回合额外回复2点能量
     /// </summary>
-    Lava,
-    
-    /// <summary>
-    /// 深渊 - 致命地形
-    /// </summary>
-    Abyss,
-    
-    /// <summary>
-    /// 动能弹簧 - 弹射地形
-    /// </summary>
-    Spring,
-    
-    /// <summary>
-    /// 磁性立场 - 增强拉力地形
-    /// </summary>
-    MagneticField,
-    
-    /// <summary>
-    /// 炸药桶 - 可摧毁爆炸地形
-    /// </summary>
-    ExplosiveBarrel
+    RegisterTile,
 }
 
 /// <summary>
