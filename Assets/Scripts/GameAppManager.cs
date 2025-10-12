@@ -91,5 +91,10 @@ public class GameAppManager : MonoBehaviour
             ParentTransform = transform.Find("ViewManager")
         });
         
+        ViewManager.Instance.RegisterView(ViewType.SkillSelectView, new ViewInfo()
+        {
+            PrefabName = "SkillSelectView",
+            ParentTransform = transform.Find("ViewManager")
+        });
     }
 }

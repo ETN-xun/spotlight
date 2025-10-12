@@ -78,17 +78,25 @@ namespace View
         public void OpenView(ViewType viewType, string instanceKey = "", params object[] args)
         {
             var key = GetViewKey(viewType, instanceKey);
-            var viewInfo = _views[(int)viewType];
+            if (!_views.TryGetValue((int)viewType, out var viewInfo) || viewInfo == null)
+            {
+                Debug.LogError($"ViewManager.OpenView: ViewType {viewType} 未注册，无法打开。请先在 GameAppManager.RegisterViews 中注册。");
+                return;
+            }
+
             var view = GetView(viewType, instanceKey);
             
             if (view is null)
             {
-                var viewGo = Instantiate(Resources.Load<GameObject>($"Prefab/View/{viewInfo.PrefabName}"), viewInfo.ParentTransform);
-                if (viewGo is null)
+                var prefabPath = $"Prefab/View/{viewInfo.PrefabName}";
+                var prefab = Resources.Load<GameObject>(prefabPath);
+                if (prefab is null)
                 {
-                    Debug.LogError($"Failed to load view prefab: {viewInfo.PrefabName}");
+                    Debug.LogError($"Failed to load view prefab at Resources/{prefabPath}");
                     return;
                 }
+                var parent = viewInfo.ParentTransform != null ? viewInfo.ParentTransform : transform;
+                var viewGo = Instantiate(prefab, parent);
                 view = viewGo.GetComponent<IBaseView>();
                 if (view is null)
                 {

@@ -7,10 +7,16 @@ namespace Action
     {
         public IEnumerator Execute(ActionContext context)
         {
-            var unit = context.ActiveUnit;
-            unit.MoveTo(context.TargetCell);
+            var unit = context.activeUnit;
+            unit.MoveTo(context.targetCell);
             // yield return MovementSystem.Instance.MoveUnit(unit, Vector2Int.down, 2);
             yield return null;
+        }
+        
+        public void Undo(ActionContext context)
+        {
+            var unit = context.activeUnit;
+            // unit.MoveTo(context.OriginCell);
         }
     }
 }

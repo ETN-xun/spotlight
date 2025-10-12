@@ -20,7 +20,7 @@ public class GridManager : MonoBehaviour
     [Header("Terrain Library")]
     public TerrainDataSO[] terrainLibrary; //存放预制地形类型
 
-    private Dictionary<Vector2Int, GridCell> gridDict = new Dictionary<Vector2Int, GridCell>();        //网格地图
+    public readonly Dictionary<Vector2Int, GridCell> _gridDict = new Dictionary<Vector2Int, GridCell>();        //网格地图
 
     private void Awake()
     {
@@ -30,44 +30,42 @@ public class GridManager : MonoBehaviour
             return;
         }
         Instance = this;
-    }
-
-    private void Start()
-    {
+        
         //从 Tilemap 构建地图
         if (terrainTilemap != null)
             BuildGridFromTilemap();
         else
             GenerateGrid(); 
     }
+    
     /// <summary>
     /// 生成地形
     /// </summary>
     private void BuildGridFromTilemap()
     {
-        gridDict.Clear();
+        _gridDict.Clear();
 
         foreach (var pos in terrainTilemap.cellBounds.allPositionsWithin)
         {
-            Vector3Int tilePos = new Vector3Int(pos.x, pos.y, pos.z);
+            var tilePos = new Vector3Int(pos.x, pos.y, pos.z);
             if (!terrainTilemap.HasTile(tilePos))
                 continue;
 
-            Vector2Int coord = new Vector2Int(pos.x, pos.y);
-            GridCell cell = new GridCell(coord);
+            var coord = new Vector2Int(pos.x, pos.y);
+            var cell = new GridCell(coord);
 
             // 绑定地形数据
-            TileBase terrainTile = terrainTilemap.GetTile(tilePos);
+            var terrainTile = terrainTilemap.GetTile(tilePos);
             cell.TerrainData = GetTerrainDataFromTile(terrainTile);
 
             // 绑定建筑数据
             if (objectTilemap != null && objectTilemap.HasTile(tilePos))
             {
-                TileBase objectTile = objectTilemap.GetTile(tilePos);
+                var objectTile = objectTilemap.GetTile(tilePos);
                 cell.ObjectOnCell = GetDestructibleObjectFromTile(objectTile);
             }
 
-            gridDict[coord] = cell;
+            _gridDict[coord] = cell;
         }
 
         cols = terrainTilemap.size.x;
@@ -76,9 +74,9 @@ public class GridManager : MonoBehaviour
     /// <summary>
     /// 生成 8x8 网格
     /// </summary>
-    public void GenerateGrid()
+    private void GenerateGrid()
     {
-        gridDict.Clear();
+        _gridDict.Clear();
 
         for (int x = 0; x < cols; x++)
         {
@@ -86,7 +84,7 @@ public class GridManager : MonoBehaviour
             {
                 Vector2Int coord = new Vector2Int(x, y);
                 GridCell cell = new GridCell(coord);
-                gridDict[coord] = cell;
+                _gridDict[coord] = cell;
             }
         }
     }
@@ -123,7 +121,7 @@ public class GridManager : MonoBehaviour
     /// </summary>
     public GridCell GetCell(Vector2Int coord)
     {
-        gridDict.TryGetValue(coord, out var cell);
+        _gridDict.TryGetValue(coord, out var cell);
         return cell;
     }
 
@@ -132,7 +130,7 @@ public class GridManager : MonoBehaviour
     /// </summary>
     /// <param name="coord"></param>
     /// <returns></returns>
-    public bool IsValidPosition(Vector2Int coord) => gridDict.ContainsKey(coord);
+    public bool IsValidPosition(Vector2Int coord) => _gridDict.ContainsKey(coord);
 
     /// <summary>
     /// 格子坐标 → 世界坐标
@@ -158,7 +156,7 @@ public class GridManager : MonoBehaviour
 
         return null;
     }
-    
+
     /// <summary>
     /// 放置物体
     /// </summary>
@@ -166,9 +164,9 @@ public class GridManager : MonoBehaviour
     {
         var cell = GetCell(coord);
         if (cell == null || cell.CurrentUnit != null) return false;
-        
-        Unit unit = Instantiate(unitPrefab, CellToWorld(coord), Quaternion.identity);
-        
+
+        Unit unit = Instantiate(unitPrefab, CellToWorld(coord), Quaternion.identity, transform);
+
         unit.PlaceAt(cell);
         return true;
     }
@@ -183,5 +181,5 @@ public class GridManager : MonoBehaviour
         unit.MoveTo(targetCell);
         return true;
     }
-    
+
 }

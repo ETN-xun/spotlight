@@ -1,5 +1,6 @@
 using System;
 using Common;
+using Enemy;
 using UnityEngine;
 
 /// <summary>
@@ -25,7 +26,6 @@ public class GameManager : MonoBehaviour
                 {
                     GameObject gameManagerObject = new GameObject("GameManager");
                     _instance = gameManagerObject.AddComponent<GameManager>();
-                    DontDestroyOnLoad(gameManagerObject);
                 }
             }
             return _instance;
@@ -117,8 +117,6 @@ public class GameManager : MonoBehaviour
         }
         
         _instance = this;
-        DontDestroyOnLoad(gameObject);
-        
         // 初始化游戏
         InitializeGame();
     }
@@ -149,8 +147,6 @@ public class GameManager : MonoBehaviour
         
         // 初始化状态实例
         InitializeStates();
-        
-        Debug.Log("GameManager: 游戏初始化完成");
     }
     
     /// <summary>
@@ -166,16 +162,12 @@ public class GameManager : MonoBehaviour
         // 设置初始状态
         _currentStateInstance = _deploymentState;
         
-        Debug.Log("GameManager: 状态实例初始化完成");
     }
     
     private void StartGame()
     {
-        Debug.Log("GameManager: 游戏开始 - 进入部署阶段");
-        // 生成地图格子
-        GridManager.Instance.GenerateGrid();
         // 生成敌方单位
-        
+        EnemyManager.Instance.SpawnEnemies();
         // 调用初始状态的Enter方法
         _currentStateInstance?.Enter();
     }

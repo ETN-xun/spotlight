@@ -99,17 +99,14 @@ public class DataManager : MonoBehaviour
         // 加载单位数据
         UnitDataSO[] unitDataArray = Resources.LoadAll<UnitDataSO>(unitDataPath);
         allUnitData = new List<UnitDataSO>(unitDataArray);
-        Debug.Log($"加载了 {allUnitData.Count} 个单位数据");
 
         // 加载技能数据
         SkillDataSO[] skillDataArray = Resources.LoadAll<SkillDataSO>(skillDataPath);
         allSkillData = new List<SkillDataSO>(skillDataArray);
-        Debug.Log($"加载了 {allSkillData.Count} 个技能数据");
 
         // 加载地形数据
         TerrainDataSO[] terrainDataArray = Resources.LoadAll<TerrainDataSO>(terrainDataPath);
         allTerrainData = new List<TerrainDataSO>(terrainDataArray);
-        Debug.Log($"加载了 {allTerrainData.Count} 个地形数据");
         
         // 加载关卡数据
         LevelDataSO[] levelDataArray = Resources.LoadAll<LevelDataSO>(levelDataPath);

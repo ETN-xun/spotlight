@@ -18,7 +18,6 @@ public class EnemyTurnState : GameStateBase
         
         _turnTimer = 0f;
         
-        Debug.Log($"敌人回合开始 - 第{gameManager.CurrentTurn}回合");
     }
     
     public override void Update()
@@ -58,6 +57,7 @@ public class EnemyTurnState : GameStateBase
     /// </summary>
     private void FinishEnemyTurn()
     {
-        gameManager.EndCurrentTurn();
+        // gameManager.EndCurrentTurn();
+        gameManager.ChangeGameState(GameState.PlayerTurn);
     }
 }

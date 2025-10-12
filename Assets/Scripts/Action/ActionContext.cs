@@ -2,15 +2,15 @@ namespace Action
 {
     public class ActionContext
     {
-        public Unit ActiveUnit;
-        public GridCell TargetCell;
-        public ActionManager Manager;
+        public Unit activeUnit;
+        public GridCell targetCell;
+        public ActionManager manager;
 
         public ActionContext(Unit unit, GridCell target, ActionManager mgr)
         {
-            ActiveUnit = unit;
-            TargetCell = target;
-            Manager = mgr;
+            activeUnit = unit;
+            targetCell = target;
+            manager = mgr;
         }
     }
 

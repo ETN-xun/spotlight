@@ -27,7 +27,7 @@ public class Unit : MonoBehaviour
         
         CurrentCell = cell;
         cell.CurrentUnit = this;
-
+        
         transform.position = GridManager.Instance.CellToWorld(cell.Coordinate);
     }
 

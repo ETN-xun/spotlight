@@ -20,5 +20,9 @@ MonoBehaviour:
   startingActionPoints: 6
   gridWidth: 8
   gridHeight: 8
-  playerUnits: []
+  maxEnergy: 10
+  baseEnergy: 6
+  playerUnits:
+  - {fileID: 0}
+  - {fileID: 0}
   enemyUnits: []

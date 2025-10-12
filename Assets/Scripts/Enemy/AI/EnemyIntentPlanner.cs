@@ -1,12 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Action;
 
 namespace Enemy.AI
 {
-    /// <summary>
-    /// 从 Unit/Skill 数据生成 AI 意图（纯规划，不执行）
-    /// 入口：BuildForUnit(unit) -> 返回/填充 EnemyIntent，包含候选与已选意图
-    /// </summary>
     public static class EnemyIntentPlanner
     {
         public static EnemyIntent BuildForUnit(Unit unit)
@@ -69,7 +66,7 @@ namespace Enemy.AI
             float bestUtil = float.NegativeInfinity;
             foreach (var c in intent.candidates)
             {
-                if ((c.action == EnemyIntent.ActionType.Attack || c.action == EnemyIntent.ActionType.Ability)
+                if ((c.action == ActionType.Attack || c.action == ActionType.Ability)
                     && c.target.hasCell && c.path.cells == null)
                 {
                     // 只考虑当前位置能打到的
@@ -89,12 +86,12 @@ namespace Enemy.AI
             var moves = new List<EnemyIntent.IntentData>();
             foreach (var move in intent.candidates)
             {
-                if (move.action != EnemyIntent.ActionType.Move) continue;
+                if (move.action != ActionType.Move) continue;
                 var afterMovePos = move.target.cell;
                 // 检查该位置能否攻击/技能
                 foreach (var c in intent.candidates)
                 {
-                    if ((c.action == EnemyIntent.ActionType.Attack || c.action == EnemyIntent.ActionType.Ability)
+                    if ((c.action == ActionType.Attack || c.action == ActionType.Ability)
                         && c.target.hasCell)
                     {
                         // 攻击/技能的起点要等于 afterMovePos
@@ -118,7 +115,7 @@ namespace Enemy.AI
             float bestUtil = float.NegativeInfinity;
             foreach (var c in intent.candidates)
             {
-                if (c.action == EnemyIntent.ActionType.Move)
+                if (c.action == ActionType.Move)
                 {
                     if (best == null || c.utility > bestUtil)
                     {

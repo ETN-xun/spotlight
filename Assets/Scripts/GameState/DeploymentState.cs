@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Common;
 using Level;
 using UnityEngine;
@@ -13,6 +15,7 @@ public class DeploymentState : GameStateBase
     private UnitDataSO _unitData;
     private bool _isClickDeployUnit;
     private int _deployedUnitCount;
+    private List<Unit> _totalUnits = new ();
 
     public DeploymentState(GameManager gameManager) : base(gameManager)
     {
@@ -22,7 +25,7 @@ public class DeploymentState : GameStateBase
     {
         base.Enter();
         MessageCenter.Subscribe(Defines.ClickDeployUnitEvent, OnClickDeployUnit);
-        
+        _totalUnits = LevelManager.Instance.GetCurrentLevel().playerUnits;
         ViewManager.Instance.OpenView(ViewType.DeploymentView);
     }
 
@@ -35,9 +38,9 @@ public class DeploymentState : GameStateBase
             {
                 var worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 var cell = GridManager.Instance.WorldToCell(worldPoint);
-                if (cell is null) return;
+                if (cell is null || cell.CurrentUnit is not null) return;
                 _deployedUnitCount++;
-                var unit = _unitData.unitPrefab.GetComponent<Unit>();
+                var unit = GetUnitById(_unitData.unitID);
                 GridManager.Instance.PlaceUnit(cell.Coordinate, unit);
                 var view = ViewManager.Instance.GetView<UnitDeploymentView>(ViewType.UnitDeploymentView, _unitData.unitID);
                 view.DisableViewClick();
@@ -68,5 +71,10 @@ public class DeploymentState : GameStateBase
         if (obj[0] is not UnitDataSO unitData) return;
         _unitData = unitData;
         _isClickDeployUnit = true;
+    }
+    
+    private Unit GetUnitById(string unitId)
+    {
+        return _totalUnits.FirstOrDefault(unit => unit.data.unitID == unitId);
     }
 }
