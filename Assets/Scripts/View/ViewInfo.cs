@@ -20,6 +20,8 @@ namespace View
         MainMenuView,
         LevelSelectView,
         LevelView,
+        SkillView,
+        SkillSelectView,
     }
 
 }

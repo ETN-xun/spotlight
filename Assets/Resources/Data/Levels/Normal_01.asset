@@ -16,9 +16,15 @@ MonoBehaviour:
   levelType: 1
   previewSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   description: 
-  maxTurns: 0
+  maxTurns: 10
   startingActionPoints: 0
   gridWidth: 0
   gridHeight: 0
-  playerUnits: []
-  enemyUnits: []
+  maxEnergy: 10
+  baseEnergy: 6
+  playerUnits:
+  - {fileID: 7412867095707020583, guid: 502aad738f5874fb6b675fc73a9d4b47, type: 3}
+  - {fileID: 7412867095707020583, guid: d601efe630ce245f5b4fde352b7dafe9, type: 3}
+  enemyUnits:
+  - {fileID: 7412867095707020583, guid: 9dd1fd43ae7b9418c91fc0faf4aff4f0, type: 3}
+  - {fileID: 7412867095707020583, guid: ffef04109eb5b47fb807250ef95259d7, type: 3}

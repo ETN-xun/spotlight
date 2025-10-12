@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 /// <summary>
 /// 技能数据ScriptableObject
@@ -56,14 +57,11 @@ public class SkillDataSO : ScriptableObject
     public int displacementDistance = 0;
     
     [Header("生成属性")]
-    [Tooltip("生成的预制体")]
-    public GameObject spawnPrefab;
-    
-    [Tooltip("生成物持续时间(-1表示永久)")]
-    public float spawnDuration = -1f;
-    
     [Tooltip("生成物血量")]
-    public int spawnHealth = 1;
+    public int spawnHits = 2;
+    
+    [Tooltip("生成的Tile（用于Tilemap模式）")]
+    public TileBase spawnTile;
     
     [Header("范围效果")]
     [Tooltip("影响范围(以目标为中心)")]

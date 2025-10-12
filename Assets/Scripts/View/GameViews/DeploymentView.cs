@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using Level;
 using UnityEngine;
 using View.Base;
 
@@ -6,7 +8,7 @@ namespace View.GameViews
 {
     public class DeploymentView : BaseView
     {
-        private List<UnitDataSO> _playerUnitsData = new List<UnitDataSO>();
+        private readonly List<UnitDataSO> _playerUnitsData = new List<UnitDataSO>();
 
         protected override void InitView()
         {
@@ -14,7 +16,6 @@ namespace View.GameViews
             ViewManager.Instance.RegisterView(ViewType.UnitDeploymentView, new ViewInfo()
             {
                 PrefabName = "UnitDeploymentView",
-                SortingOrder = 5,
                 ParentTransform = transform.Find("Background")
             });
         }
@@ -22,7 +23,11 @@ namespace View.GameViews
         protected override void InitData()
         {
             base.InitData();
-            _playerUnitsData = DataManager.Instance.GetPlayerUnits();
+            var playerUnits = LevelManager.Instance.GetCurrentLevel().playerUnits;
+            foreach (var unit in playerUnits.Where(unit => unit is not null && unit.data is not null))
+            {
+                _playerUnitsData.Add(unit.data);
+            }
         }
         
         public override void Open(params object[] args)

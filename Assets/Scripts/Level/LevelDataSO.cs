@@ -15,8 +15,12 @@ namespace Level
         public int startingActionPoints;
         public int gridWidth;
         public int gridHeight;
+        [Tooltip("最大能量值")]
+        public int maxEnergy = 10;
+        [Tooltip("基础能量值")]
+        public int baseEnergy = 6;
         public GridCell[,] gridCells;
-        public List<Unit> playerUnits = new List<Unit>();
-        public List<Unit> enemyUnits = new List<Unit>();
+        public List<Unit> playerUnits = new ();
+        public List<Unit> enemyUnits = new ();
     }
 }

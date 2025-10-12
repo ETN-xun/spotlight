@@ -5,5 +5,6 @@ namespace Action
     public interface IAction
     {
         IEnumerator Execute(ActionContext context);
+        void Undo(ActionContext context);
     }
 }

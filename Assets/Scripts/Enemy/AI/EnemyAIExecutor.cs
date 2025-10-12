@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Action;
 using UnityEngine;
 
 namespace Enemy.AI
@@ -17,7 +18,6 @@ namespace Enemy.AI
                 return;
             }
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
 
         public static EnemyAIExecutor EnsureInstance()
@@ -79,13 +79,13 @@ namespace Enemy.AI
         {
             switch (sel.action)
             {
-                case EnemyIntent.ActionType.Move:
+                case ActionType.Move:
                     yield return ExecuteMove(enemy, sel);
                     break;
-                case EnemyIntent.ActionType.Attack:
+                case ActionType.Attack:
                     yield return ExecuteBasicAttack(enemy, sel);
                     break;
-                case EnemyIntent.ActionType.Ability:
+                case ActionType.Ability:
                     yield return ExecuteAbility(enemy, sel);
                     break;
             }

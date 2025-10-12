@@ -1,29 +1,12 @@
 using System;
 using System.Collections.Generic;
+using Action;
 using UnityEngine;
 
 namespace Enemy.AI
 {
-    /// <summary>
-    /// 敌方AI的意图数据组件：挂在每个敌方单位上，存储当前候选意图与被选中意图
-    /// 仅包含数据与轻量逻辑（创建/清理/选优），不包含具体决策算法。
-    /// </summary>
     public class EnemyIntent : MonoBehaviour
     {
-        [Serializable]
-        public enum ActionType
-        {
-            None = 0,
-            Wait = 1,
-            Move = 2,
-            Attack = 3,
-            Ability = 4,
-            Defend = 5,
-            Interact = 6,
-            Retreat = 7,
-            Heal = 8
-        }
-        
         [Serializable]
         public enum Status
         {

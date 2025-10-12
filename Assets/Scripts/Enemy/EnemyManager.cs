@@ -23,10 +23,12 @@ namespace Enemy
         {
             var currentLevelData = Level.LevelManager.Instance.GetCurrentLevel();
             var aliveEnemies = currentLevelData.enemyUnits;
-            for (var i = 0; i < aliveEnemies.Count; i++)
-            {
-                GridManager.Instance.PlaceUnit(new Vector2Int(i + 5, i), aliveEnemies[i]);
-            }
+            // for (var i = 0; i < aliveEnemies.Count; i++)
+            // {
+            //     GridManager.Instance.PlaceUnit(new Vector2Int(i, i), aliveEnemies[i]);
+            // }
+            GridManager.Instance.PlaceUnit(new Vector2Int(3, 3), aliveEnemies[0]);
+            GridManager.Instance.PlaceUnit(new Vector2Int(-3, 3), aliveEnemies[1]);
         }
     }
 }

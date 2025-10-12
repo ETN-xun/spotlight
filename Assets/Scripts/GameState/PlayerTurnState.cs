@@ -1,5 +1,6 @@
 using Common;
 using UnityEngine;
+using View;
 
 /// <summary>
 /// 玩家回合状态 - 玩家控制单位行动的阶段
@@ -17,9 +18,9 @@ public class PlayerTurnState : GameStateBase
     {
         base.Enter();
         _mainCamera = Camera.main;
-        Debug.Log($"玩家回合开始 - 第{gameManager.CurrentTurn}回合");
+        MessageCenter.Subscribe(Defines.ClickSkillEvent, OnClickSkill);
     }
-    
+
     public override void Update()
     {
 
@@ -40,52 +41,22 @@ public class PlayerTurnState : GameStateBase
             FinishPlayerTurn();
         }
     }
-    
+
     public override void Exit()
     {
         base.Exit();
         
-        // 禁用玩家输入
-        DisablePlayerInput();
-        
-        Debug.Log("玩家回合结束");
     }
-    
-    /// <summary>
-    /// 禁用玩家输入
-    /// </summary>
-    /// <summary>
-    /// 禁用玩家输入
-    /// </summary>
-    private void DisablePlayerInput()
-    {
-        // TODO: 禁用玩家输入处理
-        Debug.Log("禁用玩家输入");
-    }
-    
-    /// <summary>
-    /// 重置玩家行动点数
-    /// </summary>
-    private void ResetPlayerActionPoints()
-    {
-        // TODO: 重置所有玩家单位的行动点数
-        Debug.Log("重置玩家行动点数");
-    }
-    
-    
-    /// <summary>
-    /// 完成玩家回合
-    /// </summary>
+
+
     private void FinishPlayerTurn()
     {
-        Debug.Log("玩家回合完成，切换到敌人回合");
         gameManager.EndCurrentTurn();
     }
-    
+
     private void DetectGridCellClick()     
     {
         // BUG: 当鼠标同时点击到 UI 和 GridCell 上时，也会触发这个事件
-        // 我想要有这些状态：点击了一个 无单位格子，点击了一个 有单位格子，点击了空白处，
         var worldPoint = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
         var cell = GridManager.Instance.WorldToCell(worldPoint);
         if (cell is null) return;
@@ -100,7 +71,7 @@ public class PlayerTurnState : GameStateBase
         // 情况 2：点击的是同一个格子 -> 取消
         if (_activeCell == cell)
         {
-            MessageCenter.Publish(Defines.DeselectUnitActionEvent, _activeCell);
+            DeselectUnit(_activeCell);
             _activeCell = null;
             return;
         }
@@ -113,7 +84,7 @@ public class PlayerTurnState : GameStateBase
             if (moveRangeCells.Contains(cell))
             {
                 // 移动
-                MessageCenter.Publish(Defines.DeselectUnitActionEvent, _activeCell);
+                DeselectUnit(_activeCell);
                 _activeCell.CurrentUnit.MoveTo(cell);
                 _activeCell = null;
             }
@@ -125,7 +96,7 @@ public class PlayerTurnState : GameStateBase
             else
             {
                 // 切换选择
-                MessageCenter.Publish(Defines.DeselectUnitActionEvent, _activeCell);
+                DeselectUnit(_activeCell);
                 HandleSelectCell(cell);
             }
             return;
@@ -139,7 +110,7 @@ public class PlayerTurnState : GameStateBase
     private void DetectGridCellClickCanceled()
     {
         if (_activeCell is null) return;
-        MessageCenter.Publish(Defines.DeselectUnitActionEvent, _activeCell);
+        DeselectUnit(_activeCell);
         _activeCell = null;
     }
 
@@ -147,12 +118,53 @@ public class PlayerTurnState : GameStateBase
     {
         if (cell.CurrentUnit is not null)
         {
-            MessageCenter.Publish(Defines.SelectUnitActionEvent, cell);
+            SelectUnit(cell);
         }
         else
         {
             
         }
         _activeCell = cell;
+    }
+
+    private void SelectUnit(GridCell cell)
+    {
+        // if (cell.CurrentUnit is null) return;
+        // if (cell.GridCellController is null)
+        // {
+        //     Debug.Log("Error: GridCellController is null");
+        //     return;
+        // }
+        // cell.GridCellController.Highlight(true);
+        // var moveRangeCells = cell.CurrentUnit.GetMoveRange();
+        // foreach (var gridCell in moveRangeCells)
+        // {
+        //     gridCell.GridCellController.Highlight(true);
+        // }
+        ViewManager.Instance.OpenView(ViewType.UnitInfoView, "", cell.CurrentUnit);
+        ViewManager.Instance.OpenView(ViewType.SkillSelectView, "", cell.CurrentUnit);
+    }
+
+    private void DeselectUnit(GridCell cell)
+    {
+        if (cell.CurrentUnit is null) return;
+
+        // cell.GridCellController.Highlight(false);
+        // var moveRangeCells = cell.CurrentUnit.GetMoveRange();
+        // foreach (var gridCell in moveRangeCells)
+        // {
+        //     gridCell.GridCellController.Highlight(false);
+        // }
+        ViewManager.Instance.CloseView(ViewType.UnitInfoView);
+        ViewManager.Instance.CloseView(ViewType.SkillSelectView);
+    }
+
+    private void OnClickSkill(object[] obj)
+    {
+        if (obj[0] is not SkillDataSO skillData) return;
+        
+        
+        ViewManager.Instance.CloseView(ViewType.SkillSelectView);
+        ViewManager.Instance.CloseView(ViewType.UnitInfoView);
     }
 }

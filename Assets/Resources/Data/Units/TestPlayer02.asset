@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5907fe0d4ae767b4291f44fedc3d1d08, type: 3}
+  m_Name: TestPlayer02
+  m_EditorClassIdentifier: 
+  unitID: player_02
+  unitName: zzz
+  description: 
+  unitSprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b,
+    type: 3}
+  unitPrefab: {fileID: 5232480781568626486, guid: d601efe630ce245f5b4fde352b7dafe9,
+    type: 3}
+  isEnemy: 0
+  maxHP: 3
+  moveRange: 2
+  attackRange: 1
+  movementEnergyCost: 1
+  baseDamage: 1
+  canDestroy: 1
+  collisionDamage: 1
+  skills:
+  - {fileID: 11400000, guid: 418fa04bd2f184c5ab674b870ecc8227, type: 2}
+  - {fileID: 11400000, guid: fe4446182899a4e79af5eb4255274faa, type: 2}
+  aiPriority: 1
+  buildingTargetPriority: 2
+  unitTargetPriority: 1
