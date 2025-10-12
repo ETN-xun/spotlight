@@ -18,6 +18,8 @@ namespace View
         DeploymentView,
         UnitDeploymentView,
         MainMenuView,
+        LevelSelectView,
+        LevelView,
     }
 
 }

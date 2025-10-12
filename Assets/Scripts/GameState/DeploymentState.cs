@@ -39,7 +39,7 @@ public class DeploymentState : GameStateBase
                 _deployedUnitCount++;
                 var unit = _unitData.unitPrefab.GetComponent<Unit>();
                 GridManager.Instance.PlaceUnit(cell.Coordinate, unit);
-                var view = ViewManager.Instance.GetView<UnitDeploymentView>(ViewType.UnitDeploymentView, int.Parse(_unitData.unitID));
+                var view = ViewManager.Instance.GetView<UnitDeploymentView>(ViewType.UnitDeploymentView, _unitData.unitID);
                 view.DisableViewClick();
                 _isClickDeployUnit = false;
             }
@@ -50,7 +50,7 @@ public class DeploymentState : GameStateBase
         }
 
 
-        if (_deployedUnitCount == LevelManager.Instance.GetLevelData().playerUnits.Count)
+        if (_deployedUnitCount == LevelManager.Instance.GetCurrentLevel().playerUnits.Count)
         {
             gameManager.ChangeGameState(GameState.EnemyTurn);
         }

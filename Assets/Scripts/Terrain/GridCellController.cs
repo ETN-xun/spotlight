@@ -31,16 +31,4 @@ public class GridCellController : MonoBehaviour
 
         
     }
-    /// <summary>
-    /// 鼠标点击逻辑
-    /// </summary>
-    private void OnMouseDown()
-    {
-        if (Data != null)
-        {
-            Debug.Log($"Clicked cell: {Data.Coordinate}");
-            //鼠标点击逻辑
-            
-        }
-    }
 }

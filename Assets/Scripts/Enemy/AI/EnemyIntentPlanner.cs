@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AI
+namespace Enemy.AI
 {
     /// <summary>
     /// 从 Unit/Skill 数据生成 AI 意图（纯规划，不执行）
