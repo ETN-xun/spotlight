@@ -19,7 +19,12 @@ public enum SkillType
     /// <summary>
     /// 生成技能 - 创建临时物体
     /// </summary>
-    Spawn
+    Spawn,
+    
+    /// <summary>
+    /// 状态异常技能 - 施加状态异常效果
+    /// </summary>
+    StatusAbnormal
 }
 
 /// <summary>
@@ -94,5 +99,37 @@ public enum EffectType
     /// <summary>
     /// 护盾效果
     /// </summary>
-    Shield
+    Shield,
+    
+    /// <summary>
+    /// 状态异常效果 - 数据损坏，影响单位行为
+    /// </summary>
+    StatusAbnormal
+}
+
+/// <summary>
+/// 状态异常类型枚举
+/// 定义不同的状态异常效果
+/// </summary>
+public enum StatusAbnormalType
+{
+    /// <summary>
+    /// 数据损坏 - 移动和攻击随机化
+    /// </summary>
+    DataCorruption,
+    
+    /// <summary>
+    /// 系统错误 - 技能冷却时间增加
+    /// </summary>
+    SystemError,
+    
+    /// <summary>
+    /// 内存泄漏 - 每回合损失能量
+    /// </summary>
+    MemoryLeak,
+    
+    /// <summary>
+    /// 缓存污染 - 攻击力降低
+    /// </summary>
+    CacheCorruption
 }

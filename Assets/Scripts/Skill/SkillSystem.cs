@@ -77,6 +77,8 @@ public class SkillSystem : MonoBehaviour
                 return new DisplacementSkill(data, caster);
             case SkillType.Spawn:
                 return new SpawnSkill(data, caster);
+            case SkillType.StatusAbnormal:
+                return new StatusAbnormalSkill(data, caster);
             default:
                 return null;
         }

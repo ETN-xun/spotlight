@@ -215,7 +215,7 @@ public class GameManager : MonoBehaviour
         // HandleStateTransition(oldState, newState);
         
         // 触发状态改变事件
-        // OnGameStateChanged?.Invoke(oldState, newState);
+        OnGameStateChanged?.Invoke(oldState, newState);
     }
     
     /// <summary>

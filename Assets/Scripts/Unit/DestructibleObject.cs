@@ -2,11 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DestructibleObject
+public class DestructibleObject : IObjectOnCell
 {
     public UnitDataSO data;
     public Vector2Int coordinate;
     public bool isDestroyed = false;
+    
+    // IObjectOnCell 接口实现
+    public string Name => data?.unitName ?? "Unknown";
+    public Vector2Int Coordinate => coordinate;
+    public int Hits => data?.Hits ?? 0;
     
     public DestructibleObject(int hits, string name, Vector2Int coord)
     {
@@ -18,15 +23,20 @@ public class DestructibleObject
 
     public void TakeDamage()
     {
+        TakeDamage(1); // 默认伤害为1
+    }
+    
+    public void TakeDamage(int damage)
+    {
         if (isDestroyed) return;
-        data.Hits -= 1;
+        data.Hits -= damage;
         if (data.Hits <= 0)
         {
             Die();
         }
     }
 
-    private void Die()
+    public void Die()
     {
         if (isDestroyed) return;
         isDestroyed = true;
@@ -44,6 +54,18 @@ public class DestructibleObject
             Vector3Int tilePos = new Vector3Int(coordinate.x, coordinate.y, 0);
             GridManager.Instance.objectTilemap.SetTile(tilePos, null);
         }
+    }
+    
+    public bool CanUnitPassThrough(Unit unit)
+    {
+        // 可破坏物体通常不允许单位穿过
+        return false;
+    }
+    
+    public bool CanTakeDamage()
+    {
+        // 可破坏物体可以受到伤害
+        return !isDestroyed;
     }
 
 }

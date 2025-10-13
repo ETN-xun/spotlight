@@ -77,7 +77,24 @@ public class SkillDataSO : ScriptableObject
     [Tooltip("冷却回合数")]
     public int cooldownTurns = 0;
     
-    [Tooltip("是否为被动技能")]
+    
+    
+    [Header("状态异常属性")]
+    [Tooltip("状态异常类型")]
+    public StatusAbnormalType statusAbnormalType;
+    
+    [Tooltip("状态异常持续回合数")]
+    public int statusDuration = 3;
+    
+    [Tooltip("状态异常强度")]
+    public float statusIntensity = 1.0f;
+    
+    [Tooltip("状态异常是否可叠加")]
+    public bool statusCanStack = true;
+    
+    [Tooltip("状态异常最大叠加层数")]
+    public int statusMaxStacks = 5;
+[Tooltip("是否为被动技能")]
     public bool isPassive = false;
     
     /// <summary>

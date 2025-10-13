@@ -30,6 +30,9 @@ public class MovementSystem : MonoBehaviour
 
         GridManager grid = GridManager.Instance;
         GridCell currentCell = unit.CurrentCell;
+        
+        // 记录移动前的位置，用于闪回位移
+        GridCell originalCell = currentCell;
 
         for (int step = 0; step < distance; step++)
         {
@@ -89,7 +92,7 @@ public class MovementSystem : MonoBehaviour
             //撞到建筑
             if (nextCell.ObjectOnCell != null)
             {
-                nextCell.ObjectOnCell.TakeDamage();
+                nextCell.ObjectOnCell.TakeDamage(1);
                 yield break;
             }
             
@@ -97,6 +100,13 @@ public class MovementSystem : MonoBehaviour
             currentCell = nextCell;
 
             yield return new WaitForSeconds(0.05f);
+        }
+
+        // 如果单位实际发生了移动，记录位移历史
+        if (originalCell != unit.CurrentCell)
+        {
+            int currentTurn = GameManager.Instance != null ? GameManager.Instance.CurrentTurn : 1;
+            FlashbackDisplacementSkill.RecordMovement(unit, originalCell, currentTurn);
         }
 
         onComplete?.Invoke();
@@ -200,6 +210,9 @@ public class MovementSystem : MonoBehaviour
 
     private IEnumerator MoveUnitByPathCoroutine(Unit unit, List<GridCell> path, System.Action onComplete)
     {
+        // 记录移动前的位置
+        GridCell originalCell = unit.CurrentCell;
+        
         for (int i = 1; i < path.Count; i++)
         {
             var nextCell = path[i];
@@ -207,6 +220,14 @@ public class MovementSystem : MonoBehaviour
             unit.MoveTo(nextCell);      // TODO: 替换为 MoveUnit
             yield return new WaitForSeconds(0.05f);
         }
+        
+        // 如果单位实际发生了移动，记录位移历史
+        if (originalCell != unit.CurrentCell)
+        {
+            int currentTurn = GameManager.Instance != null ? GameManager.Instance.CurrentTurn : 1;
+            FlashbackDisplacementSkill.RecordMovement(unit, originalCell, currentTurn);
+        }
+        
         onComplete?.Invoke();
     }
 }
