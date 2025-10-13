@@ -133,7 +133,10 @@ public class DataCorruptionEffect : StatusEffect
         // 检查格子是否被占用
         if (cell.CurrentUnit != null) return false;
         
-        // 检查格子是否有阻挡物体
+        // 检查格子是否有建筑
+        if (cell.DestructibleObject != null && !cell.DestructibleObject.CanUnitPassThrough(affectedUnit)) return false;
+        
+        //检查格子是否有残影
         if (cell.ObjectOnCell != null && !cell.ObjectOnCell.CanUnitPassThrough(affectedUnit)) return false;
         
         // 检查地形是否可通行
@@ -158,7 +161,12 @@ public class DataCorruptionEffect : StatusEffect
             return isTargetEnemy != isCasterEnemy; // 只能攻击敌对单位
         }
         
-        // 检查格子是否有可攻击的物体
+        // 检查格子是否有可攻击的建筑
+        if (cell.DestructibleObject != null && cell.DestructibleObject.CanTakeDamage())
+        {
+            return true;
+        }
+        // 检查格子是否有可攻击的残影
         if (cell.ObjectOnCell != null && cell.ObjectOnCell.CanTakeDamage())
         {
             return true;

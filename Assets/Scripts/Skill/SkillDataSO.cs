@@ -57,7 +57,7 @@ public class SkillDataSO : ScriptableObject
     public int displacementDistance = 0;
     
     [Header("生成属性")]
-    [Tooltip("生成物血量")]
+    [Tooltip("生成物护盾")]
     public int spawnHits = 2;
     
     [Tooltip("生成的Tile（用于Tilemap模式）")]
@@ -94,7 +94,7 @@ public class SkillDataSO : ScriptableObject
     
     [Tooltip("状态异常最大叠加层数")]
     public int statusMaxStacks = 5;
-[Tooltip("是否为被动技能")]
+    [Tooltip("是否为被动技能")]
     public bool isPassive = false;
     
     /// <summary>

@@ -2,39 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DestructibleObject : IObjectOnCell
+public class DestructibleObject
 {
-    public UnitDataSO data;
+    public DestructibleObjectSO data;
     public Vector2Int coordinate;
     public bool isDestroyed = false;
-    
-    // IObjectOnCell 接口实现
-    public string Name => data?.unitName ?? "Unknown";
-    public Vector2Int Coordinate => coordinate;
-    public int Hits => data?.Hits ?? 0;
     
     public DestructibleObject(int hits, string name, Vector2Int coord)
     {
         data.canDestroy = true;
         data.Hits = hits;
-        data.unitName = name;
+        data.Name = name;
         coordinate = coord;
     }
 
-    public void TakeDamage()
+    public void TakeHits()
     {
-        TakeDamage(1); // 默认伤害为1
-    }
-    
-    public void TakeDamage(int damage)
-    {
-        if (isDestroyed) return;
-        data.Hits -= damage;
+        if (isDestroyed || !data.canDestroy) return;
+        data.Hits -= 1;
         if (data.Hits <= 0)
         {
             Die();
         }
     }
+    
 
     public void Die()
     {
@@ -45,7 +36,7 @@ public class DestructibleObject : IObjectOnCell
         GridCell cell = GridManager.Instance.GetCell(coordinate);
         if (cell != null)
         {
-            cell.ObjectOnCell = null;
+            cell.DestructibleObject = null;
         }
 
         //从Tilemap中移除对应Tile
@@ -65,7 +56,7 @@ public class DestructibleObject : IObjectOnCell
     public bool CanTakeDamage()
     {
         // 可破坏物体可以受到伤害
-        return !isDestroyed;
+        return !isDestroyed||data.canDestroy;
     }
 
 }

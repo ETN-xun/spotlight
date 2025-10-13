@@ -194,7 +194,7 @@ public class MovementSystem : MonoBehaviour
 
     private bool IsCellWalkable(GridCell cell)
     {
-        return cell.CurrentUnit == null && cell.ObjectOnCell == null;
+        return cell.CurrentUnit == null && cell.DestructibleObject == null;
     }
 
     /// <summary>

@@ -57,7 +57,10 @@ public class Unit : MonoBehaviour
 
     public void TakeDamage(int dmg)
     {
-        currentHP -= dmg;
+        if(data.Hits>0)
+            data.Hits--;
+        else
+            currentHP -= dmg;
         Debug.Log($"{data.unitName} 受到 {dmg} 点伤害，剩余生命值: {currentHP}");
         if (currentHP <= 0) Die();
     }
