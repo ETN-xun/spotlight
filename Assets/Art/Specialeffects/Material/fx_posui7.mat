@@ -1,0 +1,235 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: fx_posui7
+  m_Shader: {fileID: 4800000, guid: 26f2e3b2122ecdf4c9a4cc2eb5cdd165, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _MASK_ON
+  - _NQ_ON
+  m_InvalidKeywords:
+  - _CUSTOMRJ1_ON
+  - _MAINTEXRA_ON
+  - _NQMAIN_TEX1_ON
+  - _NQMASK_ON
+  - _NQRJTEX_ON
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Main_Tex:
+        m_Texture: {fileID: 2800000, guid: 25f181d2f56824148a7925a799463b57, type: 3}
+        m_Scale: {x: 3, y: 1}
+        m_Offset: {x: 0, y: -0.39}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NiuQuTex:
+        m_Texture: {fileID: 2800000, guid: dedd7b7a1cf4afd4388830a8c55df58b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RongJieTex:
+        m_Texture: {fileID: 2800000, guid: 473fb97e7b3bd96478bb0b7b7c8ae53c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SpecGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ddpyTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ddpymask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _maskTex:
+        m_Texture: {fileID: 2800000, guid: 950a84e4c370259459c9cbdbc3e98357, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 1.45}
+    - _rjTex2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _3colorAlpha: 0
+    - _All_alpha: 1
+    - _AlphaClip: 0
+    - _AlphaToMask: 0
+    - _Blend: 0
+    - _BlendModePreserveSpecular: 1
+    - _BumpScale: 1
+    - _ClearCoatMask: 0
+    - _ClearCoatSmoothness: 0
+    - _Cull: 2
+    - _Cutoff: 0.5
+    - _DDpianyi: 0
+    - _DDpy: 0
+    - _DetailAlbedoMapScale: 1
+    - _DetailNormalMapScale: 1
+    - _Dst: 10
+    - _DstBlend: 0
+    - _DstBlendAlpha: 0
+    - _EnvironmentReflections: 1
+    - _FanXiangFrenal: 0
+    - _Float6: 1
+    - _GlossMapScale: 0
+    - _Glossiness: 0
+    - _GlossyReflections: 0
+    - _MainTexRotator: 0
+    - _MainTexUV: 0
+    - _Metallic: 0
+    - _NQRJTex: 1
+    - _NiuQuPow: -0.11
+    - _OcclusionStrength: 1
+    - _Parallax: 0.005
+    - _QueueOffset: 0
+    - _RGBcolor_onoff: 0
+    - _RJlK: 0
+    - _ReceiveShadows: 1
+    - _RongJie: 0
+    - _RongJieRY: 0.766
+    - _Smoothness: 0.5
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _Src: 5
+    - _SrcBlend: 1
+    - _SrcBlendAlpha: 1
+    - _Surface: 0
+    - _WorkflowMode: 1
+    - _ZWrite: 1
+    - _Zdethp: 4
+    - _cd_ddpy_pow: 0
+    - _cull_: 0
+    - _customNQQD: 0
+    - _customRJ1: 1
+    - _custum_rj_uv: 0
+    - _frenalRJ: 0
+    - _fresnel: 0
+    - _fresnelPow: -2.4
+    - _fresnelSize: 0.45
+    - _m_3color: 0
+    - _m_ddpianyi: 0
+    - _m_ddpianyi1: 0
+    - _m_mask: 0
+    - _m_niuqu: 0
+    - _m_rongjie: 0
+    - _maintexRA: 1
+    - _mask: 1
+    - _mask_RA: 0
+    - _nq: 1
+    - _nqMain_Tex1: 1
+    - _nqMask: 1
+    - _nqby: 0
+    - _polar: 0
+    - _pymsqh: 0
+    - _rj: 0
+    - _rj2: 0
+    - _rj2_ma: 0
+    - _rjTex2onoff: 0
+    - _rongjieB: 0
+    - _rotator2: 0
+    - _soft_lz: 0
+    - _xrsd: 0
+    - _xz: 0
+    - stenci_lbuffer: 8
+    m_Colors:
+    - _B_color: {r: 0, g: 0, b: 1, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DDpianyiUV: {r: 0, g: 0, b: 0, a: 0}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _G_color: {r: 0, g: 1, b: 0, a: 1}
+    - _Main_Color1: {r: 0.36037734, g: 0.41916206, b: 1.4980392, a: 1}
+    - _NiuQuUV: {r: 0, g: -0.54, b: 0, a: 0}
+    - _RJBColor: {r: 1, g: 0.4009434, b: 0.4009434, a: 1}
+    - _RJUVliudong: {r: 0, g: 0, b: 0, a: 0}
+    - _R_color: {r: 1, g: 0, b: 0, a: 1}
+    - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _ddpyxyz: {r: 1, g: 1, b: 1, a: 0}
+    - _feinierColor: {r: 1024, g: 0, b: 0, a: 1}
+    - _mainUV: {r: 0, g: 0, b: 0, a: 0}
+    - _maskUVliuDong: {r: 0, g: 0, b: 0, a: 0}
+    - _polar_tilling: {r: 1, g: 1, b: 0, a: 0}
+  m_BuildTextureStacks: []
+--- !u!114 &8918783935157176157
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7
