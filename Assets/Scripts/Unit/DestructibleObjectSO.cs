@@ -14,4 +14,10 @@ public class DestructibleObjectSO : ScriptableObject
 
     [Tooltip("护盾")] 
     public int Hits;
+    
+    [Tooltip("建筑类型")]
+    public DestructibleObjectType Type;
+    
+    [Tooltip(("是否激活"))]
+    public bool isActive = false;
 }

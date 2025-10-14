@@ -47,11 +47,21 @@ public enum TerrainType
     /// Bug格子:停留在格子上的单位生命值和攻击力数值调换，并施加状态异常效果
     /// </summary>
     BugTile,
-    
+}
+/// <summary>
+/// 定义地图建筑种类
+/// </summary>
+public enum DestructibleObjectType
+{
     /// <summary>
-    /// 缓存区：占领后每回合额外回复2点能量
+    /// 缓存区
     /// </summary>
-    RegisterTile,
+    Register,
+    /// <summary>
+    /// 防火墙
+    /// </summary>
+    FireWall,
+    
 }
 
 /// <summary>

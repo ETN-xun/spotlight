@@ -82,19 +82,24 @@ public class MovementSystem : MonoBehaviour
                         //造成异常效果
 
                         break;
-                    case TerrainType.RegisterTile:
-                        //每回合回复两点能量
-                        unit.data.RecoverEnergy += 2;
-                        //生成能承受一次伤害的据点
-                        terrain.destructionThreshold = 1;
-                        break;
                 }
             }
 
             //撞到建筑
             if (nextCell.ObjectOnCell != null)
             {
-                nextCell.ObjectOnCell.TakeDamage(1);
+                var DestructibleObject = nextCell.DestructibleObject;
+                DestructibleObjectType type = DestructibleObject.data.Type;
+                switch (type)
+                {
+                    case DestructibleObjectType.Register:
+                        //每回合回复两点能量
+                        unit.data.RecoverEnergy += 2;
+                        //建筑激活，可以被攻击
+                        DestructibleObject.data.Hits = 1;
+                        DestructibleObject.data.canDestroy = true;
+                        break;
+                }
                 yield break;
             }
             

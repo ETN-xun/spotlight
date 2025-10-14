@@ -9,10 +9,11 @@ public class TileLibrary : ScriptableObject
 
     [Header("建筑Tile")]
     public TileBase FirewallTile;
+    public TileBase RegisterTile;
 
     [Header("地形Tile")]
     public TileBase Plain;
     public TileBase CorrosionTile;
     public TileBase BugTile;
-    public TileBase RegisterTile;
+    
 }
