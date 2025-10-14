@@ -138,6 +138,16 @@ namespace Enemy.AI
 
         private Skill CreateSkill(SkillDataSO data, Unit caster)
         {
+            // 首先检查特定的技能ID
+            switch (data.skillID)
+            {
+                case "breakpoint_execution_01":
+                    return new BreakpointExecutionSkill(data, caster);
+                case "forced_migration_01":
+                    return new ForcedMigrationSkill(data, caster);
+            }
+            
+            // 然后按技能类型创建通用技能
             switch (data.skillType)
             {
                 case SkillType.Damage:
