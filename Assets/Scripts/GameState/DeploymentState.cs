@@ -24,7 +24,7 @@ public class DeploymentState : GameStateBase
     public override void Enter()
     {
         base.Enter();
-        MessageCenter.Subscribe(Defines.ClickDeployUnitEvent, OnClickDeployUnit);
+        MessageCenter.Subscribe(Defines.ClickDeployUnitViewEvent, OnClickDeployUnit);
         _totalUnits = LevelManager.Instance.GetCurrentLevel().playerUnits;
         ViewManager.Instance.OpenView(ViewType.DeploymentView);
     }
@@ -62,7 +62,7 @@ public class DeploymentState : GameStateBase
     public override void Exit()
     {
         base.Exit();
-        MessageCenter.Unsubscribe(Defines.ClickDeployUnitEvent, OnClickDeployUnit);
+        MessageCenter.Unsubscribe(Defines.ClickDeployUnitViewEvent, OnClickDeployUnit);
         ViewManager.Instance.CloseView(ViewType.DeploymentView);
     }
     

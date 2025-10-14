@@ -192,4 +192,15 @@ public class GridManager : MonoBehaviour
         return true;
     }
 
+    public void Highlight(bool highlight, Vector2Int coord)
+    {
+        var cellPos = new Vector3Int(coord.x, coord.y, 0);
+        var tile = terrainTilemap.GetTile(cellPos);
+        if (tile == null) return;
+
+        terrainTilemap.SetTileFlags(cellPos, TileFlags.None);
+        terrainTilemap.SetColor(cellPos, highlight ? Color.green : Color.white);
+    }
+
+    
 }

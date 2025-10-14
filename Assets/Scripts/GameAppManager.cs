@@ -63,13 +63,6 @@ public class GameAppManager : MonoBehaviour
             SortingOrder = 0,
             ParentTransform = transform.Find("ViewManager")
         });
-
-        ViewManager.Instance.RegisterView(ViewType.UnitInfoView, new ViewInfo()
-        {
-            PrefabName = "UnitInfoView",
-            SortingOrder = 1,
-            ParentTransform = transform.Find("ViewManager")
-        });
             
         ViewManager.Instance.RegisterView(ViewType.DeploymentView, new ViewInfo()
         {
@@ -84,6 +77,12 @@ public class GameAppManager : MonoBehaviour
             SortingOrder = 999,
             ParentTransform = transform.Find("ViewManager")
         });
+
+        ViewManager.Instance.RegisterView(ViewType.FightView, new ViewInfo()
+        {
+            PrefabName = "FightView",
+            ParentTransform = transform.Find("ViewManager")
+        });
         
         ViewManager.Instance.RegisterView(ViewType.LevelSelectView, new ViewInfo()
         {
@@ -91,10 +90,5 @@ public class GameAppManager : MonoBehaviour
             ParentTransform = transform.Find("ViewManager")
         });
         
-        ViewManager.Instance.RegisterView(ViewType.SkillSelectView, new ViewInfo()
-        {
-            PrefabName = "SkillSelectView",
-            ParentTransform = transform.Find("ViewManager")
-        });
     }
 }

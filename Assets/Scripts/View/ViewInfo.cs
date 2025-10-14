@@ -22,6 +22,8 @@ namespace View
         LevelView,
         SkillView,
         SkillSelectView,
+        TerrainInfoView,
+        FightView,
     }
 
 }

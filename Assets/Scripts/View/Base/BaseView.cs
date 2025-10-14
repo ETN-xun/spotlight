@@ -9,13 +9,11 @@ namespace View.Base
         public int ViewId { get; set; }
         public bool IsInit { get; set; }
         
-        private Canvas _canvas;
         
         private readonly Dictionary<string, GameObject> _cacheGameObjects = new ();
 
         private void Awake()
         {
-            _canvas = GetComponent<Canvas>();
             OnAwake();
         }
 
@@ -62,7 +60,7 @@ namespace View.Base
 
         public virtual void SetVisible(bool visible)
         {
-            _canvas.enabled = visible;
+            gameObject.SetActive(visible);
         }
 
 

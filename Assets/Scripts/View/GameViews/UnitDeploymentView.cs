@@ -24,7 +24,7 @@ namespace View.GameViews
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            MessageCenter.Publish(Defines.ClickDeployUnitEvent,  _unitData);
+            MessageCenter.Publish(Defines.ClickDeployUnitViewEvent,  _unitData);
         }
 
         public void DisableViewClick()

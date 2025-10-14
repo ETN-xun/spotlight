@@ -5,14 +5,14 @@ namespace View.GameViews
 {
     public class SkillSelectView : BaseView
     {
-        private List<SkillDataSO> _skillsData = new();
+        private readonly List<SkillDataSO> _skillsData = new();
         protected override void InitView()
         {
             base.InitView();
             ViewManager.Instance.RegisterView(ViewType.SkillView, new ViewInfo()
             {
                 PrefabName = "SkillView",
-                ParentTransform = transform.Find("Background")
+                ParentTransform = transform
             });
         }
 

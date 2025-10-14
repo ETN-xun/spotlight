@@ -184,7 +184,7 @@ namespace View
         /// <param name="viewType"></param>
         /// <param name="instanceKey"></param>
         /// <returns></returns>
-        private bool IsOpen(ViewType viewType, string instanceKey = "")
+        public bool IsOpen(ViewType viewType, string instanceKey = "")
         {
             var key = GetViewKey(viewType, instanceKey);
             return _openViews.ContainsKey(key);
