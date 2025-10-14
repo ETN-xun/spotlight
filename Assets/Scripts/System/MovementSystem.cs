@@ -85,6 +85,8 @@ public class MovementSystem : MonoBehaviour
                     case TerrainType.RegisterTile:
                         //每回合回复两点能量
                         unit.data.RecoverEnergy += 2;
+                        //生成能承受一次伤害的据点
+                        terrain.destructionThreshold = 1;
                         break;
                 }
             }
