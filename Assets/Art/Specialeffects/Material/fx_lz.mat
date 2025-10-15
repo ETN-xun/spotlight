@@ -7,17 +7,16 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: fx_posui5
+  m_Name: fx_lz
   m_Shader: {fileID: 4800000, guid: 26f2e3b2122ecdf4c9a4cc2eb5cdd165, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _RJ_ON
+  m_ValidKeywords: []
   m_InvalidKeywords:
-  - _CUSTOMRJ1_ON
   - _NQMAIN_TEX1_ON
   - _NQMASK_ON
   - _NQRJTEX_ON
+  - _POLAR_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -57,7 +56,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Main_Tex:
-        m_Texture: {fileID: 2800000, guid: f83ba203bd4a4a24c97215c0a4453cd8, type: 3}
+        m_Texture: {fileID: 2800000, guid: cf3079588190ca94dbc84aa625449186, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -77,8 +76,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _RongJieTex:
-        m_Texture: {fileID: 2800000, guid: f988b1c921ea6e44c9a0a83689600649, type: 3}
-        m_Scale: {x: 0.2, y: 0.1}
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
         m_Texture: {fileID: 0}
@@ -93,7 +92,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _maskTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: dc122424d2c182b4280f1193da99b759, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _rjTex2:
@@ -168,7 +167,7 @@ Material:
     - _cd_ddpy_pow: 0
     - _cull_: 0
     - _customNQQD: 0
-    - _customRJ1: 1
+    - _customRJ1: 0
     - _custum_rj_uv: 0
     - _frenalRJ: 0
     - _fresnel: 0
@@ -187,9 +186,9 @@ Material:
     - _nqMain_Tex1: 1
     - _nqMask: 1
     - _nqby: 0
-    - _polar: 0
+    - _polar: 1
     - _pymsqh: 0
-    - _rj: 1
+    - _rj: 0
     - _rj2: 0
     - _rj2_ma: 0
     - _rjTex2onoff: 0
@@ -206,7 +205,7 @@ Material:
     - _DDpianyiUV: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _G_color: {r: 0, g: 1, b: 0, a: 1}
-    - _Main_Color1: {r: 1, g: 1, b: 1, a: 1}
+    - _Main_Color1: {r: 1.8880861, g: 1.8880861, b: 1.8880861, a: 1}
     - _NiuQuUV: {r: 0, g: 0, b: 0, a: 0}
     - _RJBColor: {r: 1, g: 0.4009434, b: 0.4009434, a: 1}
     - _RJUVliudong: {r: 0, g: 0, b: 0, a: 0}
@@ -214,7 +213,7 @@ Material:
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _ddpyxyz: {r: 1, g: 1, b: 1, a: 0}
     - _feinierColor: {r: 1024, g: 0, b: 0, a: 1}
-    - _mainUV: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _mainUV: {r: 0, g: 0, b: 0, a: 0}
     - _maskUVliuDong: {r: 0, g: 0, b: 0, a: 0}
     - _polar_tilling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []

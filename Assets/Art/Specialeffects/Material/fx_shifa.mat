@@ -206,7 +206,7 @@ Material:
     - _DDpianyiUV: {r: 0, g: 0.69, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _G_color: {r: 0, g: 1, b: 0, a: 1}
-    - _Main_Color1: {r: 3.44159, g: 3.44159, b: 3.44159, a: 1}
+    - _Main_Color1: {r: 0.94177717, g: 4.0746274, b: 2.5560641, a: 1}
     - _NiuQuUV: {r: 0, g: 0.1, b: 0, a: 0}
     - _RJBColor: {r: 1, g: 0.4009434, b: 0.4009434, a: 1}
     - _RJUVliudong: {r: 0, g: 0, b: 0, a: 0}
