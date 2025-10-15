@@ -57,7 +57,7 @@ public class SkillDataSO : ScriptableObject
     public int displacementDistance = 0;
     
     [Header("生成属性")]
-    [Tooltip("生成物血量")]
+    [Tooltip("生成物护盾")]
     public int spawnHits = 2;
     
     [Tooltip("生成的Tile（用于Tilemap模式）")]
@@ -77,6 +77,23 @@ public class SkillDataSO : ScriptableObject
     [Tooltip("冷却回合数")]
     public int cooldownTurns = 0;
     
+    
+    
+    [Header("状态异常属性")]
+    [Tooltip("状态异常类型")]
+    public StatusAbnormalType statusAbnormalType;
+    
+    [Tooltip("状态异常持续回合数")]
+    public int statusDuration = 3;
+    
+    [Tooltip("状态异常强度")]
+    public float statusIntensity = 1.0f;
+    
+    [Tooltip("状态异常是否可叠加")]
+    public bool statusCanStack = true;
+    
+    [Tooltip("状态异常最大叠加层数")]
+    public int statusMaxStacks = 5;
     [Tooltip("是否为被动技能")]
     public bool isPassive = false;
     

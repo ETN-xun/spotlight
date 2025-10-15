@@ -18,7 +18,7 @@ namespace View.GameViews
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            MessageCenter.Publish(Defines.ClickSkillEvent, _skillData);
+            MessageCenter.Publish(Defines.ClickSkillViewEvent, _skillData);
         }
     }
 }

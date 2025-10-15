@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DestructibleObject
 {
-    public UnitDataSO data;
+    public DestructibleObjectSO data;
     public Vector2Int coordinate;
     public bool isDestroyed = false;
     
@@ -12,21 +12,22 @@ public class DestructibleObject
     {
         data.canDestroy = true;
         data.Hits = hits;
-        data.unitName = name;
+        data.Name = name;
         coordinate = coord;
     }
 
-    public void TakeDamage()
+    public void TakeHits()
     {
-        if (isDestroyed) return;
+        if (isDestroyed || !data.canDestroy) return;
         data.Hits -= 1;
         if (data.Hits <= 0)
         {
             Die();
         }
     }
+    
 
-    private void Die()
+    public void Die()
     {
         if (isDestroyed) return;
         isDestroyed = true;
@@ -35,7 +36,7 @@ public class DestructibleObject
         GridCell cell = GridManager.Instance.GetCell(coordinate);
         if (cell != null)
         {
-            cell.ObjectOnCell = null;
+            cell.DestructibleObject = null;
         }
 
         //从Tilemap中移除对应Tile
@@ -44,6 +45,18 @@ public class DestructibleObject
             Vector3Int tilePos = new Vector3Int(coordinate.x, coordinate.y, 0);
             GridManager.Instance.objectTilemap.SetTile(tilePos, null);
         }
+    }
+    
+    public bool CanUnitPassThrough(Unit unit)
+    {
+        // 可破坏物体通常不允许单位穿过
+        return false;
+    }
+    
+    public bool CanTakeDamage()
+    {
+        // 可破坏物体可以受到伤害
+        return !isDestroyed||data.canDestroy;
     }
 
 }

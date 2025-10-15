@@ -1,3 +1,4 @@
+using Common;
 using TMPro;
 using UnityEngine.UI;
 using View.Base;
@@ -6,13 +7,30 @@ namespace View.GameViews
 {
     public class UnitInfoView : BaseView
     {
+        protected override void InitView()
+        {
+            base.InitView();
+            ViewManager.Instance.RegisterView(ViewType.SkillSelectView, new ViewInfo()
+            {
+                PrefabName = "SkillSelectView",
+                ParentTransform = transform
+            });
+        }
+
         public override void Open(params object[] args)
         {
             base.Open(args);
-            // 仅供测试
             if (args[0] is not Unit unit) return;
-            Find<TextMeshProUGUI>("UnitInfo/Name").text = "Name: " + unit.data.unitName;
-            Find<TextMeshProUGUI>("UnitInfo/Health").text = "Health: " + unit.currentHP;
+            Find<TextMeshProUGUI>("UnitName").text = unit.data.unitName;
+            Find<Image>("UnitIcon").sprite = unit.data.unitSprite;
+            
+            ViewManager.Instance.OpenView(ViewType.SkillSelectView, "", unit);
+        }
+
+        public override void Close(params object[] args)
+        {
+            base.Close(args);
+            ViewManager.Instance.CloseView(ViewType.SkillSelectView);
         }
     }
 }

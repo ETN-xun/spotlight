@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c451a6ae6559ae44f842569554b6916b, type: 3}
+  m_Name: ForcedMigrationSkill
+  m_EditorClassIdentifier: 
+  skillID: forced_migration_01
+  skillName: 强制迁移
+  description: 指针操控者-零的特殊技能：将目标向自身牵引一格，如果无法移动则造成额外伤害
+  skillIcon: {fileID: 0}
+  skillType: 1
+  energyCost: 2
+  range: 2
+  requiresTarget: 1
+  canTargetAllies: 0
+  canTargetEnemies: 1
+  baseDamage: 1
+  causeCollisionDamage: 0
+  displacementDirection: 1
+  displacementDistance: 1
+  spawnHits: 2
+  spawnTile: {fileID: 0}
+  effectRadius: 0
+  effectPattern: []
+  effects: 
+  - 1
+  cooldownTurns: 1
+  isPassive: 0
+  statusAbnormalType: 0
+  statusDuration: 0
+  statusIntensity: 0
+  statusCanStack: 0
+  statusMaxStacks: 0

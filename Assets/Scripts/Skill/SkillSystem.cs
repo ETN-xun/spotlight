@@ -69,6 +69,16 @@ public class SkillSystem : MonoBehaviour
 
     private Skill ChooseSkill(SkillDataSO data, Unit caster)
     {
+        // 首先检查特定的技能ID
+        switch (data.skillID)
+        {
+            case "breakpoint_execution_01":
+                return new BreakpointExecutionSkill(data, caster);
+            case "forced_migration_01":
+                return new ForcedMigrationSkill(data, caster);
+        }
+        
+        // 然后按技能类型创建通用技能
         switch (data.skillType)
         {
             case SkillType.Damage:
@@ -77,6 +87,8 @@ public class SkillSystem : MonoBehaviour
                 return new DisplacementSkill(data, caster);
             case SkillType.Spawn:
                 return new SpawnSkill(data, caster);
+            case SkillType.StatusAbnormal:
+                return new StatusAbnormalSkill(data, caster);
             default:
                 return null;
         }

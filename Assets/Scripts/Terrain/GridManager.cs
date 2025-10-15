@@ -7,18 +7,20 @@ public class GridManager : MonoBehaviour
 {
     public static GridManager Instance { get; private set; }
 
-    [Header("Grid Settings")]
+    [Header("网格设置")]
     public int rows = 8;            //网格长
     public int cols = 8;            //网格宽
     public float cellSize = 1f;               //格子大小
     public Vector3 origin = Vector3.zero;     //网格起点(左下角)
 
-    [Header("Prefabs")]
+    [Header("瓦片地图")]
     public Tilemap terrainTilemap; //绘制地形
     public Tilemap objectTilemap; //绘制建筑或障碍物
 
-    [Header("Terrain Library")]
+    [Header("地形类型")]
     public TerrainDataSO[] terrainLibrary; //存放预制地形类型
+    [Header("建筑类型")]
+    public DestructibleObjectSO[] destructibleObjectLibrary; //存放预制地形类型
 
     public readonly Dictionary<Vector2Int, GridCell> _gridDict = new Dictionary<Vector2Int, GridCell>();        //网格地图
 
@@ -62,7 +64,8 @@ public class GridManager : MonoBehaviour
             if (objectTilemap != null && objectTilemap.HasTile(tilePos))
             {
                 var objectTile = objectTilemap.GetTile(tilePos);
-                cell.ObjectOnCell = GetDestructibleObjectFromTile(objectTile);
+                cell.DestructibleObject.data = GetDestructibleObjectFromTile(objectTile);
+                cell.DestructibleObject.coordinate = coord;
             }
 
             _gridDict[coord] = cell;
@@ -111,9 +114,16 @@ public class GridManager : MonoBehaviour
     /// </summary>
     /// <param name="tile"></param>
     /// <returns></returns>
-    private DestructibleObject GetDestructibleObjectFromTile(TileBase tile)
+    private DestructibleObjectSO GetDestructibleObjectFromTile(TileBase tile)
     {
-        //暂定
+        if (tile == null) return null;
+        string tileName = tile.name.ToLower();
+
+        foreach (var t in destructibleObjectLibrary)
+        {
+            if (tileName.Contains(t.Name.ToLower()))
+                return t;
+        }
         return null;
     }
     /// <summary>
@@ -182,4 +192,15 @@ public class GridManager : MonoBehaviour
         return true;
     }
 
+    public void Highlight(bool highlight, Vector2Int coord)
+    {
+        var cellPos = new Vector3Int(coord.x, coord.y, 0);
+        var tile = terrainTilemap.GetTile(cellPos);
+        if (tile == null) return;
+
+        terrainTilemap.SetTileFlags(cellPos, TileFlags.None);
+        terrainTilemap.SetColor(cellPos, highlight ? Color.green : Color.white);
+    }
+
+    
 }

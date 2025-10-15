@@ -8,7 +8,7 @@ public class SpawnSkill : Skill
 
     public override void Execute(GridCell targetCell, GridManager gridManager)
     {
-        if (targetCell.ObjectOnCell != null || targetCell.CurrentUnit != null)
+        if (targetCell.DestructibleObject != null || targetCell.CurrentUnit != null)
         {
             Debug.Log("Spawn blocked: cell occupied");
             return;
@@ -25,7 +25,7 @@ public class SpawnSkill : Skill
                 name: data.skillName,
                 coord: targetCell.Coordinate
             );
-            targetCell.ObjectOnCell = destructible;
+            targetCell.DestructibleObject = destructible;
         }
 
     }

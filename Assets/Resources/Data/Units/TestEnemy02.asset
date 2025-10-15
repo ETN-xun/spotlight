@@ -26,7 +26,8 @@ MonoBehaviour:
   baseDamage: 1
   canDestroy: 1
   collisionDamage: 1
-  skills: []
+  skills:
+  - {fileID: 11400000, guid: 59d09fb55eab73c4d900ffcfc4e31487, type: 2}
   aiPriority: 1
   buildingTargetPriority: 2
   unitTargetPriority: 1

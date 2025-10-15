@@ -30,6 +30,9 @@ public class MovementSystem : MonoBehaviour
 
         GridManager grid = GridManager.Instance;
         GridCell currentCell = unit.CurrentCell;
+        
+        // 记录移动前的位置，用于闪回位移
+        GridCell originalCell = currentCell;
 
         for (int step = 0; step < distance; step++)
         {
@@ -79,17 +82,24 @@ public class MovementSystem : MonoBehaviour
                         //造成异常效果
 
                         break;
-                    case TerrainType.RegisterTile:
-                        //每回合回复两点能量
-                        unit.data.RecoverEnergy += 2;
-                        break;
                 }
             }
 
             //撞到建筑
             if (nextCell.ObjectOnCell != null)
             {
-                nextCell.ObjectOnCell.TakeDamage();
+                var DestructibleObject = nextCell.DestructibleObject;
+                DestructibleObjectType type = DestructibleObject.data.Type;
+                switch (type)
+                {
+                    case DestructibleObjectType.Register:
+                        //每回合回复两点能量
+                        unit.data.RecoverEnergy += 2;
+                        //建筑激活，可以被攻击
+                        DestructibleObject.data.Hits = 1;
+                        DestructibleObject.data.canDestroy = true;
+                        break;
+                }
                 yield break;
             }
             
@@ -97,6 +107,13 @@ public class MovementSystem : MonoBehaviour
             currentCell = nextCell;
 
             yield return new WaitForSeconds(0.05f);
+        }
+
+        // 如果单位实际发生了移动，记录位移历史
+        if (originalCell != unit.CurrentCell)
+        {
+            int currentTurn = GameManager.Instance != null ? GameManager.Instance.CurrentTurn : 1;
+            FlashbackDisplacementSkill.RecordMovement(unit, originalCell, currentTurn);
         }
 
         onComplete?.Invoke();
@@ -184,7 +201,7 @@ public class MovementSystem : MonoBehaviour
 
     private bool IsCellWalkable(GridCell cell)
     {
-        return cell.CurrentUnit == null && cell.ObjectOnCell == null;
+        return cell.CurrentUnit == null && cell.DestructibleObject == null;
     }
 
     /// <summary>
@@ -200,6 +217,9 @@ public class MovementSystem : MonoBehaviour
 
     private IEnumerator MoveUnitByPathCoroutine(Unit unit, List<GridCell> path, System.Action onComplete)
     {
+        // 记录移动前的位置
+        GridCell originalCell = unit.CurrentCell;
+        
         for (int i = 1; i < path.Count; i++)
         {
             var nextCell = path[i];
@@ -207,6 +227,14 @@ public class MovementSystem : MonoBehaviour
             unit.MoveTo(nextCell);      // TODO: 替换为 MoveUnit
             yield return new WaitForSeconds(0.05f);
         }
+        
+        // 如果单位实际发生了移动，记录位移历史
+        if (originalCell != unit.CurrentCell)
+        {
+            int currentTurn = GameManager.Instance != null ? GameManager.Instance.CurrentTurn : 1;
+            FlashbackDisplacementSkill.RecordMovement(unit, originalCell, currentTurn);
+        }
+        
         onComplete?.Invoke();
     }
 }
