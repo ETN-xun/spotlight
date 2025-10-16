@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+/// <summary>
+/// 地形投放技能
+/// </summary>
 
 public class SpawnSkill : Skill
 {

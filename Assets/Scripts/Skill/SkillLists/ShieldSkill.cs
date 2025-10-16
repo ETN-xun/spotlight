@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// 堆栈护盾技能
+/// </summary>
 public class ShieldSkill : Skill
 {
-    // Start is called before the first frame update
     public ShieldSkill(SkillDataSO data, Unit caster) : base(data, caster) {}
 
     public override void Execute(GridCell targetCell, GridManager gridManager)

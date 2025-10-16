@@ -75,10 +75,30 @@ public class MovementSystem : MonoBehaviour
                         
                         break;
                     case TerrainType.BugTile:
-                        //交换攻击力与生命
-                        unit.data.baseDamage = unit.data.baseDamage + unit.data.maxHP;
-                        unit.data.maxHP = unit.data.baseDamage - unit.data.maxHP;
-                        unit.data.baseDamage = unit.data.baseDamage - unit.data.maxHP;
+                        //根据角色类型交换攻击力与生命
+                        
+                        
+                        if(unit.data.isEnemy)
+                        {
+                            unit.data.baseDamage = unit.data.baseDamage + unit.data.maxHP;
+                            unit.data.maxHP = unit.data.baseDamage - unit.data.maxHP;
+                            unit.data.baseDamage = unit.data.baseDamage - unit.data.maxHP;
+                        }
+                        else
+                        {
+                            switch (unit.data.unitName)
+                            { 
+                                case "Shadow"://角色为影
+                                    Exchange(ref unit.data.maxHP,ref unit.data.skills.FirstOrDefault(skill => skill.skillName == "BreakpointExecutionSkill")!.baseDamage);//交换断点斩杀技能数值
+                                    break;
+                                case "Rock"://角色为石
+                                    Exchange(ref unit.data.maxHP,ref unit.data.skills.FirstOrDefault(skill => skill.skillName == "SpawnSkill")!.baseDamage);//交换地形投放技能数值
+                                    break;
+                                case "Zero"://角色为零
+                                    Exchange(ref unit.data.maxHP,ref unit.data.skills.FirstOrDefault(skill => skill.skillName == "ForcedMigrationSkill")!.baseDamage);//交换强制迁移技能
+                                    break;
+                            }
+                        }
                         //造成异常效果
 
                         break;
@@ -119,6 +139,12 @@ public class MovementSystem : MonoBehaviour
         onComplete?.Invoke();
     }
 
+    private void Exchange(ref int Num1, ref int Num2)
+    {
+        Num1 = Num1 + Num2;
+        Num2 = Num1 - Num2;
+        Num1 = Num1 - Num2;
+    }
     /// <summary>
     /// 基于A*算法查找路径
     /// </summary>
