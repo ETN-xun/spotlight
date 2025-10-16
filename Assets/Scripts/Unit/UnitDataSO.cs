@@ -76,5 +76,5 @@ public class UnitDataSO : ScriptableObject
     public float unitTargetPriority = 1.0f;
     
     [Tooltip("每回合触发过热降频行动次数")]
-    public int overheatedActionsPerTurn = 3;
+    public int overheatedActionsPerTurn = 1;
 }

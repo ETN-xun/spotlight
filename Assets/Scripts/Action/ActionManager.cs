@@ -15,6 +15,8 @@ namespace Action
         [SerializeField] private int recoverEnergyPerTurn = 1;
 
         private Unit _actorUnit;
+        private readonly List<Unit> _overheatedUnits = new();
+        private readonly List<Unit> _pendingRemoveOverheatedUnits = new();
 
         private void Awake()
         {
@@ -46,19 +48,22 @@ namespace Action
             skill.Execute(targetCell, GridManager.Instance);
             
             // play animation here
-            _actorUnit.currentTurnActionCount++;
             DetectActionEnd();
         }
         
         public void ExecuteMoveAction(Unit actor, GridCell targetCell)
         {
             if (actor == null || targetCell == null) return;
+            _actorUnit = actor;
             if (!EnergySystem.TrySpendEnergy(_actorUnit.data.movementEnergyCost))
             {
                 Debug.Log("Not enough energy to move.");
                 return;
             }
-            MovementSystem.Instance.MoveUnit(actor, targetCell);
+            // MovementSystem.Instance.MoveUnit(actor, targetCell);
+            _actorUnit.MoveTo(targetCell);
+            Debug.Log("current energy: " + EnergySystem.GetCurrentEnergy());
+            DetectActionEnd();
             // play animation here
         }
         
@@ -82,23 +87,36 @@ namespace Action
         
         private void DetectActionEnd()
         {
-            
+            _actorUnit.currentTurnActionCount++;
+            if (_actorUnit.currentTurnActionCount >= _actorUnit.data.overheatedActionsPerTurn)
+            {
+                if (!_actorUnit.ttIsApplied)
+                {
+                    _overheatedUnits.Add(_actorUnit);
+                }
+            }
         }
         
         private void OnPlayerTurnStarted(object[] args)
         {
             EnergySystem.IncreaseEnergy(recoverEnergyPerTurn);
+            
         }
 
         private void OnPlayerTurnEnd(object[] args)
         {
-            if (_actorUnit is null || _actorUnit.data.isEnemy) return;
-            if (_actorUnit.currentTurnActionCount >= _actorUnit.data.overheatedActionsPerTurn)
+            foreach (var unit in _pendingRemoveOverheatedUnits)
             {
-                // _actorUnit.StatusEffectManager.AddStatusEffect(StatusAbnormalType.ThermalThrottle, 1);
-                if (!_actorUnit.ttIsApplied)
-                    _actorUnit.ApplyTTEffect_temp();
+                unit.CancelTTEffect_temp();
             }
+            _pendingRemoveOverheatedUnits.Clear();
+            
+            foreach (var unit in _overheatedUnits)
+            {
+                unit.ApplyTTEffect_temp();
+                _pendingRemoveOverheatedUnits.Add(unit);
+            }
+            _overheatedUnits.Clear();
         }
     }
 }

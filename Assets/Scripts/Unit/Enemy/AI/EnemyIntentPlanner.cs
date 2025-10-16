@@ -22,7 +22,6 @@ namespace Enemy.AI
             else
             {
                 var moveTarget = FindBestMoveTarget(enemy, allyUnits);
-                Debug.Log($"enemy move to {moveTarget}");
                 enemy.MoveTo(moveTarget);
             }
             

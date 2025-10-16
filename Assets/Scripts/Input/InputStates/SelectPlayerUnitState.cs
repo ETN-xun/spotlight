@@ -98,7 +98,8 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
                 }
                 ViewManager.Instance.CloseView(ViewType.UnitInfoView);
                 
-                LastSelectedUnit.MoveTo(CurrentSelectedCell);
+                // LastSelectedUnit.MoveTo(CurrentSelectedCell);
+                ActionManager.Instance.ExecuteMoveAction(LastSelectedUnit, CurrentSelectedCell);
                 LastSelectedUnit.hasMoved = true;
             }
         }

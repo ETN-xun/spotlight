@@ -16,5 +16,8 @@ namespace Common
         
         public const string AllyUnitDiedEvent = "AllyUnitDiedEvent";
         public const string EnemyUnitDiedEvent = "EnemyUnitDiedEvent";
+        
+        public const string ApplyThermalThrottleEvent = "ApplyThermalThrottleEvent";
+        public const string RemoveThermalThrottleEvent = "RemoveThermalThrottleEvent";
     }
 }

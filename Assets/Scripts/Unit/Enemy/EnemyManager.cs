@@ -41,18 +41,8 @@ namespace Enemy
         public void StartEnemyTurn()       // 改成不用事件触发
         {
             CurrentEnemyTurn++;
-            Debug.Log($"count: {_aliveEnemies.Count}");
             foreach (var enemy in _aliveEnemies)
             {
-                if (enemy.CurrentCell is not null)
-                {
-                    Debug.Log($"enemy.current cell{enemy.CurrentCell.Coordinate}");
-                }
-                else
-                {
-                    Debug.Log("is null");
-                    return;
-                }
                 _intentPlanner.BuildIntent(enemy);
             }
         }

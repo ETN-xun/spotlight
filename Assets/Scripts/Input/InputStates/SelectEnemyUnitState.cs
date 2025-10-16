@@ -1,17 +1,39 @@
+using Common;
+using View;
+
 public class SelectEnemyUnitState : BaseInputState
 {
+    private Unit CurrentSelectedUnit => InputManager.Instance.GetSelectedUnit();
+    private GridCell CurrentSelectedCell => InputManager.Instance.GetSelectedCell();
+    private Unit LastSelectedUnit { get; set; }
+    private GridCell LastSelectedCell { get; set; }
+    
     public SelectEnemyUnitState(InputStateMachine stateMachine) : base(stateMachine)
     {
     }
     
     public override void Enter()
     {
-        
+        if (CurrentSelectedUnit is null) return;
+        LastSelectedUnit = CurrentSelectedUnit;
+        GridManager.Instance.Highlight(true, CurrentSelectedUnit.CurrentCell.Coordinate);
+        var moveRange = CurrentSelectedUnit.GetMoveRange();
+        foreach (var cell in moveRange)
+        {
+            GridManager.Instance.Highlight(true, cell.Coordinate);
+        }
+        ViewManager.Instance.OpenView(ViewType.UnitInfoView, "", CurrentSelectedUnit);
     }
     
     public override void Exit()
     {
-        
+        GridManager.Instance.Highlight(false, LastSelectedUnit.CurrentCell.Coordinate);
+        var moveRange = LastSelectedUnit.GetMoveRange();
+        foreach (var cell in moveRange)
+        {
+            GridManager.Instance.Highlight(false, cell.Coordinate);
+        }
+        ViewManager.Instance.CloseView(ViewType.UnitInfoView);
     }
 
     public override void Update()

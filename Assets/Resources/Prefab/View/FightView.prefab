@@ -606,7 +606,7 @@ GameObject:
   - component: {fileID: 1124412682344682804}
   - component: {fileID: 1557242182591777274}
   m_Layer: 5
-  m_Name: Overload_Btn
+  m_Name: OverloadMode_Btn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1668,7 +1668,7 @@ GameObject:
   - component: {fileID: 4782016047916440803}
   - component: {fileID: 37204050360827417}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

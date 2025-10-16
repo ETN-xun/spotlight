@@ -223,24 +223,4 @@ public class Unit : MonoBehaviour
         ttIsApplied = false;
         Debug.Log("" + data.unitName + " 热节流效果结束，移动力和攻击力各恢复1");
     }
-    
-    // public void ApplyTTEffect_temp(Unit actor)
-    // {
-    //     if (actor.data.isEnemy) return;
-    //     actor.data.moveRange -= 1;
-    //     if (actor.data.moveRange <= 0)
-    //         actor.data.moveRange = 0;
-    //     actor.data.baseDamage -= 1;
-    //     if (actor.data.baseDamage <= 0)
-    //         actor.data.baseDamage = 0;
-    //     Debug.Log("" + actor.data.unitName + " 受到热节流影响，移动力和攻击力各减少1");
-    // }
-    //
-    // public void CancelTTEffect_temp(Unit actor)
-    // {
-    //     if (actor.data.isEnemy) return;
-    //     actor.data.moveRange += 1;
-    //     actor.data.baseDamage += 1;
-    //     Debug.Log("" + actor.data.unitName + " 热节流效果结束，移动力和攻击力各恢复1");
-    // }
 }

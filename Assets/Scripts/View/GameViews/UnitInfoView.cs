@@ -23,14 +23,15 @@ namespace View.GameViews
             if (args[0] is not Unit unit) return;
             Find<TextMeshProUGUI>("UnitName").text = unit.data.unitName;
             Find<Image>("UnitIcon").sprite = unit.data.unitSprite;
-            
+            if (unit.data.isEnemy) return;
             ViewManager.Instance.OpenView(ViewType.SkillSelectView, "", unit);
         }
 
         public override void Close(params object[] args)
         {
             base.Close(args);
-            ViewManager.Instance.CloseView(ViewType.SkillSelectView);
+            if (ViewManager.Instance.IsOpen(ViewType.SkillSelectView))
+                ViewManager.Instance.CloseView(ViewType.SkillSelectView);
         }
     }
 }
