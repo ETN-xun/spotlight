@@ -89,6 +89,30 @@ public class StatusEffect
                 description = "攻击力降低";
                 canStack = true;
                 break;
+                
+            case StatusAbnormalType.OverloadDamageBonus:
+                statusName = "过载攻击增强";
+                description = "攻击力增加";
+                canStack = false;
+                break;
+                
+            case StatusAbnormalType.OverloadMoveBonus:
+                statusName = "过载移动增强";
+                description = "移动范围增加";
+                canStack = false;
+                break;
+                
+            case StatusAbnormalType.OverloadCooldownReduction:
+                statusName = "过载冷却减少";
+                description = "技能冷却时间减少";
+                canStack = false;
+                break;
+                
+            case StatusAbnormalType.OverloadGeneric:
+                statusName = "过载增强";
+                description = "获得过载状态增强";
+                canStack = false;
+                break;
         }
     }
     
@@ -115,6 +139,22 @@ public class StatusEffect
                 
             case StatusAbnormalType.CacheCorruption:
                 ApplyCacheCorruption();
+                break;
+                
+            case StatusAbnormalType.OverloadDamageBonus:
+                ApplyOverloadDamageBonus();
+                break;
+                
+            case StatusAbnormalType.OverloadMoveBonus:
+                ApplyOverloadMoveBonus();
+                break;
+                
+            case StatusAbnormalType.OverloadCooldownReduction:
+                ApplyOverloadCooldownReduction();
+                break;
+                
+            case StatusAbnormalType.OverloadGeneric:
+                ApplyOverloadGeneric();
                 break;
         }
     }
@@ -180,6 +220,42 @@ public class StatusEffect
         remainingTurns = Mathf.Max(remainingTurns, newEffect.remainingTurns);
         
         return true;
+    }
+    
+    /// <summary>
+    /// 过载攻击增强效果 - 攻击力增加
+    /// </summary>
+    private void ApplyOverloadDamageBonus()
+    {
+        Debug.Log($"{affectedUnit.data.unitName} 过载攻击增强生效，攻击力增加 {intensity} 点");
+        // 攻击力增加效果在攻击计算时处理
+    }
+    
+    /// <summary>
+    /// 过载移动增强效果 - 移动范围增加
+    /// </summary>
+    private void ApplyOverloadMoveBonus()
+    {
+        Debug.Log($"{affectedUnit.data.unitName} 过载移动增强生效，移动范围增加 {intensity} 点");
+        // 移动范围增加效果在移动计算时处理
+    }
+    
+    /// <summary>
+    /// 过载冷却减少效果 - 技能冷却时间减少
+    /// </summary>
+    private void ApplyOverloadCooldownReduction()
+    {
+        Debug.Log($"{affectedUnit.data.unitName} 过载冷却减少生效，技能冷却时间减少 {intensity} 回合");
+        // 技能冷却减少效果在技能使用时处理
+    }
+    
+    /// <summary>
+    /// 过载通用增强效果
+    /// </summary>
+    private void ApplyOverloadGeneric()
+    {
+        Debug.Log($"{affectedUnit.data.unitName} 过载通用增强生效");
+        // 通用增强效果，可以在各种计算中使用
     }
     
     /// <summary>
