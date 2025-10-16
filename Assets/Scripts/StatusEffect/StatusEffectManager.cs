@@ -145,19 +145,30 @@ public class StatusEffectManager : MonoBehaviour
     }
     
     /// <summary>
-    /// 获取攻击力修正值（考虑缓存污染效果）
+    /// 获取攻击力修正值（考虑缓存污染和过载攻击增强效果）
     /// </summary>
     /// <param name="baseDamage">基础攻击力</param>
     /// <returns>修正后的攻击力</returns>
     public int GetModifiedDamage(int baseDamage)
     {
+        float modifiedDamage = baseDamage;
+        
+        // 缓存污染效果 - 攻击力降低
         StatusEffect cacheCorruption = GetStatusEffect(StatusAbnormalType.CacheCorruption);
         if (cacheCorruption != null)
         {
             float reduction = cacheCorruption.intensity * cacheCorruption.stackCount * 0.2f; // 每层减少20%
-            return Mathf.RoundToInt(baseDamage * (1f - reduction));
+            modifiedDamage *= (1f - reduction);
         }
-        return baseDamage;
+        
+        // 过载攻击增强效果 - 攻击力增加
+        StatusEffect overloadDamageBonus = GetStatusEffect(StatusAbnormalType.OverloadDamageBonus);
+        if (overloadDamageBonus != null)
+        {
+            modifiedDamage += overloadDamageBonus.intensity;
+        }
+        
+        return Mathf.RoundToInt(modifiedDamage);
     }
     
     /// <summary>
@@ -170,19 +181,51 @@ public class StatusEffectManager : MonoBehaviour
     }
     
     /// <summary>
-    /// 获取技能冷却时间修正值（考虑系统错误效果）
+    /// 获取移动范围修正值（考虑过载移动增强效果）
+    /// </summary>
+    /// <param name="baseMoveRange">基础移动范围</param>
+    /// <returns>修正后的移动范围</returns>
+    public int GetModifiedMoveRange(int baseMoveRange)
+    {
+        int modifiedMoveRange = baseMoveRange;
+        
+        // 过载移动增强效果 - 移动范围增加
+        StatusEffect overloadMoveBonus = GetStatusEffect(StatusAbnormalType.OverloadMoveBonus);
+        if (overloadMoveBonus != null)
+        {
+            modifiedMoveRange += Mathf.RoundToInt(overloadMoveBonus.intensity);
+        }
+        
+        return modifiedMoveRange;
+    }
+    
+    /// <summary>
+    /// 获取技能冷却时间修正值（考虑系统错误和过载冷却减少效果）
     /// </summary>
     /// <param name="baseCooldown">基础冷却时间</param>
     /// <returns>修正后的冷却时间</returns>
     public int GetModifiedCooldown(int baseCooldown)
     {
+        int modifiedCooldown = baseCooldown;
+        
+        // 系统错误效果 - 冷却时间增加
         StatusEffect systemError = GetStatusEffect(StatusAbnormalType.SystemError);
         if (systemError != null)
         {
             int additionalCooldown = Mathf.RoundToInt(systemError.intensity * systemError.stackCount);
-            return baseCooldown + additionalCooldown;
+            modifiedCooldown += additionalCooldown;
         }
-        return baseCooldown;
+        
+        // 过载冷却减少效果 - 冷却时间减少
+        StatusEffect overloadCooldownReduction = GetStatusEffect(StatusAbnormalType.OverloadCooldownReduction);
+        if (overloadCooldownReduction != null)
+        {
+            int cooldownReduction = Mathf.RoundToInt(overloadCooldownReduction.intensity);
+            modifiedCooldown -= cooldownReduction;
+        }
+        
+        // 确保冷却时间不会小于0
+        return Mathf.Max(0, modifiedCooldown);
     }
     
     /// <summary>

@@ -8,5 +8,16 @@ namespace Common
         public const string EnergyChangedEvent = "EnergyChangedEvent";
         
         public const string ClickSkillViewEvent = "ClickSkillViewEvent";
+        
+        public const string PlayerTurnStartEvent = "PlayerTurnStartEvent";
+        public const string EnemyTurnStartEvent = "EnemyTurnStartEvent";
+        public const string PlayerTurnEndEvent = "PlayerTurnEndEvent";
+        public const string EnemyTurnEndEvent = "EnemyTurnEndEvent";
+        
+        public const string AllyUnitDiedEvent = "AllyUnitDiedEvent";
+        public const string EnemyUnitDiedEvent = "EnemyUnitDiedEvent";
+        
+        public const string ApplyThermalThrottleEvent = "ApplyThermalThrottleEvent";
+        public const string RemoveThermalThrottleEvent = "RemoveThermalThrottleEvent";
     }
 }

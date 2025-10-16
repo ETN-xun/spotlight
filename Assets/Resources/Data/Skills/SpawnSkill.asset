@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c451a6ae6559ae44f842569554b6916b, type: 3}
   m_Name: SpawnSkill
   m_EditorClassIdentifier: 
-  skillID: 
+  skillID: spawn_skill
   skillName: spawn
   description: "\u5730\u5F62\u6295\u653E\uFF1A\u8FDC\u7A0B\u6295\u63B7\u4E00\u4E2A\u53EF\u4EE5\u62B5\u6321\u4E00\u6B21\u653B\u51FB\u7684\u9632\u706B\u5899"
   skillIcon: {fileID: 0}

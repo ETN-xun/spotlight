@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Ally;
+using Enemy;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -175,9 +177,13 @@ public class GridManager : MonoBehaviour
         var cell = GetCell(coord);
         if (cell == null || cell.CurrentUnit != null) return false;
 
-        Unit unit = Instantiate(unitPrefab, CellToWorld(coord), Quaternion.identity, transform);
-
+        var unit = Instantiate(unitPrefab, CellToWorld(coord), Quaternion.identity, transform);
         unit.PlaceAt(cell);
+        if (unit.data.isEnemy)
+            EnemyManager.Instance.AddAliveEnemy(unit);
+        else
+            AllyManager.Instance.AddAliveAlly(unit);
+        
         return true;
     }
     /// <summary>

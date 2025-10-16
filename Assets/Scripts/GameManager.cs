@@ -98,7 +98,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 回合开始事件
     /// </summary>
-    public static event Action<int> OnTurnStarted;
+    public static event Action<int> OnPlayerTurnStarted;
     
     /// <summary>
     /// 游戏结束事件 (是否胜利)
@@ -329,7 +329,7 @@ public class GameManager : MonoBehaviour
             case GameState.PlayerTurn:
                 // 玩家回合结束，增加回合数，进入敌人回合
                 _currentTurn++;
-                OnTurnStarted?.Invoke(_currentTurn);
+                OnPlayerTurnStarted?.Invoke(_currentTurn);
                 
                 // 检查是否达到最大回合数
                 if (CheckGameEndConditions())

@@ -1,4 +1,6 @@
 using Level;
+using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 using View.Base;
 
@@ -40,6 +42,9 @@ namespace View.GameViews
                 OnClickPlayerButton(2);
             });
             Find<Button>("Background/EndTurn_Btn").onClick.AddListener(OnClickEndTurnButton);
+            
+            // 初始化过载模式按钮
+            InitializeOverloadModeButton();
         }
 
         private void OnClickSettingsButton()
@@ -63,6 +68,59 @@ namespace View.GameViews
         private void OnClickEndTurnButton()
         {
             
+        }
+        
+        private void InitializeOverloadModeButton()
+        {
+            Find<Button>("Background/OverloadMode_Btn").onClick.AddListener(OnClickOverloadModeButton);
+            Find<TextMeshProUGUI>("Background/OverloadMode_Btn/Text").text = "激活过载";
+            UpdateOverloadModeButtonState();
+        }
+        
+        private void OnClickOverloadModeButton()
+        {
+            var overloadManager = OverloadModeManager.Instance;
+            if (overloadManager != null)
+            {
+                if (overloadManager.TryActivateOverloadMode())
+                {
+                    Debug.Log("过载模式已激活！");
+                    UpdateOverloadModeButtonState();
+                }
+                else
+                {
+                    Debug.Log("无法激活过载模式：" + overloadManager.GetOverloadModeStatusInfo());
+                }
+            }
+        }
+        
+        private void UpdateOverloadModeButtonState()
+        {
+            var overloadManager = OverloadModeManager.Instance;
+            if (overloadManager == null) return;
+            var canActivate = overloadManager.CanActivateOverloadMode();
+            var isActive = overloadManager.IsOverloadModeActive;
+                
+            Find<Button>("Background/OverloadMode_Btn").interactable = canActivate && !isActive;
+                
+            if (isActive)
+            {
+                Find<TextMeshProUGUI>("Background/OverloadMode_Btn/Text").text = $"ing ({overloadManager.OverloadRemainingTurns})";
+            }
+            else if (canActivate)
+            {
+                Find<TextMeshProUGUI>("Background/OverloadMode_Btn/Text").text = "active";
+            }
+            else
+            {
+                Find<TextMeshProUGUI>("Background/OverloadMode_Btn/Text").text = "not enough";
+            }
+        }
+
+        protected override void OnUpdate()
+        {
+            base.OnUpdate();
+            UpdateOverloadModeButtonState();
         }
     }
 }

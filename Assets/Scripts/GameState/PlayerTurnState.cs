@@ -21,8 +21,7 @@ public class PlayerTurnState : GameStateBase
     {
         base.Enter();
         _mainCamera = Camera.main;
-        
-       
+        MessageCenter.Publish(Defines.PlayerTurnStartEvent);
         
         ViewManager.Instance.OpenView(ViewType.FightView);
     }
@@ -30,21 +29,24 @@ public class PlayerTurnState : GameStateBase
     public override void Exit()
     {
         base.Exit();
-        
-        
+        MessageCenter.Publish(Defines.PlayerTurnEndEvent);
         ViewManager.Instance.CloseView(ViewType.FightView);
     }
     
     public override void Update()
     {
         _inputStateMachine.Update();
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            gameManager.ChangeGameState(GameState.EnemyTurn);
+        }
     }
     
 
 
     private void FinishPlayerTurn()
     {
-
+        
         gameManager.EndCurrentTurn();
     }
 }

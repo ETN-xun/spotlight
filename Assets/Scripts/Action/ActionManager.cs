@@ -1,57 +1,122 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Common;
 using UnityEngine;
 
 namespace Action
 {
     public class ActionManager : MonoBehaviour
     {
-        private readonly Queue<IAction> _actionQueue = new Queue<IAction>();
-        private bool _isExecuting;
-
         public static ActionManager Instance { get; private set; }
+
+        public static readonly EnergySystem EnergySystem = new();
+        
+        [SerializeField] private int recoverEnergyPerTurn = 1;
+
+        private Unit _actorUnit;
+        private readonly List<Unit> _overheatedUnits = new();
+        private readonly List<Unit> _pendingRemoveOverheatedUnits = new();
 
         private void Awake()
         {
             Instance = this;
         }
 
-        public void EnqueueAction(IAction action)
+        private void OnEnable()
         {
-            _actionQueue.Enqueue(action);
-            TryExecuteNext();
+            MessageCenter.Subscribe(Defines.PlayerTurnStartEvent, OnPlayerTurnStarted);
+            MessageCenter.Subscribe(Defines.PlayerTurnEndEvent, OnPlayerTurnEnd);
+            // MessageCenter.Subscribe(Defines.EnemyTurnEndEvent, OnEnemyTurnStart);
+        }
+        
+        private void OnDisable()
+        {
+            MessageCenter.Unsubscribe(Defines.PlayerTurnStartEvent, OnPlayerTurnStarted);
+            MessageCenter.Unsubscribe(Defines.PlayerTurnEndEvent, OnPlayerTurnEnd);
         }
 
-        private void TryExecuteNext()
+        public void ExecuteSkillAction(Unit actor, Skill skill, GridCell targetCell)
         {
-            if (_isExecuting || _actionQueue.Count == 0)
-                return;
-
-            StartCoroutine(ExecuteNext());
-        }
-
-        private IEnumerator ExecuteNext()
-        {
-            _isExecuting = true;
-
-            while (_actionQueue.Count > 0)
+            if (actor == null || targetCell == null || skill == null) return;
+            if (!EnergySystem.TrySpendEnergy(skill.data.energyCost))
             {
-                var action = _actionQueue.Dequeue();
-                yield return action.Execute(new ActionContext(null, null, this));
+                Debug.Log("Not enough energy to perform the skill.");
+                return;
             }
-
-            _isExecuting = false;
-            OnAllActionsCompleted();
+            _actorUnit = actor;
+            skill.Execute(targetCell, GridManager.Instance);
+            
+            // play animation here
+            DetectActionEnd();
         }
-
-        private void OnAllActionsCompleted()
+        
+        public void ExecuteMoveAction(Unit actor, GridCell targetCell)
         {
+            if (actor == null || targetCell == null) return;
+            _actorUnit = actor;
+            if (!EnergySystem.TrySpendEnergy(_actorUnit.data.movementEnergyCost))
+            {
+                Debug.Log("Not enough energy to move.");
+                return;
+            }
+            // MovementSystem.Instance.MoveUnit(actor, targetCell);
+            _actorUnit.MoveTo(targetCell);
+            Debug.Log("current energy: " + EnergySystem.GetCurrentEnergy());
+            DetectActionEnd();
+            // play animation here
+        }
+        
+        public void ExecuteEnemyWaitAction(Unit actor)
+        {
+            if (actor == null) return;
+        }
+        
+        public void ExecuteEnemyAttackAction(Unit actor, GridCell targetCell)
+        {
+            if (actor is null || targetCell is null) return;
+            // play animation here
+            var targetUnit = targetCell.CurrentUnit;
+            if (targetUnit is null) return;
+            targetUnit.TakeDamage(actor.data.baseDamage);
+            Debug.Log($"{targetUnit.data.name} 收到伤害 {actor.data.baseDamage}");
+            _actorUnit = actor;
+            _actorUnit.currentTurnActionCount++;
+            DetectActionEnd();
+        }
+        
+        private void DetectActionEnd()
+        {
+            _actorUnit.currentTurnActionCount++;
+            if (_actorUnit.currentTurnActionCount >= _actorUnit.data.overheatedActionsPerTurn)
+            {
+                if (!_actorUnit.ttIsApplied)
+                {
+                    _overheatedUnits.Add(_actorUnit);
+                }
+            }
+        }
+        
+        private void OnPlayerTurnStarted(object[] args)
+        {
+            EnergySystem.IncreaseEnergy(recoverEnergyPerTurn);
             
         }
 
-        public void ClearActions()
+        private void OnPlayerTurnEnd(object[] args)
         {
-            _actionQueue.Clear();
+            foreach (var unit in _pendingRemoveOverheatedUnits)
+            {
+                unit.CancelTTEffect_temp();
+            }
+            _pendingRemoveOverheatedUnits.Clear();
+            
+            foreach (var unit in _overheatedUnits)
+            {
+                unit.ApplyTTEffect_temp();
+                _pendingRemoveOverheatedUnits.Add(unit);
+            }
+            _overheatedUnits.Clear();
         }
     }
 }

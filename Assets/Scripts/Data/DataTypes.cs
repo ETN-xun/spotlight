@@ -141,5 +141,26 @@ public enum StatusAbnormalType
     /// <summary>
     /// 缓存污染 - 攻击力降低
     /// </summary>
-    CacheCorruption
+    CacheCorruption,
+    
+    // 过载模式状态效果
+    /// <summary>
+    /// 过载攻击增强 - 代码刺客专用，攻击力增加
+    /// </summary>
+    OverloadDamageBonus,
+    
+    /// <summary>
+    /// 过载移动增强 - 协议卫士专用，移动范围增加
+    /// </summary>
+    OverloadMoveBonus,
+    
+    /// <summary>
+    /// 过载冷却减少 - 指针操控者专用，技能冷却减少
+    /// </summary>
+    OverloadCooldownReduction,
+    
+    /// <summary>
+    /// 过载通用增强 - 其他单位的通用过载效果
+    /// </summary>
+    OverloadGeneric
 }
