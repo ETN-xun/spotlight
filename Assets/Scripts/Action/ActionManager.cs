@@ -62,7 +62,6 @@ namespace Action
             }
             // MovementSystem.Instance.MoveUnit(actor, targetCell);
             _actorUnit.MoveTo(targetCell);
-            Debug.Log("current energy: " + EnergySystem.GetCurrentEnergy());
             DetectActionEnd();
             // play animation here
         }

@@ -120,7 +120,7 @@ public class OverloadModeManager : MonoBehaviour
         ApplyOverloadEffectsToAllies();
 
         // 发布过载模式激活事件
-        MessageCenter.Publish("OverloadModeActivated");
+        MessageCenter.Publish(Defines.OverloadModeActivatedEvent);
     }
 
     /// <summary>
@@ -282,7 +282,7 @@ public class OverloadModeManager : MonoBehaviour
         RemoveOverloadEffectsFromAllies();
 
         // 发布过载模式结束事件
-        MessageCenter.Publish("OverloadModeDeactivated");
+        MessageCenter.Publish(Defines.OverloadModeDeactivatedEvent);
     }
 
     /// <summary>
