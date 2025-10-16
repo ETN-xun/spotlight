@@ -13,7 +13,7 @@ public class GameManagerTest : MonoBehaviour
     {
         // 订阅游戏事件
         GameManager.OnGameStateChanged += OnGameStateChanged;
-        GameManager.OnTurnStarted += OnTurnStarted;
+        GameManager.OnPlayerTurnStarted += OnPlayerTurnStarted;
         GameManager.OnGameEnded += OnGameEnded;
         
         Debug.Log("GameManagerTest: 已订阅游戏事件");
@@ -23,7 +23,7 @@ public class GameManagerTest : MonoBehaviour
     {
         // 取消订阅事件
         GameManager.OnGameStateChanged -= OnGameStateChanged;
-        GameManager.OnTurnStarted -= OnTurnStarted;
+        GameManager.OnPlayerTurnStarted -= OnPlayerTurnStarted;
         GameManager.OnGameEnded -= OnGameEnded;
     }
     
@@ -70,7 +70,7 @@ public class GameManagerTest : MonoBehaviour
         Debug.Log($"<color=yellow>事件: 游戏状态改变 {oldState} -> {newState}</color>");
     }
     
-    private void OnTurnStarted(int turnNumber)
+    private void OnPlayerTurnStarted(int turnNumber)
     {
         Debug.Log($"<color=green>事件: 第{turnNumber}回合开始</color>");
     }

@@ -1,15 +1,14 @@
 using Common;
-using UnityEngine;
 
 namespace System
 {
-    public class EnergySystem : MonoBehaviour
+    public class EnergySystem 
     {
         private int _maxEnergy;
         private int _baseEnergy;
         private int _currentEnergy;
 
-        private void Start()
+        public EnergySystem()
         {
             Init();
         }

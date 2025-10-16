@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3354921914600148192}
   - component: {fileID: 7845030378677164610}
   - component: {fileID: 7412867095707020583}
-  - component: {fileID: 5615124554666487550}
   m_Layer: 0
   m_Name: TestEnemy02
   m_TagString: Untagged
@@ -100,70 +99,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: a03b17dedbcd949d1b2b6a50e91a9b02, type: 2}
---- !u!114 &5615124554666487550
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5232480781568626486}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 378defe69c7d45488c0607a4514f1c81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  actorId: 
-  actor: {fileID: 0}
-  candidates: []
-  selected:
-    intentId: 
-    action: 0
-    abilityId: 
-    target:
-      target: {fileID: 0}
-      cell: {x: 0, y: 0}
-      hasTarget: 0
-      hasCell: 0
-      targets: []
-      areaCells: []
-      hasMultipleTargets: 0
-      hasArea: 0
-    path:
-      cells: []
-      cost: 0
-      reachable: 0
-    estimate:
-      hitChance: 0
-      critChance: 0
-      expectedDamage: 0
-      expectedHeal: 0
-      killChance: 0
-      selfRisk: 0
-      ffRisk: 0
-      coverBonus: 0
-      terrainBonus: 0
-      displacementValue: 0
-    constraints:
-      minRange: 0
-      maxRange: 0
-      requiresLineOfSight: 0
-      cooldownRemaining: 0
-      willBreakStealth: 0
-      budgetCost: 0
-    apCost: 0
-    priority: 0
-    utility: 0
-    status: 0
-    rationale: 
-    metrics: []
-    planId: 
-    planStepIndex: 0
-    executeAtTick: 0
-    expiresAtTick: 0
-  selectedPlan: []
-  createdTick: 0
-  evaluatedTick: 0
-  debugDraw: 0
-  pathColor: {r: 0, g: 1, b: 0, a: 1}
-  targetColor: {r: 1, g: 0, b: 0, a: 1}
-  gizmoSphereRadius: 0.15
+  currentTurnActionCount: 0
+  hasMoved: 0
+  ttIsApplied: 0

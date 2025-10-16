@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class Skill
 {
-    protected SkillDataSO data;
+    public SkillDataSO data;
     protected Unit caster;
 
     public Skill(SkillDataSO data, Unit caster)
