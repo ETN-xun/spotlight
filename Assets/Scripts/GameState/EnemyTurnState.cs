@@ -1,3 +1,5 @@
+using Common;
+using Enemy;
 using UnityEngine;
 
 /// <summary>
@@ -17,6 +19,15 @@ public class EnemyTurnState : GameStateBase
         base.Enter();
         
         _turnTimer = 0f;
+        MessageCenter.Publish(Defines.EnemyTurnStartEvent);
+        EnemyManager.Instance.StartEnemyTurn();
+        // 如果是第一次敌人回合，只展示意图，不进行攻击
+        // 如果不是第一次敌人回合，执行上一回合的意图，然后展示新的意图
+        if (EnemyManager.Instance.CurrentEnemyTurn == 1)
+        {
+
+            return;
+        }
         
     }
     
@@ -38,6 +49,8 @@ public class EnemyTurnState : GameStateBase
         base.Exit();
         
         Debug.Log("敌人回合结束");
+        MessageCenter.Publish(Defines.EnemyTurnEndEvent);
+        EnemyManager.Instance.EndEnemyTurn();
     }
     
     
@@ -57,7 +70,6 @@ public class EnemyTurnState : GameStateBase
     /// </summary>
     private void FinishEnemyTurn()
     {
-        // gameManager.EndCurrentTurn();
         gameManager.ChangeGameState(GameState.PlayerTurn);
     }
 }

@@ -7,6 +7,7 @@ public class InputManager : MonoBehaviour
     public static InputManager Instance { get; private set; }
     
     private Unit _selectedUnit;
+    private GridCell _selectedCell;
     private Camera _mainCamera;
 
     private void Awake()
@@ -28,6 +29,11 @@ public class InputManager : MonoBehaviour
         return _selectedUnit;
     }
 
+    public GridCell GetSelectedCell()
+    {
+        return _selectedCell;
+    }
+
     public InputType DetectInputType()
     {
         if (EventSystem.current.IsPointerOverGameObject() || !Input.GetMouseButtonDown(0))
@@ -35,7 +41,7 @@ public class InputManager : MonoBehaviour
         var worldPoint = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
         var cell = GridManager.Instance.WorldToCell(worldPoint);
         if (cell is null) return InputType.NoClick;
-
+        _selectedCell = cell;
         if (cell.CurrentUnit is null) return InputType.ClickNoUnit;
         var unit = cell.CurrentUnit;
         _selectedUnit = unit;
