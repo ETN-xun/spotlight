@@ -75,6 +75,7 @@ public class UnitDataSO : ScriptableObject
     [Tooltip("攻击单位的优先级")]
     public float unitTargetPriority = 1.0f;
     
+    [Header("热管理设置(仅我方单位)")]
     [Tooltip("每回合触发过热降频行动次数")]
     public int overheatedActionsPerTurn = 1;
 }

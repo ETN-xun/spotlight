@@ -26,7 +26,7 @@ public class MovementSystem : MonoBehaviour
     
     private  IEnumerator MoveUnitCoroutine(Unit unit, GridCell nextCell)
     {
-        if (unit == null || unit.CurrentCell == null || nextCell == null) yield break;
+        if (unit?.CurrentCell is null || nextCell is null) yield break;
 
         var currentCell = unit.CurrentCell;
         
@@ -35,18 +35,19 @@ public class MovementSystem : MonoBehaviour
 
         // 如何进行攻击再议
         // 撞到单位
-        // if (nextCell.CurrentUnit != null)
-        // {
-        //     Unit other = nextCell.CurrentUnit;
-        //     unit.TakeDamage(unit.data.baseDamage);
-        //     other.TakeDamage(unit.data.baseDamage);
-        //     yield break;
-        // }
+        if (nextCell.CurrentUnit is not null)
+        {
+            var other = nextCell.CurrentUnit;
+            unit.TakeDamage(unit.data.baseDamage);
+            other.TakeDamage(unit.data.baseDamage);
+            Debug.Log("撞到单位，双方各自受到" + unit.data.baseDamage + "点伤害");
+            yield break;
+        }
         //撞到地形
-        if (nextCell.TerrainData != null)
+        if (nextCell.TerrainData is not null)
         {
             var terrain = nextCell.TerrainData;
-            TerrainType type = terrain.terrainType;
+            var type = terrain.terrainType;
             switch (type)
             {
                 case TerrainType.Plain:
@@ -88,7 +89,7 @@ public class MovementSystem : MonoBehaviour
         }
 
         //撞到建筑
-        if (nextCell.ObjectOnCell != null)
+        if (nextCell.ObjectOnCell is not null)
         {
             var destructibleObject = nextCell.DestructibleObject;
             DestructibleObjectType type = destructibleObject.data.Type;
@@ -252,7 +253,6 @@ public class MovementSystem : MonoBehaviour
 
         while (openSet.Count > 0)
         {
-            // 取fScore最小的cell
             var current = openSet[0];
             foreach (var cell in openSet.Where(cell => fScore.ContainsKey(cell) && fScore[cell] < fScore[current]))
             {
@@ -268,7 +268,7 @@ public class MovementSystem : MonoBehaviour
             {
                 if (closedSet.Contains(neighbor) || !neighbor.IsWalkable())
                     continue;
-                int tentativeG = gScore[current] + 1;
+                var tentativeG = gScore[current] + 1;
                 if (!openSet.Contains(neighbor))
                     openSet.Add(neighbor);
                 else if (tentativeG >= gScore.GetValueOrDefault(neighbor, int.MaxValue))

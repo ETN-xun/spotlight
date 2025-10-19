@@ -1,17 +1,23 @@
+using UnityEngine;
+using View;
+using View.GameViews;
+
 public class SelectNoUnitState : BaseInputState
 {
+    private GridCell CurrentSelectedCell => InputManager.Instance.GetSelectedCell();
     public SelectNoUnitState(InputStateMachine stateMachine) : base(stateMachine)
     {
     }
     
     public override void Enter()
     {
+        ViewManager.Instance.OpenView(ViewType.TerrainInfoView, "", CurrentSelectedCell);
         
     }
     
     public override void Exit()
     {
-        
+        ViewManager.Instance.CloseView(ViewType.TerrainInfoView);
     }
 
     public override void Update()
@@ -29,6 +35,9 @@ public class SelectNoUnitState : BaseInputState
                 break;
             case InputType.ClickNoUnit:
                 stateMachine.ChangeState(InputState.SelectNoUnitState);
+                break;
+            case InputType.CancelClick:
+                stateMachine.ChangeState(InputState.IdleState);
                 break;
         }
     }

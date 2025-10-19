@@ -46,7 +46,7 @@ namespace Action
             }
             _actorUnit = actor;
             skill.Execute(targetCell, GridManager.Instance);
-            
+            Debug.Log("execute skill action");
             // play animation here
             DetectActionEnd();
         }
@@ -99,7 +99,6 @@ namespace Action
         private void OnPlayerTurnStarted(object[] args)
         {
             EnergySystem.IncreaseEnergy(recoverEnergyPerTurn);
-            
         }
 
         private void OnPlayerTurnEnd(object[] args)
