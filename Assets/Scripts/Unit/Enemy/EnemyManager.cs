@@ -118,6 +118,12 @@ namespace Enemy
             {
                 _aliveEnemies.Remove(unit);
             }
+            
+            if (_aliveEnemies.Count == 0)
+            {
+                Debug.Log("所有敌人已被消灭，玩家获胜！");
+                GameManager.Instance.ChangeGameState(GameState.GameOver);
+            }
         }
 
         private void OnDeploymentStateEnded(object[] args)

@@ -1776,7 +1776,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fdc4494d59149c095824c5f0a02a557, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recoverEnergyPerTurn: 0
+  recoverEnergyPerTurn: 5
 --- !u!4 &2117754196
 Transform:
   m_ObjectHideFlags: 0

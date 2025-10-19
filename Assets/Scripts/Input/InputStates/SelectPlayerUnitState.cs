@@ -21,7 +21,7 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
     public override void Enter()
     {
         MessageCenter.Subscribe(Defines.ClickSkillViewEvent, OnClickSkillView);
-        
+        _isPreparingSkill = false;
         if (CurrentSelectedUnit is null) return;
         LastSelectedUnit = CurrentSelectedUnit;
         GridManager.Instance.Highlight(true, CurrentSelectedUnit.CurrentCell.Coordinate);
@@ -91,6 +91,7 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
                 if (!ActionManager.EnergySystem.TrySpendEnergy(_pendingSkill.energyCost))
                 {
                     Debug.Log("Not enough energy to use the skill.");
+                    _isPreparingSkill = false;
                     stateMachine.ChangeState(InputState.IdleState);
                 }
                 SkillSystem.Instance.StartSkill(LastSelectedUnit, _pendingSkill);
@@ -100,6 +101,7 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
             {
                 Debug.Log("Target out of range for the skill.");
             }
+            _isPreparingSkill = false;
             stateMachine.ChangeState(InputState.IdleState);
             return;
         }
