@@ -23,6 +23,96 @@ public class MovementSystem : MonoBehaviour
     {
         StartCoroutine(MoveUnitCoroutine(unit, direction, distance, onComplete));
     }
+    
+    private  IEnumerator MoveUnitCoroutine(Unit unit, GridCell nextCell)
+    {
+        if (unit == null || unit.CurrentCell == null || nextCell == null) yield break;
+
+        var currentCell = unit.CurrentCell;
+        
+        // 记录移动前的位置，用于闪回位移
+        var originalCell = currentCell;
+
+        // 如何进行攻击再议
+        // 撞到单位
+        // if (nextCell.CurrentUnit != null)
+        // {
+        //     Unit other = nextCell.CurrentUnit;
+        //     unit.TakeDamage(unit.data.baseDamage);
+        //     other.TakeDamage(unit.data.baseDamage);
+        //     yield break;
+        // }
+        //撞到地形
+        if (nextCell.TerrainData != null)
+        {
+            var terrain = nextCell.TerrainData;
+            TerrainType type = terrain.terrainType;
+            switch (type)
+            {
+                case TerrainType.Plain:
+                    //轻微像素效果
+                        
+                    break;
+                case TerrainType.CorrosionTile:
+                    //造成一点伤害
+                    unit.TakeDamage(1);
+                    //造成异常效果
+                        
+                    break;
+                case TerrainType.BugTile:
+                    //根据角色类型交换攻击力与生命
+
+                    if(unit.data.isEnemy)
+                    {
+                        unit.data.baseDamage = unit.data.baseDamage + unit.data.maxHP;
+                        unit.data.maxHP = unit.data.baseDamage - unit.data.maxHP;
+                        unit.data.baseDamage = unit.data.baseDamage - unit.data.maxHP;
+                    }
+                    else
+                    {
+                        switch (unit.data.unitName)
+                        { 
+                            case "Shadow"://角色为影
+                                Exchange(ref unit.data.maxHP,ref unit.data.skills.FirstOrDefault(skill => skill.skillName == "BreakpointExecutionSkill")!.baseDamage);//交换断点斩杀技能数值
+                                break;
+                            case "Rock"://角色为石
+                                Exchange(ref unit.data.maxHP,ref unit.data.skills.FirstOrDefault(skill => skill.skillName == "SpawnSkill")!.baseDamage);//交换地形投放技能数值
+                                break;
+                            case "Zero"://角色为零
+                                Exchange(ref unit.data.maxHP,ref unit.data.skills.FirstOrDefault(skill => skill.skillName == "ForcedMigrationSkill")!.baseDamage);//交换强制迁移技能
+                                break;
+                            }
+                    }
+                    break;
+                }
+        }
+
+        //撞到建筑
+        if (nextCell.ObjectOnCell != null)
+        {
+            var destructibleObject = nextCell.DestructibleObject;
+            DestructibleObjectType type = destructibleObject.data.Type;
+            switch (type)
+            {
+                case DestructibleObjectType.Register:
+                    //每回合回复两点能量
+                    unit.data.RecoverEnergy += 2;
+                    //建筑激活，可以被攻击
+                    destructibleObject.data.Hits = 1;
+                    destructibleObject.data.canDestroy = true;
+                    break;
+            }
+            yield break;
+        }
+
+        yield return new WaitForSeconds(1.0f);
+        unit.MoveTo(nextCell);      // TODO: 需要更改的移动方式
+        if (originalCell != unit.CurrentCell)
+        {
+            var currentTurn = GameManager.Instance != null ? GameManager.Instance.CurrentTurn : 1;      // TODO: 可能需要更改获取当前回合
+            FlashbackDisplacementSkill.RecordMovement(unit, originalCell, currentTurn);
+        }
+    }
 
     private IEnumerator MoveUnitCoroutine(Unit unit, Vector2Int direction, int distance, System.Action onComplete)
     {
@@ -176,24 +266,23 @@ public class MovementSystem : MonoBehaviour
 
             foreach (var neighbor in GetNeighbors(current))
             {
-                if (closedSet.Contains(neighbor) || !IsCellWalkable(neighbor))
+                if (closedSet.Contains(neighbor) || !neighbor.IsWalkable())
                     continue;
                 int tentativeG = gScore[current] + 1;
                 if (!openSet.Contains(neighbor))
                     openSet.Add(neighbor);
-                else if (tentativeG >= (gScore.ContainsKey(neighbor) ? gScore[neighbor] : int.MaxValue))
+                else if (tentativeG >= gScore.GetValueOrDefault(neighbor, int.MaxValue))
                     continue;
                 cameFrom[neighbor] = current;
                 gScore[neighbor] = tentativeG;
                 fScore[neighbor] = tentativeG + Heuristic(neighbor, end);
             }
         }
-        return null; // 无法到达
+        return null; 
     }
 
     private int Heuristic(GridCell a, GridCell b)
     {
-        // 曼哈顿距离
         return Mathf.Abs(a.Coordinate.x - b.Coordinate.x) + Mathf.Abs(a.Coordinate.y - b.Coordinate.y);
     }
 
@@ -214,53 +303,23 @@ public class MovementSystem : MonoBehaviour
         Vector2Int[] dirs = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
         foreach (var dir in dirs)
         {
-            Vector2Int pos = cell.Coordinate + dir;
-            if (GridManager.Instance.IsValidPosition(pos))
-            {
-                var neighbor = GridManager.Instance.GetCell(pos);
-                if (neighbor != null)
-                    neighbors.Add(neighbor);
-            }
+            var pos = cell.Coordinate + dir;
+            if (!GridManager.Instance.IsValidPosition(pos)) continue;
+            // if (!cell.IsWalkable()) continue;
+            var neighbor = GridManager.Instance.GetCell(pos);
+            if (neighbor != null)
+                neighbors.Add(neighbor);
         }
         return neighbors;
     }
 
-    private bool IsCellWalkable(GridCell cell)
+    public IEnumerator MoveUnitByPathCoroutine(Unit unit, List<GridCell> path)
     {
-        return cell.CurrentUnit == null && cell.DestructibleObject == null;
-    }
-
-    /// <summary>
-    /// 基于A*路径的单位移动
-    /// </summary>
-    public void MoveUnit(Unit unit, GridCell targetCell, System.Action onComplete = null)
-    {
-        if (unit == null || unit.CurrentCell == null || targetCell == null) return;
-        var path = FindPath(unit.CurrentCell, targetCell);
-        if (path == null || path.Count < 2) return;
-        StartCoroutine(MoveUnitByPathCoroutine(unit, path, onComplete));
-    }
-
-    private IEnumerator MoveUnitByPathCoroutine(Unit unit, List<GridCell> path, System.Action onComplete)
-    {
-        // 记录移动前的位置
-        GridCell originalCell = unit.CurrentCell;
-        
-        for (int i = 1; i < path.Count; i++)
+        for (var i = 1; i < path.Count; i++)
         {
             var nextCell = path[i];
-            if (!IsCellWalkable(nextCell)) yield break;
-            unit.MoveTo(nextCell);      // TODO: 替换为 MoveUnit
-            yield return new WaitForSeconds(0.05f);
+            if (!nextCell.IsWalkable()) yield break;
+            yield return MoveUnitCoroutine(unit, nextCell);
         }
-        
-        // 如果单位实际发生了移动，记录位移历史
-        if (originalCell != unit.CurrentCell)
-        {
-            int currentTurn = GameManager.Instance != null ? GameManager.Instance.CurrentTurn : 1;
-            FlashbackDisplacementSkill.RecordMovement(unit, originalCell, currentTurn);
-        }
-        
-        onComplete?.Invoke();
     }
 }

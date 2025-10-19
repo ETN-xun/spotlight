@@ -43,8 +43,26 @@ namespace View.GameViews
             });
             Find<Button>("Background/EndTurn_Btn").onClick.AddListener(OnClickEndTurnButton);
             
-            // 初始化过载模式按钮
             InitializeOverloadModeButton();
+        }
+        
+        public override void Close(params object[] args)
+        {
+            base.Close();
+            Find<Button>("Background/Settings_Btn").onClick.RemoveListener(OnClickSettingsButton);
+            Find<Button>("Background/PlayerList/Player_01").onClick.RemoveListener(() =>
+            {
+                OnClickPlayerButton(0);
+            });
+            Find<Button>("Background/PlayerList/Player_02").onClick.RemoveListener(() =>
+            {
+                OnClickPlayerButton(1);
+            });
+            Find<Button>("Background/PlayerList/Player_03").onClick.RemoveListener(() =>
+            {
+                OnClickPlayerButton(2);
+            });
+            Find<Button>("Background/EndTurn_Btn").onClick.RemoveListener(OnClickEndTurnButton);
         }
 
         private void OnClickSettingsButton()
@@ -67,7 +85,8 @@ namespace View.GameViews
         
         private void OnClickEndTurnButton()
         {
-            
+            Debug.Log("结束回合按钮被点击");
+            GameManager.Instance.ChangeGameState(GameState.EnemyTurn);
         }
         
         private void InitializeOverloadModeButton()

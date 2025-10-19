@@ -1,3 +1,4 @@
+using System;
 using Scene;
 using UnityEngine;
 using View.Base;
@@ -13,7 +14,13 @@ namespace View.GameViews
             Find<UnityEngine.UI.Button>("Background/ExitGameBtn").onClick.AddListener(OnExitGameBtnClick);
             Find<UnityEngine.UI.Button>("Background/LastGameBtn").onClick.AddListener(OnLastGameBtnClick);
         }
-        
+        public override void Destroy()      // TODO: 正确地移除监听器
+        {
+            base.Destroy();
+            Find<UnityEngine.UI.Button>("Background/NewGameBtn").onClick.RemoveListener(OnNewGameBtnClick);
+            Find<UnityEngine.UI.Button>("Background/ExitGameBtn").onClick.RemoveListener(OnExitGameBtnClick);
+            Find<UnityEngine.UI.Button>("Background/LastGameBtn").onClick.RemoveListener(OnLastGameBtnClick);
+        }
 
         private void OnNewGameBtnClick()
         {

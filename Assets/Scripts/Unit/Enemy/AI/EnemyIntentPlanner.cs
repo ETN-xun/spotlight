@@ -8,6 +8,9 @@ namespace Enemy.AI
 {
     public class EnemyIntentPlanner
     {
+        // public readonly List<EnemyIntent> plannedIntents = new();
+        private readonly Dictionary<Unit, EnemyIntent> _enemyIntents = new();
+        
         public void BuildIntent(Unit enemy)
         {
             var allyUnits = AllyManager.Instance.GetAliveAllies();
@@ -17,12 +20,23 @@ namespace Enemy.AI
             if (targets.Count > 0)
             {
                 var attackTarget = FindBestAttackTarget(enemy, allyUnits);
-                ActionManager.Instance.ExecuteEnemyAttackAction(enemy, attackTarget.CurrentCell);     // 应该是生成意图
-            }
+                var attackIntent = new EnemyIntent
+                {
+                    type = EnemyIntentType.Attack,
+                    attackTargetCell = attackTarget.CurrentCell,
+                    priority = enemy.data.aiPriority
+                };
+                _enemyIntents[enemy] = attackIntent; }
             else
             {
                 var moveTarget = FindBestMoveTarget(enemy, allyUnits);
-                enemy.MoveTo(moveTarget);
+                var moveIntent = new EnemyIntent
+                {
+                    type = EnemyIntentType.Move,
+                    moveTargetCell = moveTarget,
+                    priority = enemy.data.aiPriority,
+                };
+                _enemyIntents[enemy] = moveIntent;
             }
             
             // 如果当前敌方攻击范围内没有我方单位，就进行移动，朝着最有价值的目标移动，如果移动之后仍没有攻击目标，就暂停
@@ -35,8 +49,6 @@ namespace Enemy.AI
                     
                 }
                 
-                
-                
                 if (enemy.data.buildingTargetPriority > enemy.data.unitTargetPriority)
                 {
                     
@@ -46,45 +58,21 @@ namespace Enemy.AI
                     
                 }
             }
+        }
+        
+        public Dictionary<Unit, EnemyIntent> GetOrderedEnemyIntents()
+        {
+            var ordered = _enemyIntents
+                .Where(kv => kv.Value != null && kv.Value.IsValid())
+                .OrderByDescending(kv => kv.Value.priority)
+                .ToDictionary(kv => kv.Key, kv => kv.Value);
 
-            // // 根据敌人类型、位置、玩家单位位置等因素，规划敌人的意图
-            // var intent = new EnemyIntent();
-            //
-            // // 简单示例：如果敌人距离玩家单位在攻击范围内，则规划攻击意图
-            // var playerUnits = Player.PlayerManager.Instance.GetAllPlayerUnits();
-            // foreach (var playerUnit in playerUnits)
-            // {
-            //     var distance = Vector2Int.Distance(enemy.GridPosition, playerUnit.GridPosition);
-            //     if (distance <= enemy.AttackRange)
-            //     {
-            //         intent.attackTargetCell = GridManager.Instance.GetCellAtPosition(playerUnit.GridPosition);
-            //         intent.plannedSkill = enemy.BasicAttackSkill;
-            //         return intent;
-            //     }
-            // }
-            //
-            // // 否则，规划移动意图，向最近的玩家单位移动
-            // if (playerUnits.Count > 0)
-            // {
-            //     var closestPlayer = playerUnits[0];
-            //     var minDistance = Vector2Int.Distance(enemy.GridPosition, closestPlayer.GridPosition);
-            //     foreach (var playerUnit in playerUnits)
-            //     {
-            //         var distance = Vector2Int.Distance(enemy.GridPosition, playerUnit.GridPosition);
-            //         if (distance < minDistance)
-            //         {
-            //             minDistance = distance;
-            //             closestPlayer = playerUnit;
-            //         }
-            //     }
-            //     
-            //     // 计算移动目标位置（简单示例，向玩家单位方向移动一格）
-            //     var direction = (closestPlayer.GridPosition - enemy.GridPosition).normalized;
-            //     var moveTargetPos = enemy.GridPosition + new Vector2Int(Mathf.RoundToInt(direction.x), Mathf.RoundToInt(direction.y));
-            //     intent.moveTargetCell = GridManager.Instance.GetCellAtPosition(moveTargetPos);
-            // }
-            //
-            // return intent;
+            return ordered;
+        }
+        
+        public void ClearIntents()
+        {
+            _enemyIntents.Clear();
         }
 
         private Unit FindBestAttackTarget(Unit enemy, List<Unit> allyUnits)
@@ -151,7 +139,7 @@ namespace Enemy.AI
         private int GetDistance(GridCell cell, GridCell target)
         {
             return Mathf.Abs(target.Coordinate.x - cell.Coordinate.x) +
-                   Mathf.Abs(target.Coordinate.y - target.Coordinate.y);
+                   Mathf.Abs(target.Coordinate.y - cell.Coordinate.y);
         }
 
     }
