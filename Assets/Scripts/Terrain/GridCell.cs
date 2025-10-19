@@ -20,4 +20,9 @@ public class GridCell
         ObjectOnCell = null;
         DestructibleObject = null;
     }
+    
+    public bool IsWalkable()
+    {
+        return DestructibleObject is null && CurrentUnit is null && ObjectOnCell is null;
+    }
 }

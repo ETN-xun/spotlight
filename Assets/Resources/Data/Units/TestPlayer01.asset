@@ -20,15 +20,19 @@ MonoBehaviour:
   unitPrefab: {fileID: 5232480781568626486, guid: 502aad738f5874fb6b675fc73a9d4b47,
     type: 3}
   isEnemy: 0
-  maxHP: 100
+  maxHP: 8
+  Hits: 0
   moveRange: 5
-  attackRange: 0
+  attackRange: 3
   movementEnergyCost: 1
-  baseDamage: 1
+  Energy: 1
+  RecoverEnergy: 0
+  baseDamage: 0
   canDestroy: 0
   collisionDamage: 1
   skills:
-  - {fileID: 11400000, guid: fe4446182899a4e79af5eb4255274faa, type: 2}
+  - {fileID: 11400000, guid: 59d09fb55eab73c4d900ffcfc4e31487, type: 2}
   aiPriority: 1
   buildingTargetPriority: 2
   unitTargetPriority: 1
+  overheatedActionsPerTurn: 3

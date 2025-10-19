@@ -69,6 +69,11 @@ namespace Ally
             {
                 _aliveAllies.Remove(unit);
             }
+
+            if (_aliveAllies.Count == 0)
+            {
+                GameManager.Instance.ChangeGameState(GameState.GameOver);
+            }
         }
     }
 }

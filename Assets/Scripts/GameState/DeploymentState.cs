@@ -62,6 +62,7 @@ public class DeploymentState : GameStateBase
     public override void Exit()
     {
         base.Exit();
+        MessageCenter.Publish(Defines.DeploymentStateEndedEvent);
         MessageCenter.Unsubscribe(Defines.ClickDeployUnitViewEvent, OnClickDeployUnit);
         ViewManager.Instance.CloseView(ViewType.DeploymentView);
     }

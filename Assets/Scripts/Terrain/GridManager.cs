@@ -208,5 +208,16 @@ public class GridManager : MonoBehaviour
         terrainTilemap.SetColor(cellPos, highlight ? Color.green : Color.white);
     }
 
-    
+    public void ClearAllHighlights()
+    {
+        foreach (var pos in terrainTilemap.cellBounds.allPositionsWithin)
+        {
+            var cellPos = new Vector3Int(pos.x, pos.y, pos.z);
+            if (!terrainTilemap.HasTile(cellPos))
+                continue;
+
+            terrainTilemap.SetTileFlags(cellPos, TileFlags.None);
+            terrainTilemap.SetColor(cellPos, Color.white);
+        }
+    }
 }

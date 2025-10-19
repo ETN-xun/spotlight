@@ -36,10 +36,6 @@ public class PlayerTurnState : GameStateBase
     public override void Update()
     {
         _inputStateMachine.Update();
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            gameManager.ChangeGameState(GameState.EnemyTurn);
-        }
     }
     
 

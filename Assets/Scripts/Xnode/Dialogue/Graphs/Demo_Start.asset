@@ -58,7 +58,54 @@ MonoBehaviour:
   answerTexts: []
   characterName: "\u7CFB\u7EDF\u8BED\u97F3"
   characterIcon: {fileID: 0}
+  hasChoices: 0
   dialogueText: "\u3010\u9996\u8981\u76EE\u6807\uFF1A\u5B9A\u4F4D\u5E76\u683C\u5F0F\u5316\u5F02\u5E38\u4E2A\u4F53\u201C\u8BD7\u4EBA\u201D\u3002\u6E05\u9664\u6240\u6709Bug\u3002\u5360\u9886\u7F13\u5B58\u533A\u4EE5\u7EF4\u6301\u7CFB\u7EDF\u5E26\u5BBD\u3002\u3011"
+--- !u!114 &-4788676818869568383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f405dc8cfbc954b41a163f818f77dc3c, type: 3}
+  m_Name: Fade Screen
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 504, y: -264}
+  ports:
+    keys:
+    - output
+    - input
+    values:
+    - _fieldName: output
+      _node: {fileID: -4788676818869568383}
+      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: input
+        node: {fileID: 5466922913602985840}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: input
+      _node: {fileID: -4788676818869568383}
+      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: output
+        node: {fileID: 7962049431355616665}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  fadeDuration: 1
+  holdDuration: 0.5
+  fadeColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,6 +125,7 @@ MonoBehaviour:
   - {fileID: 2842572429807498693}
   - {fileID: 7962049431355616665}
   - {fileID: 5466922913602985840}
+  - {fileID: -4788676818869568383}
 --- !u!114 &698184605591644829
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,6 +184,7 @@ MonoBehaviour:
   answerTexts: []
   characterName: "\u7CFB\u7EDF\u8BED\u97F3"
   characterIcon: {fileID: 0}
+  hasChoices: 0
   dialogueText: "\u3010\u8B66\u544A\uFF01\u534F\u8BAE\u68EE\u6797\u533A\u57DF\u201C\u8150\u7801\u201D\u6C61\u67D3\u7B49\u7EA7\u6025\u5267\u5347\u9AD8\u3002\u8C03\u8BD5\u8005\u5C0F\u961FZERO\uFF0C\u8FDE\u63A5\u8FDB\u5165\u7CFB\u7EDF\uFF0C\u7ACB\u5373\u6267\u884C\u51C0\u5316\u534F\u8BAE\u3002\u3011"
 --- !u!114 &2842572429807498693
 MonoBehaviour:
@@ -195,6 +244,7 @@ MonoBehaviour:
   answerTexts: []
   characterName: "\u96F6"
   characterIcon: {fileID: 0}
+  hasChoices: 0
   dialogueText: "\u201C\u7CFB\u7EDF\u5E26\u5BBD\u7A33\u5B9A\uFF0C\u8BBE\u5907\u8FDE\u63A5\u7A33\u5B9A\uFF0C\u4EFB\u52A1\u76EE\u6807\u6E05\u6670\u3002\u4E00\u5982\u65E2\u5F80\u3002\u201D"
 --- !u!114 &5299067223920629866
 MonoBehaviour:
@@ -249,7 +299,7 @@ MonoBehaviour:
   m_Name: Section End
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 504, y: -184}
+  position: {x: 792, y: -184}
   ports:
     keys:
     - input
@@ -260,7 +310,7 @@ MonoBehaviour:
         Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: output
-        node: {fileID: 7962049431355616665}
+        node: {fileID: -4788676818869568383}
         reroutePoints: []
       _direction: 0
       _connectionType: 1
@@ -292,7 +342,7 @@ MonoBehaviour:
         Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: input
-        node: {fileID: 5466922913602985840}
+        node: {fileID: -4788676818869568383}
         reroutePoints: []
       _direction: 1
       _connectionType: 1

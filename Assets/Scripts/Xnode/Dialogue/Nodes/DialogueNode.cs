@@ -11,6 +11,7 @@ public class DialogueNode : BaseNode
     
     public string characterName;
     public Sprite characterIcon;
+    public bool hasChoices;
     
     [TextArea(3,5)]
     public string dialogueText;

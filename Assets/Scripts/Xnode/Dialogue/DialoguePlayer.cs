@@ -124,7 +124,27 @@ public class DialoguePlayer : MonoBehaviour
             case EndNode _:
                 EndDialogue(false);
                 break;
+            case FadeScreenNode fadeNode:
+                // 我们不直接结束对话，而是启动渐变效果
+                // 渐变效果会负责在合适的时机关闭UI和发送事件
+                ExecuteFade(fadeNode);
+                break;
         }
+    }
+    //  淡出淡入
+    private void ExecuteFade(FadeScreenNode node)
+    {
+        ScreenFader.Instance.StartFade(
+            node.fadeDuration, 
+            node.holdDuration, 
+            node.fadeColor,
+            // onPeak: 当画面最黑时，关闭对话UI
+            onPeak: () => {
+                dialoguePanel.SetActive(false); // 关闭UI
+                skipButton.gameObject.SetActive(false);
+                ClearChoices();
+            }
+        );
     }
 
     //显示旁白
@@ -136,7 +156,7 @@ public class DialoguePlayer : MonoBehaviour
         narrationText.text = node.narrationText;
         narrationText.color = narrationText.color;
         
-        if (node.answers.Count > 0)
+        if (node.hasChoices)
         {
             nextButton.gameObject.SetActive(false);
             DisplayChoices(node);
@@ -157,7 +177,7 @@ public class DialoguePlayer : MonoBehaviour
         nameText.text = node.characterName;
         storyText.text = node.dialogueText;
         
-        if (node.answers.Count > 0)
+        if (node.hasChoices)
         {
             nextButton.gameObject.SetActive(false);
             DisplayChoices(node);

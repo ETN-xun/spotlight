@@ -20,6 +20,12 @@ namespace View.GameViews
                 OnSelectLevel(levelData);
             });
         }
+        
+        public override void Close(params object[] args)
+        {
+            base.Close(args);
+            GetComponent<Button>().onClick.RemoveAllListeners();
+        }
 
         private void OnSelectLevel(LevelDataSO levelData)
         {

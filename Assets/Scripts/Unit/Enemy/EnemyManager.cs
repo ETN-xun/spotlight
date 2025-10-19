@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Common;
 using Enemy.AI;
 using UnityEngine;
@@ -8,15 +10,17 @@ namespace Enemy
 {
     public class EnemyManager : MonoBehaviour
     {
-        // EnemyManager 来管理所有敌方单位的生成和行为，还有敌方AI的执行
         public static EnemyManager Instance { get; private set; }
-        
         public int CurrentEnemyTurn { get; private set; }
 
-        private readonly EnemyIntentPlanner _intentPlanner = new();
+        private readonly EnemyIntentPlanner _intentPlanner  = new();
+        private readonly EnemyIntentExecutor _intentExecutor = new();
         
         private readonly List<Unit> _enemies = new ();
         private readonly List<Unit> _aliveEnemies = new ();
+
+        public bool EnemyIntentsShowFinished { get; private set; }
+        public bool EnemyIntentsExecuteFinished { get; private set; }
         
         private void Awake()
         {
@@ -31,34 +35,31 @@ namespace Enemy
         private void OnEnable()
         {
             MessageCenter.Subscribe(Defines.EnemyUnitDiedEvent, OnEnemyUnitDied);
+            MessageCenter.Subscribe(Defines.DeploymentStateEndedEvent, OnDeploymentStateEnded);
         }
 
         private void OnDisable()
         {
             MessageCenter.Unsubscribe(Defines.EnemyUnitDiedEvent, OnEnemyUnitDied);
+            MessageCenter.Unsubscribe(Defines.DeploymentStateEndedEvent, OnDeploymentStateEnded);
         }
         
-        public void StartEnemyTurn()       // 改成不用事件触发
+        public void StartEnemyTurnFlow()
+        {
+            StartCoroutine(EnemyTurnFlow());
+        }
+
+        private IEnumerator EnemyTurnFlow( )
         {
             CurrentEnemyTurn++;
-            foreach (var enemy in _aliveEnemies)
-            {
-                _intentPlanner.BuildIntent(enemy);
-            }
-        }
-        
-        public void EndEnemyTurn()
-        {
+            EnemyIntentsExecuteFinished = false;
+            EnemyIntentsShowFinished = false;
+            Debug.Log("敌人回合第 " + CurrentEnemyTurn + " 轮开始");
 
-        }
-        
-        private void OnEnemyUnitDied(object[] args)
-        {
-            if (args[0] is not Unit unit) return;
-            if (_aliveEnemies.Contains(unit))
-            {
-                _aliveEnemies.Remove(unit);
-            }
+            if (CurrentEnemyTurn != 1)
+                yield return ExecuteEnemyIntents();
+
+            yield return ShowEnemyIntents();
         }
 
         public void SpawnEnemies()
@@ -82,13 +83,53 @@ namespace Enemy
             return _aliveEnemies;
         }
         
-        public void ShowEnemyIntents()
+        private IEnumerator ShowEnemyIntents()
         {
-            // 展示意图，得先规划意图
-            foreach (var enemy in _enemies)
+            var enemyIntents = _intentPlanner.GetOrderedEnemyIntents();
+            foreach (var enemyIntent in enemyIntents.Where(intent => _aliveEnemies.Contains(intent.Key)))
             {
-                
+                // 仅供测试使用，实际应显示所有意图
+                yield return StartCoroutine(_intentExecutor.ShowIntent(enemyIntent.Key, enemyIntent.Value[0]));
+                yield return new WaitForSeconds(1f);
             }
+
+            yield return new WaitForSeconds(1f);
+            EnemyIntentsShowFinished = true;
+        }
+
+        private IEnumerator ExecuteEnemyIntents()
+        {
+            var enemyIntents = _intentPlanner.GetOrderedEnemyIntents();
+            foreach (var enemyIntent in enemyIntents.Where(intent => _aliveEnemies.Contains(intent.Key)))
+            {
+                yield return _intentExecutor.ExecuteIntent(enemyIntent.Key, enemyIntent.Value);
+            }
+
+            yield return new WaitForSeconds(2f);
+            foreach (var enemy in _aliveEnemies)
+                _intentPlanner.BuildIntent(enemy);
+            EnemyIntentsExecuteFinished = true;
+        }
+        
+        private void OnEnemyUnitDied(object[] args)
+        {
+            if (args[0] is not Unit unit) return;
+            if (_aliveEnemies.Contains(unit))
+            {
+                _aliveEnemies.Remove(unit);
+            }
+            
+            if (_aliveEnemies.Count == 0)
+            {
+                Debug.Log("所有敌人已被消灭，玩家获胜！");
+                GameManager.Instance.ChangeGameState(GameState.GameOver);
+            }
+        }
+
+        private void OnDeploymentStateEnded(object[] args)
+        {
+            foreach (var enemy in _aliveEnemies)
+                _intentPlanner.BuildIntent(enemy);
         }
     }
 }

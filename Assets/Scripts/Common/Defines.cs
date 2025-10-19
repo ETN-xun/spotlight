@@ -9,6 +9,7 @@ namespace Common
         
         public const string ClickSkillViewEvent = "ClickSkillViewEvent";
         
+        public const string DeploymentStateEndedEvent = "DeploymentStateEndedEvent";
         public const string PlayerTurnStartEvent = "PlayerTurnStartEvent";
         public const string EnemyTurnStartEvent = "EnemyTurnStartEvent";
         public const string PlayerTurnEndEvent = "PlayerTurnEndEvent";

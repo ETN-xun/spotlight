@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Ally;
 using Common;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace Action
 
         public static readonly EnergySystem EnergySystem = new();
         
-        [SerializeField] private int recoverEnergyPerTurn = 1;
+        [SerializeField] private int recoverEnergyPerTurn = 5;
 
         private Unit _actorUnit;
         private readonly List<Unit> _overheatedUnits = new();
@@ -46,7 +47,7 @@ namespace Action
             }
             _actorUnit = actor;
             skill.Execute(targetCell, GridManager.Instance);
-            
+            Debug.Log("execute skill action");
             // play animation here
             DetectActionEnd();
         }
@@ -98,8 +99,8 @@ namespace Action
         
         private void OnPlayerTurnStarted(object[] args)
         {
+            if (AllyManager.Instance.CurrentPlayerTurn == 1) return;
             EnergySystem.IncreaseEnergy(recoverEnergyPerTurn);
-            
         }
 
         private void OnPlayerTurnEnd(object[] args)
