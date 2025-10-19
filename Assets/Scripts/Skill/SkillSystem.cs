@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Action;
 using UnityEngine;
 
 public class SkillSystem : MonoBehaviour
@@ -24,22 +25,22 @@ public class SkillSystem : MonoBehaviour
         currentCaster = caster;
         currentSkillData = skillData;
         currentSkill = ChooseSkill(skillData, caster);
-
+        // SelectTarget(skillData.);
         //获取目标格子
         Vector2Int casterPos = caster.CurrentCell.Coordinate;
-        var coords = skillData.GetTargetableCells(casterPos, GridManager.Instance);
+        // var coords = skillData.GetTargetableCells(casterPos, GridManager.Instance);
 
         //高亮
-        ClearHighlights();
-        foreach (var pos in coords)
-        {
-            var cell = GridManager.Instance.GetCell(pos);
-            if (cell != null)
-            {
-                highlightedCells.Add(cell);
-                cell.GridCellController.Highlight(true);
-            }
-        }
+        // ClearHighlights();
+        // foreach (var pos in coords)
+        // {
+        //     var cell = GridManager.Instance.GetCell(pos);
+        //     if (cell != null)
+        //     {
+        //         highlightedCells.Add(cell);
+        //         cell.GridCellController.Highlight(true);
+        //     }
+        // }
     }
 
     /// <summary>
@@ -48,13 +49,12 @@ public class SkillSystem : MonoBehaviour
     public void SelectTarget(GridCell targetCell)
     {
         if (currentSkill == null) return;
-        if (!highlightedCells.Contains(targetCell)) return;
-
+        // if (!highlightedCells.Contains(targetCell)) return;
         //执行技能
         currentSkill.Execute(targetCell, GridManager.Instance);
 
         //清理状态
-        ClearHighlights();
+        // ClearHighlights();
         currentCaster = null;
         currentSkill = null;
         currentSkillData = null;

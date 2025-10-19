@@ -1,5 +1,7 @@
 
 
+using System.Collections.Generic;
+
 namespace Enemy.AI
 {
     public enum EnemyIntentType { None, Move, Attack, Spawn }
@@ -9,9 +11,8 @@ namespace Enemy.AI
         public EnemyIntentType type;
         public GridCell attackTargetCell;
         public GridCell moveTargetCell;
-        public GridCell spawnTargetCell;
-        public Skill plannedSkill;
-        public float priority; 
+        public float priority;
+        public List<GridCell> movePath = new();
 
         public EnemyIntent()
         {
@@ -25,7 +26,7 @@ namespace Enemy.AI
             {
                 EnemyIntentType.Attack => attackTargetCell != null,
                 EnemyIntentType.Move => moveTargetCell != null,
-                EnemyIntentType.Spawn => spawnTargetCell != null && plannedSkill != null,
+                // EnemyIntentType.Spawn => spawnTargetCell != null && plannedSkill != null,
                 _ => true
             };
         }

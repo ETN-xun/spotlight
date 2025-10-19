@@ -11,6 +11,7 @@ public class NarrationNode : BaseNode
     
     [TextArea(5, 8)] 
     public string narrationText;
+    public bool hasChoices;
     
     public Color32 textColor;
     

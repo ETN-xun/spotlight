@@ -88,7 +88,8 @@ namespace Enemy
             var enemyIntents = _intentPlanner.GetOrderedEnemyIntents();
             foreach (var enemyIntent in enemyIntents.Where(intent => _aliveEnemies.Contains(intent.Key)))
             {
-                yield return StartCoroutine(_intentExecutor.ShowIntent(enemyIntent.Key, enemyIntent.Value));
+                // 仅供测试使用，实际应显示所有意图
+                yield return StartCoroutine(_intentExecutor.ShowIntent(enemyIntent.Key, enemyIntent.Value[0]));
                 yield return new WaitForSeconds(1f);
             }
 
@@ -116,6 +117,12 @@ namespace Enemy
             if (_aliveEnemies.Contains(unit))
             {
                 _aliveEnemies.Remove(unit);
+            }
+            
+            if (_aliveEnemies.Count == 0)
+            {
+                Debug.Log("所有敌人已被消灭，玩家获胜！");
+                GameManager.Instance.ChangeGameState(GameState.GameOver);
             }
         }
 

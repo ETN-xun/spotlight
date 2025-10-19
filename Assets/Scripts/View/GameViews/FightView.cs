@@ -1,3 +1,4 @@
+using Common;
 using Level;
 using TMPro;
 using UnityEngine;
@@ -17,6 +18,12 @@ namespace View.GameViews
                 PrefabName = "UnitInfoView",
                 ParentTransform = transform.Find("Background")
             });
+
+            ViewManager.Instance.RegisterView(ViewType.TerrainInfoView, new ViewInfo()
+            {
+                PrefabName = "TerrainInfoView",
+                ParentTransform = transform.Find("Background")
+            });
         }
 
         protected override void InitData()
@@ -28,6 +35,7 @@ namespace View.GameViews
         public override void Open(params object[] args)
         {
             base.Open(args);
+            MessageCenter.Subscribe(Defines.EnergyChangedEvent, OnEnergyChanged);
             Find<Button>("Background/Settings_Btn").onClick.AddListener(OnClickSettingsButton);
             Find<Button>("Background/PlayerList/Player_01").onClick.AddListener(() =>
             {
@@ -43,12 +51,15 @@ namespace View.GameViews
             });
             Find<Button>("Background/EndTurn_Btn").onClick.AddListener(OnClickEndTurnButton);
             
+            Find<TextMeshProUGUI>("Background/EnergyBar/Text").text = $"Current energy : {Action.ActionManager.EnergySystem.GetCurrentEnergy()}";
+            
             InitializeOverloadModeButton();
         }
         
         public override void Close(params object[] args)
         {
             base.Close();
+            MessageCenter.Unsubscribe(Defines.EnergyChangedEvent, OnEnergyChanged);
             Find<Button>("Background/Settings_Btn").onClick.RemoveListener(OnClickSettingsButton);
             Find<Button>("Background/PlayerList/Player_01").onClick.RemoveListener(() =>
             {
@@ -64,6 +75,12 @@ namespace View.GameViews
             });
             Find<Button>("Background/EndTurn_Btn").onClick.RemoveListener(OnClickEndTurnButton);
         }
+        
+        private void OnEnergyChanged(object[] args)
+        {
+            if (args[0] is not int energy) return;
+            Find<TextMeshProUGUI>("Background/EnergyBar/Text").text = $"Current energy : {energy}";
+        }
 
         private void OnClickSettingsButton()
         {
@@ -72,20 +89,11 @@ namespace View.GameViews
 
         private void OnClickPlayerButton(int playerId = 0)
         {
-            // 还应该有选中等的逻辑
-            // if (ViewManager.Instance.IsOpen(ViewType.UnitInfoView))
-            // {
-            //     ViewManager.Instance.CloseView(ViewType.UnitInfoView);
-            // }
-            // else
-            // {
-            //     ViewManager.Instance.OpenView(ViewType.UnitInfoView, "" ,_levelData.playerUnits[playerId]);
-            // }
+
         }
         
         private void OnClickEndTurnButton()
         {
-            Debug.Log("结束回合按钮被点击");
             GameManager.Instance.ChangeGameState(GameState.EnemyTurn);
         }
         

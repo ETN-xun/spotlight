@@ -14,7 +14,5 @@ public enum InputType
     ClickPlayerUnit,
     ClickEnemyUnit,
     ClickNoUnit,
-    ClickView,
-    ClickSkill,
-    ClickMove,
+    CancelClick,
 }

@@ -23,6 +23,7 @@ public class SelectEnemyUnitState : BaseInputState
             GridManager.Instance.Highlight(true, cell.Coordinate);
         }
         ViewManager.Instance.OpenView(ViewType.UnitInfoView, "", CurrentSelectedUnit);
+        ViewManager.Instance.OpenView(ViewType.TerrainInfoView, "", CurrentSelectedCell);
     }
     
     public override void Exit()
@@ -34,6 +35,7 @@ public class SelectEnemyUnitState : BaseInputState
             GridManager.Instance.Highlight(false, cell.Coordinate);
         }
         ViewManager.Instance.CloseView(ViewType.UnitInfoView);
+        ViewManager.Instance.CloseView(ViewType.TerrainInfoView);
     }
 
     public override void Update()
@@ -51,6 +53,9 @@ public class SelectEnemyUnitState : BaseInputState
                 break;
             case InputType.ClickNoUnit:
                 stateMachine.ChangeState(InputState.SelectNoUnitState);
+                break;
+            case InputType.CancelClick:
+                stateMachine.ChangeState(InputState.IdleState);
                 break;
         }
     }
