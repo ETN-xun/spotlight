@@ -36,8 +36,8 @@ public class InputManager : MonoBehaviour
 
     public InputType DetectInputType()
     {
-        if (EventSystem.current.IsPointerOverGameObject() || !Input.GetMouseButtonDown(0))
-            return InputType.NoClick;
+        if (!Input.GetMouseButtonDown(0))
+            return Input.GetMouseButtonDown(1) ? InputType.CancelClick : InputType.NoClick;
         var worldPoint = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
         var cell = GridManager.Instance.WorldToCell(worldPoint);
         if (cell is null) return InputType.NoClick;
