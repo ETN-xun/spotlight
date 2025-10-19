@@ -84,8 +84,9 @@ public class ForcedMigrationSkill : Skill
         // 执行移动
         GridCell oldCell = target.CurrentCell;
         oldCell.CurrentUnit = null;
-        newCell.CurrentUnit = target;
-        target.PlaceAt(newCell);
+        // newCell.CurrentUnit = target;
+        // target.PlaceAt(newCell);
+        target.MoveTo(newCell);
         
         // 播放强制迁移效果
         PlayForcedMigrationEffect(oldCell, newCell);
