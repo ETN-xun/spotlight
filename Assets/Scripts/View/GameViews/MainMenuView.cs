@@ -10,16 +10,20 @@ namespace View.GameViews
         protected override void OnAwake()
         {
             base.OnAwake();
-            Find<UnityEngine.UI.Button>("Background/NewGameBtn").onClick.AddListener(OnNewGameBtnClick);
-            Find<UnityEngine.UI.Button>("Background/ExitGameBtn").onClick.AddListener(OnExitGameBtnClick);
-            Find<UnityEngine.UI.Button>("Background/LastGameBtn").onClick.AddListener(OnLastGameBtnClick);
+            Find<UnityEngine.UI.Button>("Background/Buttons/Continue").onClick.AddListener(OnContinueGameBtnClick);
+            Find<UnityEngine.UI.Button>("Background/Buttons/NewGame").onClick.AddListener(OnNewGameBtnClick);
+            Find<UnityEngine.UI.Button>("Background/Buttons/ExitGame").onClick.AddListener(OnExitGameBtnClick);
+            Find<UnityEngine.UI.Button>("Background/Buttons/CreativeStaff").onClick.AddListener(OnContinueGameBtnClick);
+            Find<UnityEngine.UI.Button>("Background/Settings").onClick.AddListener(OnSettingsBtnClick);
         }
-        public override void Destroy()      // TODO: 正确地移除监听器
+        public override void Destroy()      
         {
+            Find<UnityEngine.UI.Button>("Background/Buttons/Continue").onClick.RemoveListener(OnContinueGameBtnClick);
+            Find<UnityEngine.UI.Button>("Background/Buttons/NewGame").onClick.RemoveListener(OnNewGameBtnClick);
+            Find<UnityEngine.UI.Button>("Background/Buttons/ExitGame").onClick.RemoveListener(OnExitGameBtnClick);
+            Find<UnityEngine.UI.Button>("Background/Buttons/CreativeStaff").onClick.RemoveListener(OnCreativeStaffBtnClick);
+            Find<UnityEngine.UI.Button>("Background/Settings").onClick.RemoveListener(OnSettingsBtnClick);
             base.Destroy();
-            Find<UnityEngine.UI.Button>("Background/NewGameBtn").onClick.RemoveListener(OnNewGameBtnClick);
-            Find<UnityEngine.UI.Button>("Background/ExitGameBtn").onClick.RemoveListener(OnExitGameBtnClick);
-            Find<UnityEngine.UI.Button>("Background/LastGameBtn").onClick.RemoveListener(OnLastGameBtnClick);
         }
 
         private void OnNewGameBtnClick()
@@ -32,9 +36,24 @@ namespace View.GameViews
             GameAppManager.ExitGame();
         }
 
-        private void OnLastGameBtnClick()
+        private void OnContinueGameBtnClick()
         {
             
+        }
+        
+        private void OnCreativeStaffBtnClick()
+        {
+            
+        }
+        
+        private void OnSettingsBtnClick()
+        {
+            
+        }
+
+        private void OnDestroy()
+        {
+            Destroy();
         }
     }
 }

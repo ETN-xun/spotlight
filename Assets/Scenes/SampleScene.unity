@@ -596,6 +596,7 @@ GameObject:
   - component: {fileID: 1625316391}
   - component: {fileID: 1625316390}
   - component: {fileID: 1625316389}
+  - component: {fileID: 1625316393}
   m_Layer: 0
   m_Name: "\u96F6"
   m_TagString: Untagged
@@ -711,6 +712,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!320 &1625316393
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1625316388}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: 2cf0dc97217904df49a3c4b66a011d4c, type: 2}
+  m_InitialState: 1
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: 5890333455682989262, guid: 2cf0dc97217904df49a3c4b66a011d4c, type: 2}
+    value: {fileID: 1625316390}
+  m_ExposedReferences:
+    m_References: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
