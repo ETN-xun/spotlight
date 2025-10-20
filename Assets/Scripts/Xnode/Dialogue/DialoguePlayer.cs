@@ -193,6 +193,7 @@ public class DialoguePlayer : MonoBehaviour
     //显示选项界面
     private void DisplayChoices(DialogueNode node)
     {
+        Debug.Log(node.answers.Count);
         for (int i = 0; i < node.answers.Count; i++)
         {
             GameObject buttonGO = Instantiate(choiceButtonPrefab, choiceButtonContainer.transform);
