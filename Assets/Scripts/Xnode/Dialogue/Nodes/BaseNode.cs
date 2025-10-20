@@ -1,3 +1,4 @@
+using UnityEngine;
 using XNode;
 /// <summary>
 /// 节点通用逻辑
@@ -8,12 +9,14 @@ public abstract class BaseNode : Node
     //获取下一个节点
     public BaseNode GetNextNode()
     {
-        NodePort nextPort = GetOutputPort("output");
-        if (nextPort == null || nextPort.IsConnected)
+        foreach (NodePort port in this.Ports)
         {
-            return null;
+            if (port.IsOutput && port.IsConnected)
+            {
+                return port.GetConnection(0).node as BaseNode;
+            }
         }
-        return nextPort.Connection.node as BaseNode;
+        return null;
     }
 
     public override object GetValue(NodePort port)

@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: SpawnSkill
   m_EditorClassIdentifier: 
   skillID: spawn_skill
-  skillName: spawn
-  description: "\u5730\u5F62\u6295\u653E\uFF1A\u8FDC\u7A0B\u6295\u63B7\u4E00\u4E2A\u53EF\u4EE5\u62B5\u6321\u4E00\u6B21\u653B\u51FB\u7684\u9632\u706B\u5899"
+  skillName: "\u5730\u5F62\u6295\u653E"
+  description: "\u80FD\u91CF\u6D88\u80171\uFF0C\u6280\u80FD\u8303\u56F44\uFF0C\u6280\u80FD\u4F24\u5BB31\uFF0C\u8FDC\u7A0B\u6295\u63B7\u4E00\u4E2A\u9632\u706B\u5899\uFF0C\u82E5\u7838\u4E2D\u654C\u4EBA\uFF0C\u5730\u5F62\uFF0C\u6216\u5EFA\u7B51\uFF0C\u9020\u6210\u4E00\u70B9\u4F24\u5BB3\uFF0C\u540C\u65F6\u6295\u63B7\u7269\u635F\u6BC1\uFF0C\u82E5\u6295\u63B7\u81F3\u7A7A\u5730\u5F62\uFF0C\u5219\u5F62\u6210\u4E00\u4E2A\u53EF\u4EE5\u62B5\u6321\u4E00\u6B21\u653B\u51FB\u7684\u5899\uFF0C\u53D7\u51FB\u635F\u6BC1\uFF0C\u4E0D\u53D7\u51FB\u5219\u4E00\u76F4\u5B58\u5728"
   skillIcon: {fileID: 0}
   skillType: 2
   energyCost: 1
-  range: 1
+  range: 4
   requiresTarget: 1
   canTargetAllies: 0
-  canTargetEnemies: 0
-  baseDamage: 0
+  canTargetEnemies: 1
+  baseDamage: 1
   causeCollisionDamage: 0
   displacementDirection: 0
   displacementDistance: 0

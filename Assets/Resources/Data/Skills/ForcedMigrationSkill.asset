@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: ForcedMigrationSkill
   m_EditorClassIdentifier: 
   skillID: forced_migration_01
-  skillName: 强制迁移
-  description: 指针操控者-零的特殊技能：将目标向自身牵引一格，如果无法移动则造成额外伤害
+  skillName: "\u5F3A\u5236\u8FC1\u79FB"
+  description: "\u6307\u9488\u64CD\u63A7\u8005-\u96F6\u7684\u7279\u6B8A\u6280\u80FD\uFF1A\u5C06\u76EE\u6807\u5411\u81EA\u8EAB\u7275\u5F15\u4E00\u683C\uFF0C\u5982\u679C\u65E0\u6CD5\u79FB\u52A8\u5219\u9020\u6210\u989D\u5916\u4F24\u5BB3"
   skillIcon: {fileID: 0}
   skillType: 1
-  energyCost: 2
-  range: 2
+  energyCost: 1
+  range: 8
   requiresTarget: 1
-  canTargetAllies: 0
+  canTargetAllies: 1
   canTargetEnemies: 1
   baseDamage: 1
   causeCollisionDamage: 0
@@ -30,12 +30,11 @@ MonoBehaviour:
   spawnTile: {fileID: 0}
   effectRadius: 0
   effectPattern: []
-  effects: 
-  - 1
+  effects: 01000000
   cooldownTurns: 1
-  isPassive: 0
   statusAbnormalType: 0
   statusDuration: 0
   statusIntensity: 0
   statusCanStack: 0
   statusMaxStacks: 0
+  isPassive: 0

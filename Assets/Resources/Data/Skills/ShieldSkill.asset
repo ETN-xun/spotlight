@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c451a6ae6559ae44f842569554b6916b, type: 3}
+  m_Name: ShieldSkill
+  m_EditorClassIdentifier: 
+  skillID: shield_skill
+  skillName: "\u5806\u6808\u62A4\u76FE"
+  description: "\u80FD\u91CF\u6D88\u80171\uFF0C\u6280\u80FD\u8303\u56F44\uFF0C\u65E0\u4F24\u5BB3\uFF0C\u53EF\u4EE5\u4E3A\u53CB\u519B\uFF0C\u5730\u5F62\uFF0C\u5EFA\u7B51\u63D0\u4F9B\u4E00\u4E2A\u80FD\u5438\u6536\u4E00\u6B21\u4F24\u5BB3\u7684\u62A4\u76FE\uFF0C\u62A4\u76FE\u53D7\u5230\u4F24\u5BB3\u788E\u88C2\uFF0C\u5426\u5219\u4E00\u76F4\u5B58\u5728"
+  skillIcon: {fileID: 0}
+  skillType: 0
+  energyCost: 1
+  range: 4
+  requiresTarget: 1
+  canTargetAllies: 1
+  canTargetEnemies: 0
+  baseDamage: 0
+  causeCollisionDamage: 0
+  displacementDirection: 0
+  displacementDistance: 0
+  spawnHits: 2
+  spawnTile: {fileID: 0}
+  effectRadius: 0
+  effectPattern: []
+  effects: 
+  cooldownTurns: 0
+  statusAbnormalType: 0
+  statusDuration: 3
+  statusIntensity: 1
+  statusCanStack: 1
+  statusMaxStacks: 5
+  isPassive: 0

@@ -13,8 +13,14 @@ public class SpawnSkill : Skill
     {
         if (targetCell.DestructibleObject != null || targetCell.CurrentUnit != null)
         {
-            Debug.Log("Spawn blocked: cell occupied");
-            return;
+            if (targetCell.DestructibleObject != null)
+            {
+                targetCell.DestructibleObject.TakeHits();
+            }
+            else
+            {
+                targetCell.CurrentUnit.TakeDamage(1);
+            }
         }
 
         if (gridManager.objectTilemap != null && data.spawnTile != null)

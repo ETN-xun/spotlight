@@ -39,10 +39,10 @@ public class DialoguePlayer : MonoBehaviour
             Destroy(gameObject);
         else
             Instance = this;
+        dialoguePanel.SetActive(false);
     }
     private void Start()
     {
-        dialoguePanel.SetActive(false);
         //绑定点击事件
         nextButton.onClick.AddListener(AdvanceToNextNode);
         skipButton.onClick.AddListener(SkipToNextCheckpoint);
@@ -93,6 +93,8 @@ public class DialoguePlayer : MonoBehaviour
     // 用于下一步按钮
     private void AdvanceToNextNode()
     {
+        Debug.Log(currentNode.name);
+        Debug.Log(currentNode.GetNextNode());
         ProcessNode(currentNode.GetNextNode());
     }
     
@@ -103,11 +105,11 @@ public class DialoguePlayer : MonoBehaviour
     private void ProcessNode(BaseNode node)
     {
         if (node == null) { EndDialogue(false); return; }
-        
         currentNode = node;
         ClearChoices();
         switch (node)
         {
+            
             case DialogueNode dialogueNode:
                 DisplayDialogue(dialogueNode);
                 break;
@@ -189,23 +191,37 @@ public class DialoguePlayer : MonoBehaviour
     } 
     
     //显示选项界面
-    private void DisplayChoicesBase(IList<BaseNode.Connection> answers,List<string> choices) 
+    private void DisplayChoices(DialogueNode node)
     {
-        for (int i = 0; i < answers.Count; i++)
+        for (int i = 0; i < node.answers.Count; i++)
         {
             GameObject buttonGO = Instantiate(choiceButtonPrefab, choiceButtonContainer.transform);
             spawnedButtons.Add(buttonGO);
 
             // 设置按钮文本
-            buttonGO.GetComponentInChildren<TextMeshProUGUI>().text = choices[i]; 
+            buttonGO.GetComponentInChildren<TextMeshProUGUI>().text = node.answerTexts[i]; 
 
             int choiceIndex = i; 
             
             buttonGO.GetComponent<Button>().onClick.AddListener(() => OnChoiceSelected(choiceIndex));
         }
     }
-    private void DisplayChoices(DialogueNode node) => DisplayChoicesBase(node.answers,node.answerTexts);
-    private void DisplayChoices(NarrationNode node) => DisplayChoicesBase(node.answers,node.answerTexts);
+
+    private void DisplayChoices(NarrationNode node)
+    {
+        for (int i = 0; i < node.answers.Count; i++)
+        {
+            GameObject buttonGO = Instantiate(choiceButtonPrefab, choiceButtonContainer.transform);
+            spawnedButtons.Add(buttonGO);
+
+            // 设置按钮文本
+            buttonGO.GetComponentInChildren<TextMeshProUGUI>().text = node.answerTexts[i]; 
+
+            int choiceIndex = i; 
+            
+            buttonGO.GetComponent<Button>().onClick.AddListener(() => OnChoiceSelected(choiceIndex));
+        }
+    }
     
     // 根据选择的索引找到下一个节点
     private void OnChoiceSelected(int choiceIndex)
