@@ -114,7 +114,7 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
         {
             // 判断技能范围
         }
-        if (!CurrentSelectedUnit.hasMoved && !_isPreparingSkill)
+        else
         {
             var moveRangeCells = LastSelectedUnit.GetMoveRange();
             if (moveRangeCells.Contains(CurrentSelectedCell))
@@ -128,7 +128,6 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
                 // ViewManager.Instance.CloseView(ViewType.UnitInfoView);
                 // LastSelectedUnit.MoveTo(CurrentSelectedCell);
                 ActionManager.Instance.ExecuteMoveAction(LastSelectedUnit, CurrentSelectedCell);
-                LastSelectedUnit.hasMoved = true;
             }
         }
         stateMachine.ChangeState(InputState.SelectNoUnitState);

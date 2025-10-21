@@ -12,8 +12,6 @@ public class Unit : MonoBehaviour
     
     [HideInInspector]
     public int currentTurnActionCount;  // 当前回合已执行的行动次数
-    [HideInInspector]
-    public bool hasMoved;   // 当前回合是否已移动
     public GridCell CurrentCell { get; private set; }
     [HideInInspector]
     public bool ttIsApplied; // 热量节流是否激活
@@ -110,8 +108,6 @@ public class Unit : MonoBehaviour
         {
             StatusEffectManager.ApplyAllEffects();
         }
-
-        hasMoved = false;
         currentTurnActionCount = 0;
     }
     
