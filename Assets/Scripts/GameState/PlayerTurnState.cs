@@ -29,6 +29,7 @@ public class PlayerTurnState : GameStateBase
     public override void Exit()
     {
         base.Exit();
+        GridManager.Instance.ClearAllHighlights();
         MessageCenter.Publish(Defines.PlayerTurnEndEvent);
         ViewManager.Instance.CloseView(ViewType.FightView);
     }
