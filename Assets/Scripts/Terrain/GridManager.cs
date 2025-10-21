@@ -220,4 +220,10 @@ public class GridManager : MonoBehaviour
             terrainTilemap.SetColor(cellPos, Color.white);
         }
     }
+    
+    public int GetDistance(GridCell a, GridCell b)
+    {
+        return Mathf.Abs(a.Coordinate.x - b.Coordinate.x) +
+               Mathf.Abs(a.Coordinate.y - b.Coordinate.y);
+    }
 }

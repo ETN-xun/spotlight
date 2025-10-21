@@ -21,8 +21,13 @@ public class GridCell
         DestructibleObject = null;
     }
     
-    public bool IsWalkable()
+    public bool IsWalkableForAlly()
     {
         return DestructibleObject is null && CurrentUnit is null && ObjectOnCell is null;
+    }
+
+    public bool IsWalkableForEnemy()
+    {
+        return DestructibleObject is null && CurrentUnit is null && ObjectOnCell is null && (TerrainData is null || TerrainData.terrainType == TerrainType.CorrosionTile);
     }
 }

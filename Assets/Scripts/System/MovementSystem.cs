@@ -24,7 +24,7 @@ public class MovementSystem : MonoBehaviour
         StartCoroutine(MoveUnitCoroutine(unit, direction, distance, onComplete));
     }
     
-    private  IEnumerator MoveUnitCoroutine(Unit unit, GridCell nextCell)
+    private IEnumerator MoveUnitCoroutine(Unit unit, GridCell nextCell)
     {
         if (unit?.CurrentCell is null || nextCell is null) yield break;
 
@@ -239,7 +239,7 @@ public class MovementSystem : MonoBehaviour
     /// <summary>
     /// 基于A*算法查找路径
     /// </summary>
-    public List<GridCell> FindPath(GridCell start, GridCell end)
+    public List<GridCell> FindPathForEnemy(GridCell start, GridCell end)
     {
         var openSet = new List<GridCell>();
         var closedSet = new HashSet<GridCell>();
@@ -266,7 +266,7 @@ public class MovementSystem : MonoBehaviour
 
             foreach (var neighbor in GetNeighbors(current))
             {
-                if (closedSet.Contains(neighbor) || !neighbor.IsWalkable())
+                if (closedSet.Contains(neighbor) || !neighbor.IsWalkableForEnemy())
                     continue;
                 var tentativeG = gScore[current] + 1;
                 if (!openSet.Contains(neighbor))
@@ -305,7 +305,6 @@ public class MovementSystem : MonoBehaviour
         {
             var pos = cell.Coordinate + dir;
             if (!GridManager.Instance.IsValidPosition(pos)) continue;
-            // if (!cell.IsWalkable()) continue;
             var neighbor = GridManager.Instance.GetCell(pos);
             if (neighbor != null)
                 neighbors.Add(neighbor);
@@ -318,7 +317,7 @@ public class MovementSystem : MonoBehaviour
         for (var i = 1; i < path.Count; i++)
         {
             var nextCell = path[i];
-            if (!nextCell.IsWalkable()) yield break;
+            // if (!nextCell.IsWalkableForEnemy()) yield break;
             yield return MoveUnitCoroutine(unit, nextCell);
         }
     }

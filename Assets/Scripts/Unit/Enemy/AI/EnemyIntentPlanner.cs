@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Action;
@@ -9,56 +10,28 @@ namespace Enemy.AI
     public class EnemyIntentPlanner
     {
         private readonly Dictionary<Unit, List<EnemyIntent>> _enemyIntents = new();
+        private readonly IEnemyStrategy _garbledCrawlerStrategy = new GarbledCrawlerStrategy();
+        private readonly IEnemyStrategy _crashUndeadStrategy = new CrashUndeadStrategy();
+        private readonly IEnemyStrategy _nullPointerStrategy = new NullPointerStrategy();
 
         public void BuildIntent(Unit enemy)
         {
-            var allyUnits = AllyManager.Instance.GetAliveAllies();
-            var moveRange = enemy.GetMoveRange();
-            var attackRange = enemy.GetAttackRange(enemy.CurrentCell);
             var intents = new List<EnemyIntent>();
-            
-            var targetsInRange = allyUnits.Where(u => attackRange.Contains(u.CurrentCell)).ToList();
-            if (targetsInRange.Count > 0)
+            switch (enemy.data.unitType)
             {
-                var attackTarget = FindBestAttackTarget(enemy, targetsInRange);
-                intents.Add(new EnemyIntent
-                {
-                    type = EnemyIntentType.Attack,
-                    attackTargetCell = attackTarget.CurrentCell,
-                    priority = enemy.data.aiPriority
-                });
-                _enemyIntents[enemy] = intents;
-                return;
+                case UnitType.GarbledCrawler:
+                    intents = _garbledCrawlerStrategy.BuildIntent(enemy);
+                    break;
+                case UnitType.CrashUndead:
+                    intents = _crashUndeadStrategy.BuildIntent(enemy);
+                    break;
+                case UnitType.NullPointer:
+                    intents = _nullPointerStrategy.BuildIntent(enemy);
+                    break;
+                case UnitType.RecursivePhantom:
+                    break;
+
             }
-            
-            var bestMoveCell = FindBestMoveTarget(enemy, allyUnits);
-            if (bestMoveCell != null && bestMoveCell != enemy.CurrentCell)
-            {
-                var moveIntent = new EnemyIntent
-                {
-                    type = EnemyIntentType.Move,
-                    moveTargetCell = bestMoveCell,
-                    movePath = MovementSystem.Instance.FindPath(enemy.CurrentCell, bestMoveCell),
-                    priority = enemy.data.aiPriority,
-                };
-                intents.Add(moveIntent);
-
-                var postMoveAttackRange = enemy.GetAttackRange(bestMoveCell);
-                var postMoveTargets = allyUnits.Where(u => postMoveAttackRange.Contains(u.CurrentCell)).ToList();
-
-                if (postMoveTargets.Count > 0)
-                {
-                    var attackTarget = FindBestAttackTarget(enemy, postMoveTargets);
-                    var attackIntent = new EnemyIntent
-                    {
-                        type = EnemyIntentType.Attack,
-                        attackTargetCell = attackTarget.CurrentCell,
-                        priority = enemy.data.aiPriority
-                    };
-                    intents.Add(attackIntent);
-                }
-            }
-
             _enemyIntents[enemy] = intents;
         }
 
@@ -73,69 +46,6 @@ namespace Enemy.AI
         public void ClearIntents()
         {
             _enemyIntents.Clear();
-        }
-
-        private Unit FindBestAttackTarget(Unit enemy, List<Unit> candidates)
-        {
-            Unit bestTarget = null;
-            var bestScore = float.MinValue;
-
-            foreach (var t in candidates)
-            {
-                var score = EvaluateTarget(enemy, t);
-                if (score <= bestScore) continue;
-                bestScore = score;
-                bestTarget = t;
-            }
-
-            return bestTarget;
-        }
-
-        private GridCell FindBestMoveTarget(Unit enemy, List<Unit> allyUnits)
-        {
-            var moveRange = enemy.GetMoveRange();
-            var bestCell = enemy.CurrentCell;
-            var bestScore = float.MinValue;
-
-            foreach (var cell in moveRange)
-            {
-                var attackableCells = enemy.GetAttackRange(cell);
-                var attackableTargets = allyUnits.Where(u => attackableCells.Contains(u.CurrentCell)).ToList();
-
-                float score;
-                if (attackableTargets.Count > 0)
-                {
-                    score = attackableTargets.Max(t => EvaluateTarget(enemy, t)) + 5f;
-                }
-                else
-                {
-                    float minDist = allyUnits.Min(u => GetDistance(cell, u.CurrentCell));
-                    score = 1f / (1 + minDist);
-                }
-
-                if (score > bestScore)
-                {
-                    bestScore = score;
-                    bestCell = cell;
-                }
-            }
-
-            return bestCell;
-        }
-
-        private float EvaluateTarget(Unit enemy, Unit target)
-        {
-            var hpScore = (target.data.maxHP - target.currentHP) / (float)target.data.maxHP;
-            var threatScore = target.data.baseDamage / 10f;
-            var distanceScore = 1f / (1 + GetDistance(enemy.CurrentCell, target.CurrentCell));
-
-            return hpScore * 2f + threatScore + distanceScore;
-        }
-
-        private int GetDistance(GridCell a, GridCell b)
-        {
-            return Mathf.Abs(a.Coordinate.x - b.Coordinate.x) +
-                   Mathf.Abs(a.Coordinate.y - b.Coordinate.y);
         }
     }
 }
