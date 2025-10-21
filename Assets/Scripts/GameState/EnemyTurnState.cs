@@ -46,6 +46,7 @@ public class EnemyTurnState : GameStateBase
         
         Debug.Log("敌人回合结束");
         GridManager.Instance.ClearAllHighlights();
+        EnemyManager.Instance.RemoveNullPointerAttackedUnits();
         MessageCenter.Publish(Defines.EnemyTurnEndEvent);
     }
 }

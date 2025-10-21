@@ -5,9 +5,10 @@ namespace Enemy.AI
 {
     public class NullPointerStrategy : IEnemyStrategy
     {
-        public Unit AttackedUnit { get; set; }
         public Unit FindBestAttackTarget(Unit enemy, List<Unit> candidates)
         {
+            if (candidates == null || candidates.Count == 0)
+                return null;
             Unit bestTarget = null;
             var bestScore = float.MinValue;
 
@@ -18,8 +19,7 @@ namespace Enemy.AI
                 bestScore = score;
                 bestTarget = unit;
             }
-
-            return bestTarget;
+            return bestTarget ?? candidates[0];
         }
         
         public GridCell FindBestMoveTarget(Unit enemy, List<Unit> allyUnits)
@@ -53,7 +53,7 @@ namespace Enemy.AI
         
         private float EvaluateAttackTarget(Unit enemy, Unit target)
         {
-            if (target == AttackedUnit)
+            if (enemy.attackedUnits.ContainsKey(target))
             {
                 return float.MinValue;
             }
