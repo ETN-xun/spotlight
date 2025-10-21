@@ -17,7 +17,7 @@ MonoBehaviour:
   description: 代码刺客-影的特殊技能：如果目标处于异常状态，则直接击杀；否则造成普通伤害
   skillIcon: {fileID: 0}
   skillType: 0
-  energyCost: 3
+  energyCost: 1
   range: 1
   requiresTarget: 1
   canTargetAllies: 0

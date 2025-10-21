@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5907fe0d4ae767b4291f44fedc3d1d08, type: 3}
   m_Name: BOSS
   m_EditorClassIdentifier: 
-  unitID: 
-  unitName: 
+  unitID: BOSS
+  unitName: BOSS
   description: 
   unitSprite: {fileID: 0}
   unitPrefab: {fileID: 0}

@@ -76,6 +76,14 @@ public class SkillSystem : MonoBehaviour
                 return new BreakpointExecutionSkill(data, caster);
             case "forced_migration_01":
                 return new ForcedMigrationSkill(data, caster);
+            case "stack_shield_01":
+                return new ShieldSkill(data, caster);
+            case "terrain_deployment_01":
+                return new SpawnSkill(data, caster);
+            case "position_swap_01":
+                return new PositionSwapSkill(data, caster);
+            case "flashback_displacement_01":
+                return new FlashbackDisplacementSkill(data, caster);
         }
         
         // 然后按技能类型创建通用技能
