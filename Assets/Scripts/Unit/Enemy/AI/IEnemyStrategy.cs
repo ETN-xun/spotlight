@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Ally;
+using UnityEngine;
 
 namespace Enemy.AI
 {
@@ -8,11 +9,10 @@ namespace Enemy.AI
     {
         public List<EnemyIntent> BuildIntent(Unit enemy)
         {
-            // 先判断当前是否有可攻击目标，有则直接攻击，没有则移动到最佳位置，再判断是否有可攻击目标，有则攻击，没有则结束
             var allyUnits = AllyManager.Instance.GetAliveAllies();
             var attackRange = enemy.GetAttackRange(enemy.CurrentCell);
             var enemyIntents = new List<EnemyIntent>();
-            
+
             var targetsInAttackRange = allyUnits.Where(u => attackRange.Contains(u.CurrentCell)).ToList();
             if (targetsInAttackRange.Count > 0)
             {
@@ -25,15 +25,16 @@ namespace Enemy.AI
                 });
                 return enemyIntents;
             }
-            
+
             var bestMoveCell = FindBestMoveTarget(enemy, allyUnits);
             if (bestMoveCell is not null && bestMoveCell != enemy.CurrentCell)
             {
+                var movePath = MovementSystem.Instance.FindPathForEnemy(enemy.CurrentCell, bestMoveCell);
                 var moveIntent = new EnemyIntent
                 {
                     type = EnemyIntentType.Move,
                     moveTargetCell = bestMoveCell,
-                    movePath = MovementSystem.Instance.FindPathForEnemy(enemy.CurrentCell, bestMoveCell),
+                    movePath = movePath,
                     priority = enemy.data.aiPriority,
                 };
                 enemyIntents.Add(moveIntent);

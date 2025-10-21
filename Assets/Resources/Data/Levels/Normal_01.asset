@@ -26,5 +26,6 @@ MonoBehaviour:
   - {fileID: 7412867095707020583, guid: 502aad738f5874fb6b675fc73a9d4b47, type: 3}
   - {fileID: 7412867095707020583, guid: d601efe630ce245f5b4fde352b7dafe9, type: 3}
   enemyUnits:
-  - {fileID: 7412867095707020583, guid: 9dd1fd43ae7b9418c91fc0faf4aff4f0, type: 3}
-  - {fileID: 7412867095707020583, guid: ffef04109eb5b47fb807250ef95259d7, type: 3}
+  - {fileID: 7412867095707020583, guid: 89950a90055484244bdc748c71f64bbc, type: 3}
+  - {fileID: 7412867095707020583, guid: c02dc2fe921f5423eb7110393f5daa38, type: 3}
+  - {fileID: 7412867095707020583, guid: d38ad961fd9314294944e444ffc5b8fb, type: 3}

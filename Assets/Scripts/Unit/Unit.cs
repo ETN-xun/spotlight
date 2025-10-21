@@ -15,6 +15,8 @@ public class Unit : MonoBehaviour
     public GridCell CurrentCell { get; private set; }
     [HideInInspector]
     public bool ttIsApplied; // 热量节流是否激活
+
+    public Dictionary<Unit, int> attackedUnits = new();
     
     /// <summary>
     /// 状态效果管理器
