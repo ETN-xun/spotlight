@@ -66,10 +66,15 @@ namespace Enemy
         {
             var currentLevelData = Level.LevelManager.Instance.GetCurrentLevel();
             var aliveEnemies = currentLevelData.enemyUnits;
-            GridManager.Instance.PlaceUnit(new Vector2Int(3, 3), aliveEnemies[0]);
-            GridManager.Instance.PlaceUnit(new Vector2Int(-3, 3), aliveEnemies[1]);
-            _enemies.Add(aliveEnemies[0]);
-            _enemies.Add(aliveEnemies[1]);
+            for (var i = 0; i < aliveEnemies.Count; i++)
+            {
+                GridManager.Instance.PlaceUnit(new Vector2Int(i, 3), aliveEnemies[i]);
+                _enemies.Add(aliveEnemies[i]);
+            }
+            // GridManager.Instance.PlaceUnit(new Vector2Int(3, 3), aliveEnemies[0]);
+            // GridManager.Instance.PlaceUnit(new Vector2Int(-3, 3), aliveEnemies[1]);
+            // _enemies.Add(aliveEnemies[0]);
+            // _enemies.Add(aliveEnemies[1]);
         }
         
         public void AddAliveEnemy(Unit ally)

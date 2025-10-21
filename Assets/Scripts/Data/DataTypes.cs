@@ -1,5 +1,15 @@
 using System;
 
+public enum UnitType
+{
+    None,
+    GarbledCrawler,
+    CrashUndead,
+    NullPointer,
+    RecursivePhantom,
+}
+
+
 /// <summary>
 /// 技能类型枚举
 /// 定义技能的分类

@@ -16,6 +16,12 @@ namespace Enemy.AI
                     yield break;
 
                 case EnemyIntentType.Move:
+                    if (enemy.data.unitType == UnitType.NullPointer)
+                    {
+                        GridManager.Instance.Highlight(true, intent.moveTargetCell.Coordinate);
+                        yield return new WaitForSeconds(0.5f);
+                        break;
+                    }
                     foreach (var pathCell in intent.movePath)
                         GridManager.Instance.Highlight(true, pathCell.Coordinate);
 

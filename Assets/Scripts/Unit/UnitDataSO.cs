@@ -16,6 +16,8 @@ public class UnitDataSO : ScriptableObject
     [Tooltip("单位名称")]
     public string unitName;
     
+    public UnitType unitType;
+    
     [Tooltip("单位描述")]
     [TextArea(2, 3)]
     public string description;
