@@ -72,18 +72,20 @@ public class SkillSystem : MonoBehaviour
         // 首先检查特定的技能ID
         switch (data.skillID)
         {
-            case "breakpoint_execution_01":
+            case "breakpoint_execution_01"://断点斩杀技能
                 return new BreakpointExecutionSkill(data, caster);
-            case "forced_migration_01":
+            case "forced_migration_01"://强制迁移技能
                 return new ForcedMigrationSkill(data, caster);
-            case "stack_shield_01":
+            case "stack_shield_01"://堆栈护盾技能
                 return new ShieldSkill(data, caster);
-            case "terrain_deployment_01":
+            case "terrain_deployment_01"://地形投放技能
                 return new SpawnSkill(data, caster);
-            case "position_swap_01":
+            case "position_swap_01"://移形换影技能
                 return new PositionSwapSkill(data, caster);
-            case "flashback_displacement_01":
+            case "flashback_displacement_01"://闪回位移技能
                 return new FlashbackDisplacementSkill(data, caster);
+            case "Status_Abnormal_01"://状态异常技能
+                return new StatusAbnormalSkill(data, caster);
         }
         
         // 然后按技能类型创建通用技能

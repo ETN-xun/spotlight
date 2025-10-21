@@ -6,6 +6,7 @@ using UnityEngine;
 public class MovementSystem : MonoBehaviour
 {
     public static MovementSystem Instance { get; private set; }
+    public static SkillDataSO StatusAbnormalSkill;
 
     private void Awake()
     {
@@ -58,11 +59,12 @@ public class MovementSystem : MonoBehaviour
                     //造成一点伤害
                     unit.TakeDamage(1);
                     //造成异常效果
-                        
+                    StatusAbnormal(unit,nextCell);    
                     break;
                 case TerrainType.BugTile:
+                    //造成异常效果
+                    StatusAbnormal(unit,nextCell);    
                     //根据角色类型交换攻击力与生命
-
                     if(unit.data.isEnemy)
                     {
                         unit.data.baseDamage = unit.data.baseDamage + unit.data.maxHP;
@@ -89,7 +91,7 @@ public class MovementSystem : MonoBehaviour
         }
 
         //撞到建筑
-        if (nextCell.ObjectOnCell is not null)
+        if (nextCell.DestructibleObject is not null)
         {
             var destructibleObject = nextCell.DestructibleObject;
             DestructibleObjectType type = destructibleObject.data.Type;
@@ -115,6 +117,11 @@ public class MovementSystem : MonoBehaviour
         }
     }
 
+    private void StatusAbnormal(Unit unit, GridCell nowCell)
+    {
+        SkillSystem.Instance.StartSkill(unit, StatusAbnormalSkill);
+        SkillSystem.Instance.SelectTarget(nowCell);
+    }
     private IEnumerator MoveUnitCoroutine(Unit unit, Vector2Int direction, int distance, System.Action onComplete)
     {
         if (unit == null || unit.CurrentCell == null) yield break;
@@ -229,7 +236,7 @@ public class MovementSystem : MonoBehaviour
 
         onComplete?.Invoke();
     }
-
+    
     private void Exchange(ref int Num1, ref int Num2)
     {
         Num1 = Num1 + Num2;
