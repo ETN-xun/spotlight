@@ -10,13 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5907fe0d4ae767b4291f44fedc3d1d08, type: 3}
-  m_Name: PointerManipulatorZero
+  m_Name: "\u96F6"
   m_EditorClassIdentifier: 
   unitID: pointer_manipulator_zero_01
-  unitName: 指针操纵者-零
-  description: 一个强大的指针操纵单位，拥有断点斩杀和强制迁移技能。能够对状态异常的敌人造成致命打击，并将敌人拉向自己。
-  unitSprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
-  unitPrefab: {fileID: 5232480781568626486, guid: 502aad738f5874fb6b675fc73a9d4b47, type: 3}
+  unitName: "\u6307\u9488\u64CD\u7EB5\u8005-\u96F6"
+  unitType: 0
+  description: "\u4E00\u4E2A\u5F3A\u5927\u7684\u6307\u9488\u64CD\u7EB5\u5355\u4F4D\uFF0C\u62E5\u6709\u65AD\u70B9\u65A9\u6740\u548C\u5F3A\u5236\u8FC1\u79FB\u6280\u80FD\u3002\u80FD\u591F\u5BF9\u72B6\u6001\u5F02\u5E38\u7684\u654C\u4EBA\u9020\u6210\u81F4\u547D\u6253\u51FB\uFF0C\u5E76\u5C06\u654C\u4EBA\u62C9\u5411\u81EA\u5DF1\u3002"
+  unitSprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224,
+    type: 3}
+  unitPrefab: {fileID: 1842087686838263254, guid: ada4204eb756547d1860fbc103fb7a2a,
+    type: 3}
   isEnemy: 0
   maxHP: 80
   Hits: 3
@@ -34,3 +37,4 @@ MonoBehaviour:
   aiPriority: 1
   buildingTargetPriority: 2
   unitTargetPriority: 1
+  overheatedActionsPerTurn: 1

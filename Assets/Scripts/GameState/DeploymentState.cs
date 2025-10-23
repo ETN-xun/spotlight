@@ -25,7 +25,7 @@ public class DeploymentState : GameStateBase
     {
         base.Enter();
         MessageCenter.Subscribe(Defines.ClickDeployUnitViewEvent, OnClickDeployUnit);
-        _totalUnits = LevelManager.Instance.GetCurrentLevel().playerUnits;
+        _totalUnits = LevelManager.Instance.GetCurrentLevel().allyUnits;
         ViewManager.Instance.OpenView(ViewType.DeploymentView);
     }
 
@@ -53,7 +53,7 @@ public class DeploymentState : GameStateBase
         }
 
 
-        if (_deployedUnitCount == LevelManager.Instance.GetCurrentLevel().playerUnits.Count)
+        if (_deployedUnitCount == LevelManager.Instance.GetCurrentLevel().allyUnits.Count)
         {
             gameManager.ChangeGameState(GameState.EnemyTurn);
         }

@@ -41,3 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Terrain
+    uniqueID: 2123229825
+    locked: 0
+  - name: Buildings
+    uniqueID: 2491009641
+    locked: 0
+  - name: Unit
+    uniqueID: 812182303
+    locked: 0

@@ -72,6 +72,11 @@ namespace Enemy
             }
         }
         
+        public Unit GetAliveEnemyByID(string unitID)
+        {
+            return _aliveEnemies.Find(enemy => enemy.data.unitID == unitID);
+        }
+        
         public void AddAliveEnemy(Unit ally)
         {
             _aliveEnemies.Add(ally);

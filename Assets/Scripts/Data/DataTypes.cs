@@ -7,6 +7,9 @@ public enum UnitType
     CrashUndead,
     NullPointer,
     RecursivePhantom,
+    Zero,
+    Shadow,
+    Stone,
 }
 
 
