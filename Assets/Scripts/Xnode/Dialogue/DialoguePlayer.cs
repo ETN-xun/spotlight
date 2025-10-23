@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using System;
+using System.Collections;
 
 public class DialoguePlayer : MonoBehaviour
 {
@@ -30,6 +31,14 @@ public class DialoguePlayer : MonoBehaviour
     public Button nextButton;   //下一步按钮
     public Button skipButton;  // 跳过按钮
     
+    [Header("Typewriter Effect")]
+    [Tooltip("每秒显示的字符数")]
+    public float charactersPerSecond = 20f;
+
+    // 私有状态变量
+    private Coroutine typingCoroutine; // 用于持有对当前正在运行的协程的引用
+    private bool isTyping = false; // 标记当前是否正在打字
+    
     private BaseNode currentNode;  //当前节点
     private List<GameObject> spawnedButtons = new List<GameObject>();   //选项按钮
     
@@ -44,7 +53,7 @@ public class DialoguePlayer : MonoBehaviour
     private void Start()
     {
         //绑定点击事件
-        nextButton.onClick.AddListener(AdvanceToNextNode);
+        nextButton.onClick.AddListener(OnInteraction);
         skipButton.onClick.AddListener(SkipToNextCheckpoint);
     }
     /// <summary>
@@ -89,12 +98,39 @@ public class DialoguePlayer : MonoBehaviour
         }
         EndDialogue(true);
     }
-    
+    //点击事件
+    private void OnInteraction()
+    {
+        if (isTyping && typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+            
+            isTyping = false;
+            typingCoroutine = null;
+            
+            if (currentNode is DialogueNode dn) storyText.text = dn.dialogueText;
+            if (currentNode is NarrationNode nn) narrationText.text = nn.narrationText;
+
+            if (currentNode is DialogueNode dialogueNode && dialogueNode.hasChoices ||
+                currentNode is NarrationNode narrationNode && narrationNode.hasChoices)
+            {
+                nextButton.gameObject.SetActive(false);
+            }
+            else
+            {
+                nextButton.gameObject.SetActive(true);
+            }
+        }
+        else
+        {
+            AdvanceToNextNode();
+        }
+    }
     // 用于下一步按钮
     private void AdvanceToNextNode()
     {
-        Debug.Log(currentNode.name);
-        Debug.Log(currentNode.GetNextNode());
+        //Debug.Log(currentNode.name);
+        //Debug.Log(currentNode.GetNextNode());
         ProcessNode(currentNode.GetNextNode());
     }
     
@@ -116,19 +152,16 @@ public class DialoguePlayer : MonoBehaviour
             case NarrationNode narrationNode:
                 DisplayNarration(narrationNode);
                 break;
-            case CheckpointNode _: // 如果是检查点，什么都不显示，直接跳到下一个
+            case CheckpointNode _: 
                 AdvanceToNextNode();
                 break;
             case SectionEndNode sectionEndNode:
-                // 触发段落结束事件！
-                EndDialogue(true, sectionEndNode.eventName); // 结束本次播放
+                EndDialogue(true, sectionEndNode.eventName); 
                 break; 
             case EndNode _:
                 EndDialogue(false);
                 break;
             case FadeScreenNode fadeNode:
-                // 我们不直接结束对话，而是启动渐变效果
-                // 渐变效果会负责在合适的时机关闭UI和发送事件
                 ExecuteFade(fadeNode);
                 break;
         }
@@ -155,18 +188,14 @@ public class DialoguePlayer : MonoBehaviour
         narrationLayout.SetActive(true);
         dialogueLayout.SetActive(false);
         
-        narrationText.text = node.narrationText;
+        //narrationText.text = node.narrationText;
         narrationText.color = narrationText.color;
         
+        nextButton.gameObject.SetActive(true);
+        typingCoroutine = StartCoroutine(TypewriterCoroutine(node.narrationText, narrationText));
+        
         if (node.hasChoices)
-        {
-            nextButton.gameObject.SetActive(false);
             DisplayChoices(node);
-        }
-        else
-        {
-            nextButton.gameObject.SetActive(true);
-        }
     }
     
     //显示对话
@@ -177,23 +206,19 @@ public class DialoguePlayer : MonoBehaviour
 
         characterPortraitImage.sprite = node.characterIcon;
         nameText.text = node.characterName;
-        storyText.text = node.dialogueText;
+        //storyText.text = node.dialogueText;
+        
+        nextButton.gameObject.SetActive(true);
+        typingCoroutine = StartCoroutine(TypewriterCoroutine(node.dialogueText, storyText));
         
         if (node.hasChoices)
-        {
-            nextButton.gameObject.SetActive(false);
             DisplayChoices(node);
-        }
-        else
-        {
-            nextButton.gameObject.SetActive(true);
-        }
     } 
     
     //显示选项界面
     private void DisplayChoices(DialogueNode node)
     {
-        Debug.Log(node.answers.Count);
+        //Debug.Log(node.answers.Count);
         for (int i = 0; i < node.answers.Count; i++)
         {
             GameObject buttonGO = Instantiate(choiceButtonPrefab, choiceButtonContainer.transform);
@@ -258,5 +283,36 @@ public class DialoguePlayer : MonoBehaviour
         }
         
         OnDialogueEnded?.Invoke();//对话结束触发该事件
+    }
+    /// <summary>
+    /// 逐个字出现
+    /// </summary>
+    /// <param name="textToType"></param>
+    /// <param name="textLabel"></param>
+    /// <returns></returns>
+    private IEnumerator TypewriterCoroutine(string textToType, TextMeshProUGUI textLabel)
+    {
+        isTyping = true;
+        textLabel.text = ""; 
+        float delay = 1f / charactersPerSecond;
+        
+        foreach (char c in textToType)
+        {
+            textLabel.text += c; 
+            yield return new WaitForSeconds(delay); 
+        }
+        
+        typingCoroutine = null;
+        isTyping = false;
+
+        if ((currentNode is DialogueNode dialogueNode && dialogueNode.hasChoices) ||
+            (currentNode is NarrationNode narrationNode && narrationNode.hasChoices))
+        {
+            nextButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            nextButton.gameObject.SetActive(true);
+        }
     }
 }
