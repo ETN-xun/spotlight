@@ -20,5 +20,7 @@ namespace Common
         
         public const string OverloadModeActivatedEvent = "OverloadModeActivatedEvent";
         public const string OverloadModeDeactivatedEvent = "OverloadModeDeactivatedEvent";
+        
+        public const string UnitTakeDamageEvent = "UnitTakeDamageEvent";
     }
 }

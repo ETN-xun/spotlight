@@ -40,6 +40,11 @@ namespace Ally
             MessageCenter.Unsubscribe(Defines.PlayerTurnEndEvent, OnPlayerTurnEnd);
             MessageCenter.Unsubscribe(Defines.AllyUnitDiedEvent, OnAllyUnitDied);
         }
+        
+        public Unit GetAliveAllyByID(string unitID)
+        {
+            return _aliveAllies.Find(ally => ally.data.unitID == unitID);
+        }
 
         public List<Unit> GetAliveAllies()
         {

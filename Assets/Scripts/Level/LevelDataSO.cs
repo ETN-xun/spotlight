@@ -19,8 +19,7 @@ namespace Level
         public int maxEnergy = 10;
         [Tooltip("基础能量值")]
         public int baseEnergy = 6;
-        public GridCell[,] gridCells;
-        public List<Unit> playerUnits = new ();
+        public List<Unit> allyUnits = new ();
         public List<Unit> enemyUnits = new ();
     }
 }

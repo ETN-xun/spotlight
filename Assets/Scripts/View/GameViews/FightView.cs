@@ -1,3 +1,4 @@
+using System;
 using Common;
 using Level;
 using TMPro;
@@ -36,19 +37,20 @@ namespace View.GameViews
         {
             base.Open(args);
             MessageCenter.Subscribe(Defines.EnergyChangedEvent, OnEnergyChanged);
+            MessageCenter.Subscribe(Defines.UnitTakeDamageEvent, OnUnitTakeDamage);
             Find<Button>("Background/Settings_Btn").onClick.AddListener(OnClickSettingsButton);
-            Find<Button>("Background/PlayerList/Player_01").onClick.AddListener(() =>
-            {
-                OnClickPlayerButton(0);
-            });
-            Find<Button>("Background/PlayerList/Player_02").onClick.AddListener(() =>
-            {
-                OnClickPlayerButton(1);
-            });
-            Find<Button>("Background/PlayerList/Player_03").onClick.AddListener(() =>
-            {
-                OnClickPlayerButton(2);
-            });
+            // Find<Button>("Background/PlayerList/Player_01").onClick.AddListener(() =>
+            // {
+            //     OnClickPlayerButton(0);
+            // });
+            // Find<Button>("Background/PlayerList/Player_02").onClick.AddListener(() =>
+            // {
+            //     OnClickPlayerButton(1);
+            // });
+            // Find<Button>("Background/PlayerList/Player_03").onClick.AddListener(() =>
+            // {
+            //     OnClickPlayerButton(2);
+            // });
             Find<Button>("Background/EndTurn_Btn").onClick.AddListener(OnClickEndTurnButton);
             
             Find<TextMeshProUGUI>("Background/EnergyBar/Text").text = $"Current energy : {Action.ActionManager.EnergySystem.GetCurrentEnergy()}";
@@ -60,19 +62,20 @@ namespace View.GameViews
         {
             base.Close();
             MessageCenter.Unsubscribe(Defines.EnergyChangedEvent, OnEnergyChanged);
+            MessageCenter.Unsubscribe(Defines.UnitTakeDamageEvent, OnUnitTakeDamage);
             Find<Button>("Background/Settings_Btn").onClick.RemoveListener(OnClickSettingsButton);
-            Find<Button>("Background/PlayerList/Player_01").onClick.RemoveListener(() =>
-            {
-                OnClickPlayerButton(0);
-            });
-            Find<Button>("Background/PlayerList/Player_02").onClick.RemoveListener(() =>
-            {
-                OnClickPlayerButton(1);
-            });
-            Find<Button>("Background/PlayerList/Player_03").onClick.RemoveListener(() =>
-            {
-                OnClickPlayerButton(2);
-            });
+            // Find<Button>("Background/PlayerList/Player_01").onClick.RemoveListener(() =>
+            // {
+            //     OnClickPlayerButton(0);
+            // });
+            // Find<Button>("Background/PlayerList/Player_02").onClick.RemoveListener(() =>
+            // {
+            //     OnClickPlayerButton(1);
+            // });
+            // Find<Button>("Background/PlayerList/Player_03").onClick.RemoveListener(() =>
+            // {
+            //     OnClickPlayerButton(2);
+            // });
             Find<Button>("Background/EndTurn_Btn").onClick.RemoveListener(OnClickEndTurnButton);
         }
         
@@ -80,6 +83,24 @@ namespace View.GameViews
         {
             if (args[0] is not int energy) return;
             Find<TextMeshProUGUI>("Background/EnergyBar/Text").text = $"Current energy : {energy}";
+        }
+
+        private void OnUnitTakeDamage(object[] args)
+        {
+            if (args[0] is not string unitId) return;   //根据unit id从ally_manager 或 enemy_manager 获取对应单位的信息进行显示更新
+            var ally = Ally.AllyManager.Instance.GetAliveAllyByID(unitId);
+            switch (ally.data.unitType)
+            {
+                case UnitType.Zero:
+                    // Find<Image>("Background/PlayerLists/Zero").sprite = 
+                    break;
+                case UnitType.Shadow:
+                    break;
+                case UnitType.Stone:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private void OnClickSettingsButton()
@@ -142,6 +163,11 @@ namespace View.GameViews
             {
                 Find<TextMeshProUGUI>("Background/OverloadMode_Btn/Text").text = "not enough";
             }
+        }
+
+        private void UpdateBloodBar()
+        {
+            
         }
 
         protected override void OnUpdate()

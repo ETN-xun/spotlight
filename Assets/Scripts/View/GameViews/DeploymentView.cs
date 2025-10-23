@@ -23,7 +23,7 @@ namespace View.GameViews
         protected override void InitData()
         {
             base.InitData();
-            var playerUnits = LevelManager.Instance.GetCurrentLevel().playerUnits;
+            var playerUnits = LevelManager.Instance.GetCurrentLevel().allyUnits;
             foreach (var unit in playerUnits.Where(unit => unit is not null && unit.data is not null))
             {
                 _playerUnitsData.Add(unit.data);

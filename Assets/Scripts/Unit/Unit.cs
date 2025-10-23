@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Common;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -57,7 +58,6 @@ public class Unit : MonoBehaviour
     {
         if (data == null) return;
         currentHP = data.maxHP;
-        GetComponent<SpriteRenderer>().sprite = data.unitSprite;
     }
 
     public void PlaceAt(GridCell cell)
@@ -84,6 +84,7 @@ public class Unit : MonoBehaviour
         else
             currentHP -= dmg;
         Debug.Log($"{data.unitName} 受到 {dmg} 点伤害，剩余生命值: {currentHP}");
+        MessageCenter.Publish(Defines.UnitTakeDamageEvent, data.unitID);
         if (currentHP <= 0) Die();
     }
     
