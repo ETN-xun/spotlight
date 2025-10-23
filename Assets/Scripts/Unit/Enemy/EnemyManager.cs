@@ -69,12 +69,7 @@ namespace Enemy
             for (var i = 0; i < aliveEnemies.Count; i++)
             {
                 GridManager.Instance.PlaceUnit(new Vector2Int(i, 3), aliveEnemies[i]);
-                _enemies.Add(aliveEnemies[i]);
             }
-            // GridManager.Instance.PlaceUnit(new Vector2Int(3, 3), aliveEnemies[0]);
-            // GridManager.Instance.PlaceUnit(new Vector2Int(-3, 3), aliveEnemies[1]);
-            // _enemies.Add(aliveEnemies[0]);
-            // _enemies.Add(aliveEnemies[1]);
         }
         
         public void AddAliveEnemy(Unit ally)
@@ -88,14 +83,61 @@ namespace Enemy
             return _aliveEnemies;
         }
         
+        public void RemoveNullPointerAttackedUnits()
+        {
+            foreach (var enemy in _enemies.Where(enemy => enemy.data.unitType == UnitType.NullPointer))
+            {
+                var toRemove = new List<Unit>();
+                foreach (var kvp in enemy.attackedUnits.ToList()) // 遍历副本，避免修改时出错
+                {
+                    enemy.attackedUnits[kvp.Key] = kvp.Value - 1;
+                    if (enemy.attackedUnits[kvp.Key] <= 0)
+                        toRemove.Add(kvp.Key);
+                }
+                foreach (var unit in toRemove)
+                {
+                    enemy.attackedUnits.Remove(unit);
+                }
+            }
+        }
+        
         private IEnumerator ShowEnemyIntents()
         {
             var enemyIntents = _intentPlanner.GetOrderedEnemyIntents();
             foreach (var enemyIntent in enemyIntents.Where(intent => _aliveEnemies.Contains(intent.Key)))
             {
-                // 仅供测试使用，实际应显示所有意图
-                yield return StartCoroutine(_intentExecutor.ShowIntent(enemyIntent.Key, enemyIntent.Value[0]));
-                yield return new WaitForSeconds(1f);
+                var unit = enemyIntent.Key;
+                var intents = enemyIntent.Value;
+                if (intents.Count == 1)
+                {
+                    var intent = intents[0];
+                    if (intent.type == EnemyIntentType.Move)
+                    {
+                        yield return StartCoroutine(_intentExecutor.ShowIntent(unit, intent));
+                        yield return new WaitForSeconds(1f);
+                        yield return _intentExecutor.ShowMoveIntent(unit, intent);
+                        yield return new WaitForSeconds(1f);
+                        yield return _intentExecutor.ExecuteMoveIntent(unit, intent);
+                    }
+                    else if (intent.type == EnemyIntentType.Attack)
+                    {
+                        yield return StartCoroutine(_intentExecutor.ShowIntent(unit, intent));
+                        yield return new WaitForSeconds(1f);
+                        yield return _intentExecutor.ShowAttackIntent(unit, intent);
+                    }
+                }
+                else if (intents.Count == 2)
+                {
+                    var moveIntent = intents[0];
+                    var attackIntent = intents[1];
+                    yield return StartCoroutine(_intentExecutor.ShowIntent(unit, moveIntent));
+                    yield return new WaitForSeconds(1f);
+                    yield return _intentExecutor.ShowMoveIntent(unit, moveIntent);
+                    yield return new WaitForSeconds(1f);
+                    yield return _intentExecutor.ExecuteMoveIntent(unit, moveIntent);
+                    yield return new WaitForSeconds(1f);
+                    yield return _intentExecutor.ShowAttackIntent(unit, attackIntent);
+                }
             }
 
             yield return new WaitForSeconds(1f);
@@ -107,10 +149,20 @@ namespace Enemy
             var enemyIntents = _intentPlanner.GetOrderedEnemyIntents();
             foreach (var enemyIntent in enemyIntents.Where(intent => _aliveEnemies.Contains(intent.Key)))
             {
-                yield return _intentExecutor.ExecuteIntent(enemyIntent.Key, enemyIntent.Value);
+                if (enemyIntent.Value.Count == 1)
+                {
+                    if (enemyIntent.Value[0].type == EnemyIntentType.Attack)
+                    {
+                        yield return _intentExecutor.ExecuteAttackIntent(enemyIntent.Key, enemyIntent.Value[0]);
+                    }
+                }
+                else if (enemyIntent.Value.Count == 2)
+                {
+                    yield return _intentExecutor.ExecuteAttackIntent(enemyIntent.Key, enemyIntent.Value[1]);
+                }
             }
 
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
             foreach (var enemy in _aliveEnemies)
                 _intentPlanner.BuildIntent(enemy);
             EnemyIntentsExecuteFinished = true;

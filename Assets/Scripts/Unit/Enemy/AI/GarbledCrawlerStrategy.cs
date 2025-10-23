@@ -8,6 +8,8 @@ namespace Enemy.AI
     {
         public Unit FindBestAttackTarget(Unit enemy, List<Unit> candidates)
         {
+            if (candidates == null || candidates.Count == 0)
+                return null;
             Unit bestTarget = null;
             var bestScore = float.MinValue;
 
@@ -19,7 +21,7 @@ namespace Enemy.AI
                 bestTarget = unit;
             }
 
-            return bestTarget;
+            return bestTarget ?? candidates[0];
         }
         
         public GridCell FindBestMoveTarget(Unit enemy, List<Unit> allyUnits)
@@ -30,8 +32,8 @@ namespace Enemy.AI
 
             foreach (var cell in moveRange)
             {
-                if (cell.CurrentUnit is null) continue;
-                if (!allyUnits.Contains(cell.CurrentUnit)) continue;
+                if (cell.CurrentUnit is not null) continue;
+                // if (!allyUnits.Contains(cell.CurrentUnit)) continue;
                 
                 var minDistance = allyUnits.Min(unit => GridManager.Instance.GetDistance(cell, unit.CurrentCell));
                 if (minDistance >= bestScore) continue;
@@ -44,7 +46,9 @@ namespace Enemy.AI
         
         private float EvaluateTarget(Unit enemy, Unit target)
         {
-            var distanceScore = 1f / (1 + GridManager.Instance.GetDistance(enemy.CurrentCell, target.CurrentCell));
+            var distance = GridManager.Instance.GetDistance(enemy.CurrentCell, target.CurrentCell);
+            var distanceScore = 1f / (1 + distance);
+            UnityEngine.Debug.Log($"[GarbledCrawlerStrategy] EvaluateTarget: enemy={enemy?.name}, target={target?.name}, distance={distance}, score={distanceScore}");
             return distanceScore;
         }
     }
