@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c451a6ae6559ae44f842569554b6916b, type: 3}
   m_Name: StatusAbnormalSkill
   m_EditorClassIdentifier: 
-  skillID: 
-  skillName: 
-  description: 
+  skillID: Status_Abnormal_01
+  skillName: StatusAbnormalSkill
+  description: "\u72B6\u6001\u5F02\u5E38\u6280\u80FD\uFF1A\u4E4B\u540E\u4E00\u6574\u5C40\u6536\u5230\u653B\u51FB\u7684\u4F24\u5BB3\u503C+1\uFF0C\u5E76\u4E14\u6211\u65B9\u6709\u4E00\u4E2A\u5355\u4F4D\u9047\u5230\u6302\u5728\u6B64\u6548\u679C\u7684\u654C\u4EBA\u53EF\u4EE5\u4F7F\u7528\u6280\u80FD\u65E0\u89C6\u8840\u91CF\u79D2\u6740"
   skillIcon: {fileID: 0}
   skillType: 0
-  energyCost: 1
+  energyCost: 0
   range: 1
-  requiresTarget: 1
-  canTargetAllies: 0
+  requiresTarget: 0
+  canTargetAllies: 1
   canTargetEnemies: 1
   baseDamage: 0
   causeCollisionDamage: 0
