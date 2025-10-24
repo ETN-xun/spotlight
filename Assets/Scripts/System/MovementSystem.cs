@@ -84,10 +84,11 @@ public class MovementSystem : MonoBehaviour
                             case "Zero"://角色为零
                                 Exchange(ref unit.data.maxHP,ref unit.data.skills.FirstOrDefault(skill => skill.skillName == "ForcedMigrationSkill")!.baseDamage);//交换强制迁移技能
                                 break;
-                            }
+                        }
                     }
                     break;
-                }
+            }
+            
         }
 
         //撞到建筑
@@ -98,16 +99,21 @@ public class MovementSystem : MonoBehaviour
             switch (type)
             {
                 case DestructibleObjectType.Register:
-                    //每回合回复两点能量
-                    unit.data.RecoverEnergy += 2;
-                    //建筑激活，可以被攻击
-                    destructibleObject.data.Hits = 1;
-                    destructibleObject.data.canDestroy = true;
+                    if(!destructibleObject.data.isActive)
+                    {
+                        //每回合回复两点能量
+                        unit.data.RecoverEnergy += 2;
+                        //建筑激活，可以被攻击
+                        destructibleObject.data.Hits = 1;
+                        destructibleObject.data.canDestroy = true;
+                        destructibleObject.data.isActive = true;
+                    }
                     break;
             }
             yield break;
         }
-
+        RegisterActivation(nextCell,unit);
+        
         yield return new WaitForSeconds(1.0f);
         unit.MoveTo(nextCell);      // TODO: 需要更改的移动方式
         if (originalCell != unit.CurrentCell)
@@ -155,11 +161,10 @@ public class MovementSystem : MonoBehaviour
                 yield break;
             }
 
-            //撞到地形
-            if (nextCell.TerrainData != null)
+            if (nextCell.TerrainData is not null)
             {
                 var terrain = nextCell.TerrainData;
-                TerrainType type = terrain.terrainType;
+                var type = terrain.terrainType;
                 switch (type)
                 {
                     case TerrainType.Plain:
@@ -170,12 +175,12 @@ public class MovementSystem : MonoBehaviour
                         //造成一点伤害
                         unit.TakeDamage(1);
                         //造成异常效果
-                        
+                        StatusAbnormal(unit,nextCell);    
                         break;
                     case TerrainType.BugTile:
+                        //造成异常效果
+                        StatusAbnormal(unit,nextCell);    
                         //根据角色类型交换攻击力与生命
-                        
-                        
                         if(unit.data.isEnemy)
                         {
                             unit.data.baseDamage = unit.data.baseDamage + unit.data.maxHP;
@@ -187,39 +192,43 @@ public class MovementSystem : MonoBehaviour
                             switch (unit.data.unitName)
                             { 
                                 case "Shadow"://角色为影
-                                    Exchange(ref unit.data.maxHP,ref unit.data.skills.FirstOrDefault(skill => skill.skillName == "BreakpointExecutionSkill")!.baseDamage);//交换断点斩杀技能数值
+                                    Exchange(ref unit.data.maxHP,ref unit.data.skills.FirstOrDefault(skill => skill.skillID== "breakpoint_execution_01")!.baseDamage);//交换断点斩杀技能数值
                                     break;
                                 case "Rock"://角色为石
-                                    Exchange(ref unit.data.maxHP,ref unit.data.skills.FirstOrDefault(skill => skill.skillName == "SpawnSkill")!.baseDamage);//交换地形投放技能数值
+                                    Exchange(ref unit.data.maxHP,ref unit.data.skills.FirstOrDefault(skill => skill.skillID == "terrain_deployment_01")!.baseDamage);//交换地形投放技能数值
                                     break;
                                 case "Zero"://角色为零
-                                    Exchange(ref unit.data.maxHP,ref unit.data.skills.FirstOrDefault(skill => skill.skillName == "ForcedMigrationSkill")!.baseDamage);//交换强制迁移技能
+                                    Exchange(ref unit.data.maxHP,ref unit.data.skills.FirstOrDefault(skill => skill.skillID == "forced_migration_01")!.baseDamage);//交换强制迁移技能
                                     break;
                             }
                         }
-                        //造成异常效果
-
                         break;
                 }
+            
             }
 
             //撞到建筑
-            if (nextCell.ObjectOnCell != null)
+            if (nextCell.DestructibleObject is not null)
             {
-                var DestructibleObject = nextCell.DestructibleObject;
-                DestructibleObjectType type = DestructibleObject.data.Type;
+                var destructibleObject = nextCell.DestructibleObject;
+                DestructibleObjectType type = destructibleObject.data.Type;
                 switch (type)
                 {
                     case DestructibleObjectType.Register:
-                        //每回合回复两点能量
-                        unit.data.RecoverEnergy += 2;
-                        //建筑激活，可以被攻击
-                        DestructibleObject.data.Hits = 1;
-                        DestructibleObject.data.canDestroy = true;
+                        if(!destructibleObject.data.isActive)
+                        {
+                            //每回合回复两点能量
+                            unit.data.RecoverEnergy += 2;
+                            //建筑激活，可以被攻击
+                            destructibleObject.data.Hits = 1;
+                            destructibleObject.data.canDestroy = true;
+                            destructibleObject.data.isActive = true;
+                        }
                         break;
                 }
                 yield break;
             }
+            RegisterActivation(nextCell,unit);
             
             unit.MoveTo(nextCell);
             currentCell = nextCell;
@@ -326,6 +335,48 @@ public class MovementSystem : MonoBehaviour
             var nextCell = path[i];
             // if (!nextCell.IsWalkableForEnemy()) yield break;
             yield return MoveUnitCoroutine(unit, nextCell);
+        }
+    }
+    //获取角色周围的格子
+    private List<GridCell> GetNeighbors(Vector2Int coord)
+    {
+        List<GridCell> neighbors = new List<GridCell>();
+
+        Vector2Int[] directions = new Vector2Int[]
+        {
+            new Vector2Int(0, 1),   // 上
+            new Vector2Int(0, -1),  // 下
+            new Vector2Int(-1, 0),  // 左
+            new Vector2Int(1, 0)    // 右
+        };
+
+        foreach (var dir in directions)
+        {
+            Vector2Int neighborCoord = coord + dir;
+            neighbors.Add(GridManager.Instance.GetCell(neighborCoord));
+        }
+
+        return neighbors;
+    }
+    //缓存区激活判断
+    private void RegisterActivation(GridCell gridCell, Unit unit)
+    {
+        List<GridCell> neighbors = GetNeighbors(gridCell);
+        for (int i = 0; i < neighbors.Count; i++)
+        {
+            GridCell neighbor = neighbors[i];
+            if (neighbor.DestructibleObject != null)
+            {
+                var DestructibleObject = neighbor.DestructibleObject;
+                if(DestructibleObject.data.Type == DestructibleObjectType.Register && !DestructibleObject.data.isActive)
+                {
+                    //每回合回复两点能量
+                    unit.data.RecoverEnergy += 2;
+                    //建筑激活，可以被攻击
+                    DestructibleObject.data.Hits = 1;
+                    DestructibleObject.data.canDestroy = true;
+                }
+            }
         }
     }
 }

@@ -111,9 +111,14 @@ public class DialoguePlayer : MonoBehaviour
             if (currentNode is DialogueNode dn) storyText.text = dn.dialogueText;
             if (currentNode is NarrationNode nn) narrationText.text = nn.narrationText;
 
-            if (currentNode is DialogueNode dialogueNode && dialogueNode.hasChoices ||
-                currentNode is NarrationNode narrationNode && narrationNode.hasChoices)
+            if (currentNode is DialogueNode dialogueNode && dialogueNode.hasChoices)
             {
+                DisplayChoices(currentNode as DialogueNode);
+                nextButton.gameObject.SetActive(false);
+            }
+            else if (currentNode is NarrationNode narrationNode && narrationNode.hasChoices)
+            {
+                DisplayChoices(currentNode as NarrationNode);
                 nextButton.gameObject.SetActive(false);
             }
             else
@@ -192,10 +197,10 @@ public class DialoguePlayer : MonoBehaviour
         narrationText.color = narrationText.color;
         
         nextButton.gameObject.SetActive(true);
-        typingCoroutine = StartCoroutine(TypewriterCoroutine(node.narrationText, narrationText));
+        typingCoroutine = StartCoroutine(TypewriterCoroutine(node, narrationText));
         
-        if (node.hasChoices)
-            DisplayChoices(node);
+        /*if (node.hasChoices)
+            DisplayChoices(node);*/
     }
     
     //显示对话
@@ -209,10 +214,10 @@ public class DialoguePlayer : MonoBehaviour
         //storyText.text = node.dialogueText;
         
         nextButton.gameObject.SetActive(true);
-        typingCoroutine = StartCoroutine(TypewriterCoroutine(node.dialogueText, storyText));
+        typingCoroutine = StartCoroutine(TypewriterCoroutine(node, storyText));
         
-        if (node.hasChoices)
-            DisplayChoices(node);
+        /*if (node.hasChoices)
+            DisplayChoices(node);*/
     } 
     
     //显示选项界面
@@ -290,11 +295,15 @@ public class DialoguePlayer : MonoBehaviour
     /// <param name="textToType"></param>
     /// <param name="textLabel"></param>
     /// <returns></returns>
-    private IEnumerator TypewriterCoroutine(string textToType, TextMeshProUGUI textLabel)
+    private IEnumerator TypewriterCoroutine(BaseNode node, TextMeshProUGUI textLabel)
     {
         isTyping = true;
         textLabel.text = ""; 
         float delay = 1f / charactersPerSecond;
+        string textToType = "";
+        
+        if (node is DialogueNode dn) textToType = dn.dialogueText;
+        if (node is NarrationNode nn) textToType = nn.narrationText;
         
         foreach (char c in textToType)
         {
@@ -305,9 +314,15 @@ public class DialoguePlayer : MonoBehaviour
         typingCoroutine = null;
         isTyping = false;
 
-        if ((currentNode is DialogueNode dialogueNode && dialogueNode.hasChoices) ||
-            (currentNode is NarrationNode narrationNode && narrationNode.hasChoices))
+        if (currentNode is DialogueNode dialogueNode && dialogueNode.hasChoices)
         {
+            DisplayChoices(node as DialogueNode);
+            nextButton.gameObject.SetActive(false);
+        }
+
+        else if (currentNode is NarrationNode narrationNode && narrationNode.hasChoices)
+        {
+            DisplayChoices(node as NarrationNode);
             nextButton.gameObject.SetActive(false);
         }
         else
