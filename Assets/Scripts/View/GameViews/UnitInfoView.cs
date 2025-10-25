@@ -22,7 +22,7 @@ namespace View.GameViews
             base.Open(args);
             if (args[0] is not Unit unit) return;
             Find<TextMeshProUGUI>("UnitName").text = unit.data.unitName;
-            Find<Image>("UnitIcon").sprite = unit.data.unitSprite;
+            Find<Image>("UnitIcon").sprite = unit.data.unitIcon;
             if (unit.data.isEnemy) return;
             ViewManager.Instance.OpenView(ViewType.SkillSelectView, "", unit);
         }

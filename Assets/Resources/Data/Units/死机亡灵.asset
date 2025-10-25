@@ -16,8 +16,8 @@ MonoBehaviour:
   unitName: 
   unitType: 2
   description: 
-  unitSprite: {fileID: -904345601, guid: a0fbd0b49fa2242b382ef65923932aaf, type: 3}
-  unitPrefab: {fileID: 5232480781568626486, guid: c02dc2fe921f5423eb7110393f5daa38,
+  unitIcon: {fileID: 21300000, guid: 1b497b11d79be4c9ea1edd734271cd94, type: 3}
+  unitPrefab: {fileID: 8277121982363187256, guid: c02dc2fe921f5423eb7110393f5daa38,
     type: 3}
   isEnemy: 1
   maxHP: 4

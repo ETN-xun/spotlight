@@ -13,7 +13,6 @@ public class UnitDataSO : ScriptableObject
     [Tooltip("单位唯一ID")]
     public string unitID;
     
-    [Tooltip("单位名称")]
     public string unitName;
     
     public UnitType unitType;
@@ -22,8 +21,7 @@ public class UnitDataSO : ScriptableObject
     [TextArea(2, 3)]
     public string description;
     
-    [Tooltip("单位图标/头像")]
-    public Sprite unitSprite;
+    public Sprite unitIcon;
     
     [Tooltip("单位预制体")]
     public GameObject unitPrefab;

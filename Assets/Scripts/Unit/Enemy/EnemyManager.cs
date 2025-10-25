@@ -64,12 +64,12 @@ namespace Enemy
 
         public void SpawnEnemies()
         {
-            var currentLevelData = Level.LevelManager.Instance.GetCurrentLevel();
-            var aliveEnemies = currentLevelData.enemyUnits;
-            for (var i = 0; i < aliveEnemies.Count; i++)
-            {
-                GridManager.Instance.PlaceUnit(new Vector2Int(i, 3), aliveEnemies[i]);
-            }
+            // var currentLevelData = Level.LevelManager.Instance.GetCurrentLevel();
+            // var aliveEnemies = currentLevelData.enemyUnits;
+            // for (var i = 0; i < aliveEnemies.Count; i++)
+            // {
+            //     GridManager.Instance.PlaceUnit(new Vector2Int(i, 3), aliveEnemies[i]);
+            // }
         }
         
         public Unit GetAliveEnemyByID(string unitID)
