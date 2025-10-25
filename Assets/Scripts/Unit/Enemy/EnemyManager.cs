@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Common;
 using Enemy.AI;
+using Level;
 using UnityEngine;
 
 namespace Enemy
@@ -18,6 +19,12 @@ namespace Enemy
         
         private readonly List<Unit> _enemies = new ();
         private readonly List<Unit> _aliveEnemies = new ();
+
+        private int _乱码爬虫数量;
+        private int _死机亡灵数量;
+        private int _空指针数量;
+        
+        private LevelDataSO _currentLevelData;
 
         public bool EnemyIntentsShowFinished { get; private set; }
         public bool EnemyIntentsExecuteFinished { get; private set; }
@@ -49,27 +56,21 @@ namespace Enemy
             StartCoroutine(EnemyTurnFlow());
         }
 
-        private IEnumerator EnemyTurnFlow( )
+        public void InitEnemies()
         {
-            CurrentEnemyTurn++;
-            EnemyIntentsExecuteFinished = false;
-            EnemyIntentsShowFinished = false;
-            Debug.Log("敌人回合第 " + CurrentEnemyTurn + " 轮开始");
+            _currentLevelData = LevelManager.Instance.GetCurrentLevel();
+            if (_currentLevelData is null) return;
+            _乱码爬虫数量 = _currentLevelData.初始乱码爬虫数量;
+            _死机亡灵数量 = _currentLevelData.初始死机亡灵数量;
+            _空指针数量 = _currentLevelData.初始空指针数量;
+            
+            _aliveEnemies.Clear();
 
-            if (CurrentEnemyTurn != 1)
-                yield return ExecuteEnemyIntents();
-
-            yield return ShowEnemyIntents();
-        }
-
-        public void SpawnEnemies()
-        {
-            // var currentLevelData = Level.LevelManager.Instance.GetCurrentLevel();
-            // var aliveEnemies = currentLevelData.enemyUnits;
-            // for (var i = 0; i < aliveEnemies.Count; i++)
-            // {
-            //     GridManager.Instance.PlaceUnit(new Vector2Int(i, 3), aliveEnemies[i]);
-            // }
+            if (_乱码爬虫数量 != 0)
+            {
+                var garbledCrawler = Resources.Load<Unit>("Prefab/Unit/乱码爬虫");
+            }
+            
         }
         
         public Unit GetAliveEnemyByID(string unitID)
@@ -104,6 +105,19 @@ namespace Enemy
                     enemy.attackedUnits.Remove(unit);
                 }
             }
+        }
+        
+        private IEnumerator EnemyTurnFlow( )
+        {
+            CurrentEnemyTurn++;
+            EnemyIntentsExecuteFinished = false;
+            EnemyIntentsShowFinished = false;
+            Debug.Log("敌人回合第 " + CurrentEnemyTurn + " 轮开始");
+
+            if (CurrentEnemyTurn != 1)
+                yield return ExecuteEnemyIntents();
+
+            yield return ShowEnemyIntents();
         }
         
         private IEnumerator ShowEnemyIntents()

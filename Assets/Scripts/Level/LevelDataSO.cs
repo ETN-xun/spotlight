@@ -19,19 +19,19 @@ namespace Level
 
         public int addedEnemyPerTurnCount;
         
-        public int initGarbledCrawlerCount;
-        public int initCrashUndeadCount;
-        public int initRecursiveCount;
+        public int 初始乱码爬虫数量;
+        public int 初始死机亡灵数量;
+        public int 初始空指针数量;
         
-        public int maxGarbledCrawlerCount;
-        public int maxCrashUndeadCount;
-        public int maxRecursiveCount;
+        public int 最大乱码爬虫数量;
+        public int 最大死机亡灵数量;
+        public int 最大空指针数量;
 
         public List<Vector2Int> allyDeployPositions = new ();
         public List<Vector2Int> enemyDeployPositions = new ();
         
-        public List<Vector2Int> garbledCrawlerPositions = new ();
-        public List<Vector2Int> crashUndeadPositions = new ();
-        public List<Vector2Int> recursivePositions = new ();
+        public List<Vector2Int> 乱码爬虫位置 = new ();
+        public List<Vector2Int> 死机亡灵位置 = new ();
+        public List<Vector2Int> 空指针位置 = new ();
     }
 }

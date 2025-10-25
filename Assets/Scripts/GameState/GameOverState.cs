@@ -16,7 +16,7 @@ public class GameOverState : GameStateBase
         base.Enter();
         
         // 判断胜负
-        isVictory = gameManager.AllEnemiesDefeated && !gameManager.IsCoreDestroyed;
+        // isVictory = gameManager.AllEnemiesDefeated && !gameManager.IsCoreDestroyed;
         
         // 显示游戏结束UI
         ShowGameOverUI();

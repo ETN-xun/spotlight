@@ -15,7 +15,7 @@ public class DeploymentState : GameStateBase
     private UnitDataSO _unitData;
     private bool _isClickDeployUnit;
     private int _deployedUnitCount;
-    private List<Unit> _totalUnits = new ();
+    private List<Unit> _allyUnits = new ();
 
     public DeploymentState(GameManager gameManager) : base(gameManager)
     {
@@ -25,7 +25,7 @@ public class DeploymentState : GameStateBase
     {
         base.Enter();
         MessageCenter.Subscribe(Defines.ClickDeployUnitViewEvent, OnClickDeployUnit);
-        _totalUnits = LevelManager.Instance.GetCurrentLevel().allyUnits;
+        _allyUnits = LevelManager.Instance.GetCurrentLevel().allyUnits;
         ViewManager.Instance.OpenView(ViewType.DeploymentView);
     }
 
@@ -76,6 +76,6 @@ public class DeploymentState : GameStateBase
     
     private Unit GetUnitById(string unitId)
     {
-        return _totalUnits.FirstOrDefault(unit => unit.data.unitID == unitId);
+        return _allyUnits.FirstOrDefault(unit => unit.data.unitID == unitId);
     }
 }

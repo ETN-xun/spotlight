@@ -18,7 +18,6 @@ namespace View.GameViews
             _unitData = unitData;
             Find<TextMeshProUGUI>("UnitName").text = _unitData.unitName;
             Find<Image>("UnitImage").sprite = _unitData.unitIcon;
-            Find<Image>("UnitImage").color = Color.red;
         }
         
 

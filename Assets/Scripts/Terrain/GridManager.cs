@@ -34,7 +34,10 @@ public class GridManager : MonoBehaviour
             return;
         }
         Instance = this;
-        
+    }
+
+    public void InitGrid()
+    {
         //从 Tilemap 构建地图
         if (terrainTilemap != null)
             BuildGridFromTilemap();
