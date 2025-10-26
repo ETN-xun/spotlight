@@ -68,9 +68,35 @@ namespace Enemy
 
             if (_乱码爬虫数量 != 0)
             {
-                var garbledCrawler = Resources.Load<Unit>("Prefab/Unit/乱码爬虫");
+                var 乱码爬虫 = Resources.Load<Unit>("Prefab/Unit/乱码爬虫");
+                foreach (var pos in _currentLevelData.乱码爬虫位置)
+                {
+                    var coord = pos;
+                    Utils.Coordinate.Transform(ref coord);
+                    GridManager.Instance.PlaceUnit(coord, 乱码爬虫);
+                }
             }
-            
+            if (_死机亡灵数量 != 0)
+            {
+                var 死机亡灵 = Resources.Load<Unit>("Prefab/Unit/死机亡灵");
+                foreach (var pos in _currentLevelData.死机亡灵位置)
+                {
+                    var coord = pos;
+                    Utils.Coordinate.Transform(ref coord);
+                    GridManager.Instance.PlaceUnit(coord, 死机亡灵);
+                }
+            }
+            if (_空指针数量 != 0)
+            {
+                var 空指针 = Resources.Load<Unit>("Prefab/Unit/空指针");
+                foreach (var pos in _currentLevelData.空指针位置)
+                {
+                    var coord = pos;
+                    Utils.Coordinate.Transform(ref coord);
+                    GridManager.Instance.PlaceUnit(coord, 空指针);
+                }
+            }
+
         }
         
         public Unit GetAliveEnemyByID(string unitID)
@@ -114,10 +140,17 @@ namespace Enemy
             EnemyIntentsShowFinished = false;
             Debug.Log("敌人回合第 " + CurrentEnemyTurn + " 轮开始");
 
-            if (CurrentEnemyTurn != 1)
-                yield return ExecuteEnemyIntents();
+            // 第一回合：只显示意图，不执行也不生成新意图
+            if (CurrentEnemyTurn == 1)
+            {
+                yield return ShowEnemyIntents();
+                yield break;
+            }
 
+            // 之后的回合：执行意图 → 显示意图 → 生成新意图
+            yield return ExecuteEnemyIntents();
             yield return ShowEnemyIntents();
+            yield return GenerateNewIntents();
         }
         
         private IEnumerator ShowEnemyIntents()
@@ -127,9 +160,10 @@ namespace Enemy
             {
                 var unit = enemyIntent.Key;
                 var intents = enemyIntent.Value;
-                if (intents.Count == 1)
+                
+                // Process intents based on their count and types
+                foreach (var intent in intents)
                 {
-                    var intent = intents[0];
                     if (intent.type == EnemyIntentType.Move)
                     {
                         yield return StartCoroutine(_intentExecutor.ShowIntent(unit, intent));
@@ -143,22 +177,19 @@ namespace Enemy
                         yield return StartCoroutine(_intentExecutor.ShowIntent(unit, intent));
                         yield return new WaitForSeconds(1f);
                         yield return _intentExecutor.ShowAttackIntent(unit, intent);
+                        yield return new WaitForSeconds(1f);
                     }
-                }
-                else if (intents.Count == 2)
-                {
-                    var moveIntent = intents[0];
-                    var attackIntent = intents[1];
-                    yield return StartCoroutine(_intentExecutor.ShowIntent(unit, moveIntent));
-                    yield return new WaitForSeconds(1f);
-                    yield return _intentExecutor.ShowMoveIntent(unit, moveIntent);
-                    yield return new WaitForSeconds(1f);
-                    yield return _intentExecutor.ExecuteMoveIntent(unit, moveIntent);
-                    yield return new WaitForSeconds(1f);
-                    yield return _intentExecutor.ShowAttackIntent(unit, attackIntent);
+                    else if (intent.type == EnemyIntentType.Spawn)
+                    {
+                        yield return StartCoroutine(_intentExecutor.ShowIntent(unit, intent));
+                        yield return new WaitForSeconds(1f);
+                        yield return _intentExecutor.ShowSpawnIntent(unit, intent);
+                        yield return new WaitForSeconds(1f);
+                    }
                 }
             }
 
+            GridManager.Instance.ClearAllHighlights();
             yield return new WaitForSeconds(1f);
             EnemyIntentsShowFinished = true;
         }
@@ -168,23 +199,33 @@ namespace Enemy
             var enemyIntents = _intentPlanner.GetOrderedEnemyIntents();
             foreach (var enemyIntent in enemyIntents.Where(intent => _aliveEnemies.Contains(intent.Key)))
             {
-                if (enemyIntent.Value.Count == 1)
+                // Execute all intents in order (Move, Attack, Spawn)
+                foreach (var intent in enemyIntent.Value)
                 {
-                    if (enemyIntent.Value[0].type == EnemyIntentType.Attack)
+                    if (intent.type == EnemyIntentType.Attack)
                     {
-                        yield return _intentExecutor.ExecuteAttackIntent(enemyIntent.Key, enemyIntent.Value[0]);
+                        yield return _intentExecutor.ExecuteAttackIntent(enemyIntent.Key, intent);
                     }
-                }
-                else if (enemyIntent.Value.Count == 2)
-                {
-                    yield return _intentExecutor.ExecuteAttackIntent(enemyIntent.Key, enemyIntent.Value[1]);
+                    else if (intent.type == EnemyIntentType.Spawn)
+                    {
+                        yield return _intentExecutor.ExecuteSpawnIntent(enemyIntent.Key, intent);
+                    }
                 }
             }
 
             yield return new WaitForSeconds(1f);
+        }
+
+        private IEnumerator GenerateNewIntents()
+        {
             foreach (var enemy in _aliveEnemies)
                 _intentPlanner.BuildIntent(enemy);
+            
+            // 生成 Spawn 意图（根据 LevelData 的配置）
+            _intentPlanner.BuildSpawnIntents(_aliveEnemies, _currentLevelData);
+            
             EnemyIntentsExecuteFinished = true;
+            yield return null;
         }
         
         private void OnEnemyUnitDied(object[] args)

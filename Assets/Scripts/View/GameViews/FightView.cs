@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Action;
 using Common;
 using Level;
 using TMPro;
@@ -10,7 +12,12 @@ namespace View.GameViews
 {
     public class FightView : BaseView
     {
-        private LevelDataSO _levelData;
+        [SerializeField] private List<Image> energyImages;
+        [SerializeField] private Sprite lEnergyBright;
+        [SerializeField] private Sprite lEnergyDark;
+        [SerializeField] private Sprite energyBright;
+        [SerializeField] private Sprite energyDark;
+        
         protected override void InitView()
         {
             base.InitView();
@@ -26,12 +33,7 @@ namespace View.GameViews
                 ParentTransform = transform.Find("Background")
             });
         }
-
-        protected override void InitData()
-        {
-            base.InitData();
-            _levelData = LevelManager.Instance.GetCurrentLevel();
-        }
+        
 
         public override void Open(params object[] args)
         {
@@ -39,21 +41,8 @@ namespace View.GameViews
             MessageCenter.Subscribe(Defines.EnergyChangedEvent, OnEnergyChanged);
             MessageCenter.Subscribe(Defines.UnitTakeDamageEvent, OnUnitTakeDamage);
             Find<Button>("Background/Settings_Btn").onClick.AddListener(OnClickSettingsButton);
-            // Find<Button>("Background/PlayerList/Player_01").onClick.AddListener(() =>
-            // {
-            //     OnClickPlayerButton(0);
-            // });
-            // Find<Button>("Background/PlayerList/Player_02").onClick.AddListener(() =>
-            // {
-            //     OnClickPlayerButton(1);
-            // });
-            // Find<Button>("Background/PlayerList/Player_03").onClick.AddListener(() =>
-            // {
-            //     OnClickPlayerButton(2);
-            // });
             Find<Button>("Background/EndTurn_Btn").onClick.AddListener(OnClickEndTurnButton);
-            
-            Find<TextMeshProUGUI>("Background/EnergyBar/Text").text = $"Current energy : {Action.ActionManager.EnergySystem.GetCurrentEnergy()}";
+            UpdateEnergyBar(ActionManager.EnergySystem.GetCurrentEnergy());
             
             InitializeOverloadModeButton();
         }
@@ -64,25 +53,13 @@ namespace View.GameViews
             MessageCenter.Unsubscribe(Defines.EnergyChangedEvent, OnEnergyChanged);
             MessageCenter.Unsubscribe(Defines.UnitTakeDamageEvent, OnUnitTakeDamage);
             Find<Button>("Background/Settings_Btn").onClick.RemoveListener(OnClickSettingsButton);
-            // Find<Button>("Background/PlayerList/Player_01").onClick.RemoveListener(() =>
-            // {
-            //     OnClickPlayerButton(0);
-            // });
-            // Find<Button>("Background/PlayerList/Player_02").onClick.RemoveListener(() =>
-            // {
-            //     OnClickPlayerButton(1);
-            // });
-            // Find<Button>("Background/PlayerList/Player_03").onClick.RemoveListener(() =>
-            // {
-            //     OnClickPlayerButton(2);
-            // });
             Find<Button>("Background/EndTurn_Btn").onClick.RemoveListener(OnClickEndTurnButton);
         }
         
         private void OnEnergyChanged(object[] args)
         {
             if (args[0] is not int energy) return;
-            Find<TextMeshProUGUI>("Background/EnergyBar/Text").text = $"Current energy : {energy}";
+            UpdateEnergyBar(energy);
         }
 
         private void OnUnitTakeDamage(object[] args)
@@ -106,11 +83,6 @@ namespace View.GameViews
         private void OnClickSettingsButton()
         {
             
-        }
-
-        private void OnClickPlayerButton(int playerId = 0)
-        {
-
         }
         
         private void OnClickEndTurnButton()
@@ -168,6 +140,25 @@ namespace View.GameViews
         private void UpdateBloodBar()
         {
             
+        }
+
+        private void UpdateEnergyBar(int energy)
+        {
+            for (var i = 0; i < energyImages.Count; i++)
+            {
+                if (i <= energy - 1)
+                {
+                    if (i == 0)
+                        energyImages[i].sprite = lEnergyBright;
+                    energyImages[i].sprite = energyBright;
+                }
+                else
+                {
+                    if (i == 0)
+                        energyImages[i].sprite = lEnergyDark;
+                    energyImages[i].sprite = energyDark;
+                }
+            }
         }
 
         protected override void OnUpdate()

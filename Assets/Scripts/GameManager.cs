@@ -2,6 +2,7 @@ using System;
 using Common;
 using Enemy;
 using UnityEngine;
+using View;
 
 public class GameManager : MonoBehaviour
 {
@@ -104,6 +105,7 @@ public class GameManager : MonoBehaviour
     {
         GridManager.Instance.InitGrid();
         EnemyManager.Instance.InitEnemies();
+        ViewManager.Instance.OpenView(ViewType.FightView);
         _currentStateInstance?.Enter();
     }
 
