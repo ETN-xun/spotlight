@@ -24,6 +24,10 @@ public class GridManager : MonoBehaviour
     [Header("建筑类型")]
     public DestructibleObjectSO[] destructibleObjectLibrary; //存放预制地形类型
 
+    [Header("随机地图生成")]
+    public bool useRandomGeneration = false; //是否使用随机地图生成
+    private RandomMapGenerator randomMapGenerator;
+
     public readonly Dictionary<Vector2Int, GridCell> _gridDict = new Dictionary<Vector2Int, GridCell>();        //网格地图
 
     private void Awake()
@@ -34,10 +38,24 @@ public class GridManager : MonoBehaviour
             return;
         }
         Instance = this;
+        
+        // 获取RandomMapGenerator组件
+        randomMapGenerator = GetComponent<RandomMapGenerator>();
+        if (randomMapGenerator == null && useRandomGeneration)
+        {
+            randomMapGenerator = gameObject.AddComponent<RandomMapGenerator>();
+        }
     }
 
     public void InitGrid()
     {
+        // 如果启用随机地图生成
+        if (useRandomGeneration && randomMapGenerator != null)
+        {
+            randomMapGenerator.GenerateRandomMap();
+            return;
+        }
+        
         //从 Tilemap 构建地图
         if (terrainTilemap != null)
             BuildGridFromTilemap();
@@ -69,8 +87,12 @@ public class GridManager : MonoBehaviour
             if (objectTilemap != null && objectTilemap.HasTile(tilePos))
             {
                 var objectTile = objectTilemap.GetTile(tilePos);
-                cell.DestructibleObject.data = GetDestructibleObjectFromTile(objectTile);
-                cell.DestructibleObject.coordinate = coord;
+                var objectData = GetDestructibleObjectFromTile(objectTile);
+                if (objectData != null)
+                {
+                    cell.DestructibleObject = new DestructibleObject(objectData.Hits, objectData.Name, coord);
+                    cell.DestructibleObject.data = objectData;
+                }
             }
 
             _gridDict[coord] = cell;
@@ -228,5 +250,34 @@ public class GridManager : MonoBehaviour
     {
         return Mathf.Abs(a.Coordinate.x - b.Coordinate.x) +
                Mathf.Abs(a.Coordinate.y - b.Coordinate.y);
+    }
+    
+    /// <summary>
+    /// 手动生成随机地图
+    /// </summary>
+    public void GenerateRandomMap()
+    {
+        if (randomMapGenerator == null)
+        {
+            randomMapGenerator = GetComponent<RandomMapGenerator>();
+            if (randomMapGenerator == null)
+            {
+                randomMapGenerator = gameObject.AddComponent<RandomMapGenerator>();
+            }
+        }
+        
+        randomMapGenerator.GenerateRandomMap();
+    }
+    
+    /// <summary>
+    /// 切换随机地图生成模式
+    /// </summary>
+    public void ToggleRandomGeneration(bool enable)
+    {
+        useRandomGeneration = enable;
+        if (enable && randomMapGenerator == null)
+        {
+            randomMapGenerator = gameObject.AddComponent<RandomMapGenerator>();
+        }
     }
 }
