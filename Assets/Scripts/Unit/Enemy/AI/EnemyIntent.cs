@@ -1,5 +1,3 @@
-
-
 using System.Collections.Generic;
 
 namespace Enemy.AI
@@ -13,6 +11,8 @@ namespace Enemy.AI
         public GridCell attackTargetCell;
         public GridCell moveTargetCell;
         public List<GridCell> movePath = new();
+        public GridCell spawnTargetCell;
+        public UnitType spawnUnitType;
         
         public EnemyIntent()
         {

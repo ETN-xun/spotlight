@@ -23,7 +23,6 @@ public class PlayerTurnState : GameStateBase
         _mainCamera = Camera.main;
         MessageCenter.Publish(Defines.PlayerTurnStartEvent);
         
-        ViewManager.Instance.OpenView(ViewType.FightView);
     }
 
     public override void Exit()
@@ -31,7 +30,6 @@ public class PlayerTurnState : GameStateBase
         base.Exit();
         GridManager.Instance.ClearAllHighlights();
         MessageCenter.Publish(Defines.PlayerTurnEndEvent);
-        ViewManager.Instance.CloseView(ViewType.FightView);
     }
     
     public override void Update()

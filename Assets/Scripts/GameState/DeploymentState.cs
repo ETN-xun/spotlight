@@ -16,6 +16,7 @@ public class DeploymentState : GameStateBase
     private bool _isClickDeployUnit;
     private int _deployedUnitCount;
     private List<Unit> _allyUnits = new ();
+    private List<Vector2Int> _availableDeployPositions = new ();
 
     public DeploymentState(GameManager gameManager) : base(gameManager)
     {
@@ -25,6 +26,7 @@ public class DeploymentState : GameStateBase
     {
         base.Enter();
         MessageCenter.Subscribe(Defines.ClickDeployUnitViewEvent, OnClickDeployUnit);
+        ShowDeploymentGrid();
         _allyUnits = LevelManager.Instance.GetCurrentLevel().allyUnits;
         ViewManager.Instance.OpenView(ViewType.DeploymentView);
     }
@@ -39,6 +41,7 @@ public class DeploymentState : GameStateBase
                 var worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 var cell = GridManager.Instance.WorldToCell(worldPoint);
                 if (cell is null || cell.CurrentUnit is not null) return;
+                if (!_availableDeployPositions.Contains(cell.Coordinate)) return;
                 _deployedUnitCount++;
                 var unit = GetUnitById(_unitData.unitID);
                 GridManager.Instance.PlaceUnit(cell.Coordinate, unit);
@@ -64,6 +67,7 @@ public class DeploymentState : GameStateBase
         base.Exit();
         MessageCenter.Publish(Defines.DeploymentStateEndedEvent);
         MessageCenter.Unsubscribe(Defines.ClickDeployUnitViewEvent, OnClickDeployUnit);
+        GridManager.Instance.ClearAllHighlights();
         ViewManager.Instance.CloseView(ViewType.DeploymentView);
     }
     
@@ -77,5 +81,17 @@ public class DeploymentState : GameStateBase
     private Unit GetUnitById(string unitId)
     {
         return _allyUnits.FirstOrDefault(unit => unit.data.unitID == unitId);
+    }
+    
+    private void ShowDeploymentGrid()
+    {
+        var deploymentArea = LevelManager.Instance.GetCurrentLevel().allyDeployPositions;
+        foreach (var pos in deploymentArea)
+        {
+            var coord = pos;
+            Utils.Coordinate.Transform(ref coord);
+            _availableDeployPositions.Add(coord);
+            GridManager.Instance.Highlight(true, coord);
+        }
     }
 }

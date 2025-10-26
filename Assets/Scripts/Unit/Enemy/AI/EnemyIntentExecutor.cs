@@ -37,6 +37,47 @@ namespace Enemy.AI
             yield return new WaitForSeconds(0.5f);
         }
         
+        public IEnumerator ShowSpawnIntent(Unit enemy, EnemyIntent intent)
+        {
+            if (intent is not { type: EnemyIntentType.Spawn }) 
+                yield break;
+
+            GridManager.Instance.Highlight(true, intent.spawnTargetCell.Coordinate);
+            yield return new WaitForSeconds(0.5f);
+        }
+        
+        public IEnumerator ExecuteSpawnIntent(Unit enemy, EnemyIntent intent)
+        {
+            if (intent is not { type: EnemyIntentType.Spawn }) 
+                yield break;
+
+            if (intent.spawnTargetCell == null)
+                yield break;
+
+            Debug.Log($"Enemy {enemy.data.unitName} spawns {intent.spawnUnitType} at cell {intent.spawnTargetCell.Coordinate}");
+            
+            // Load the unit prefab based on spawn type
+            Unit spawnedUnit = intent.spawnUnitType switch
+            {
+                UnitType.GarbledCrawler => Resources.Load<Unit>("Prefab/Unit/乱码爬虫"),
+                UnitType.CrashUndead => Resources.Load<Unit>("Prefab/Unit/死机亡灵"),
+                UnitType.NullPointer => Resources.Load<Unit>("Prefab/Unit/空指针"),
+                _ => null
+            };
+
+            if (spawnedUnit != null && intent.spawnTargetCell.CurrentUnit == null)
+            {
+                GridManager.Instance.PlaceUnit(intent.spawnTargetCell.Coordinate, spawnedUnit);
+                Debug.Log($"Successfully spawned {intent.spawnUnitType}!");
+            }
+            else
+            {
+                Debug.Log($"Failed to spawn unit - cell occupied or invalid unit type");
+            }
+
+            yield return new WaitForSeconds(0.3f);
+        }
+        
         public IEnumerator ExecuteMoveIntent(Unit enemy, EnemyIntent intent)
         {
             GridManager.Instance.ClearAllHighlights();

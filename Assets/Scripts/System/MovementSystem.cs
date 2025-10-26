@@ -330,10 +330,13 @@ public class MovementSystem : MonoBehaviour
 
     public IEnumerator MoveUnitByPathCoroutine(Unit unit, List<GridCell> path)
     {
-        for (var i = 1; i < path.Count; i++)
+        // 路径应该包含起点，循环从索引 1 开始跳过起点
+        if (path == null || path.Count < 2)
+            yield break;
+            
+        for (int i = 1; i < path.Count; i++)
         {
             var nextCell = path[i];
-            // if (!nextCell.IsWalkableForEnemy()) yield break;
             yield return MoveUnitCoroutine(unit, nextCell);
         }
     }
