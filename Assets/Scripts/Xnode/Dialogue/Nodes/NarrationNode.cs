@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using XNode;
 
 public class NarrationNode : BaseNode
@@ -8,6 +9,8 @@ public class NarrationNode : BaseNode
     public List<Connection> answers; 
     
     public List<string> answerTexts; 
+    
+    public Image narrationIcon;
     
     [TextArea(5, 8)] 
     public string narrationText;
