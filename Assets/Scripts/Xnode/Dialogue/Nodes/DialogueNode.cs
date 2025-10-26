@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using XNode;
 
 public class DialogueNode : BaseNode
@@ -11,6 +12,7 @@ public class DialogueNode : BaseNode
     
     public string characterName;
     public Sprite characterIcon;
+    public Image dialougeIcon;
     public bool hasChoices;
     
     [TextArea(3,5)]
