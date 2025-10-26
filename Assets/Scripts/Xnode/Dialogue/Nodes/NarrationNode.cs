@@ -10,7 +10,8 @@ public class NarrationNode : BaseNode
     
     public List<string> answerTexts; 
     
-    public Image narrationIcon;
+    public Sprite narrationIcon;
+    public Sprite dialougeSkip;
     
     [TextArea(5, 8)] 
     public string narrationText;

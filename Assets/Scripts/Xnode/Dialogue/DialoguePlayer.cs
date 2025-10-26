@@ -197,7 +197,7 @@ public class DialoguePlayer : MonoBehaviour
         
         //narrationText.text = node.narrationText;
         narrationText.color = narrationText.color;
-        narrationImage = node.narrationIcon;
+        dialogueImage.sprite = node.narrationIcon;
         
         nextButton.gameObject.SetActive(true);
         typingCoroutine = StartCoroutine(TypewriterCoroutine(node, narrationText));
@@ -214,8 +214,8 @@ public class DialoguePlayer : MonoBehaviour
 
         characterPortraitImage.sprite = node.characterIcon;
         nameText.text = node.characterName;
+        dialogueImage.sprite = node.characterIcon;
         
-        dialogueImage = node.dialougeIcon;
         //storyText.text = node.dialogueText;
         
         nextButton.gameObject.SetActive(true);

@@ -12,7 +12,8 @@ public class DialogueNode : BaseNode
     
     public string characterName;
     public Sprite characterIcon;
-    public Image dialougeIcon;
+    public Sprite dialougeIcon;
+    public Sprite dialougeSkip;
     public bool hasChoices;
     
     [TextArea(3,5)]
