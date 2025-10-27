@@ -8,7 +8,7 @@ public class DialogueNode : BaseNode
     [Output(dynamicPortList = true, connectionType = Node.ConnectionType.Override)]
     public List<Connection> answers; 
     
-    public List<string> answerTexts; 
+    public List<Sprite> answer; 
     
     public string characterName;
     public Sprite characterIcon;

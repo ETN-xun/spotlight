@@ -55,9 +55,11 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 1
   answers: []
-  answerTexts: []
+  answer: []
   characterName: "\u96F6"
-  characterIcon: {fileID: 0}
+  characterIcon: {fileID: 21300000, guid: 265520833bac1914e9f295f69864b7c6, type: 3}
+  dialougeIcon: {fileID: 21300000, guid: b3e3c7501349c2347aa47dba348e6cf1, type: 3}
+  dialougeSkip: {fileID: 21300000, guid: 1be0a8d677ee50a4abe23afe54c2f43e, type: 3}
   hasChoices: 0
   dialogueText: "\u201C\u884C\u52A8\u5F00\u59CB\u3002\u8BB0\u4F4F\uFF0C\u8EAB\u4E3A\u5143\u754C\u5916\u90E8\u7684\u201C\u8C03\u8BD5\u8005\u201D\uFF0C\u6E05\u9664\u2018\u9519\u8BEF\u2019\u662F\u6211\u4EEC\u7684\u5929\u804C\u3002\u201D"
 --- !u!114 &-1381738878265241898
@@ -115,9 +117,11 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 1
   answers: []
-  answerTexts: []
+  answer: []
   characterName: "\u77F3"
-  characterIcon: {fileID: 0}
+  characterIcon: {fileID: 21300000, guid: d5f094ddd115fb54499f41129c8ded61, type: 3}
+  dialougeIcon: {fileID: 21300000, guid: c17c365fd1961a047925ab529701bb79, type: 3}
+  dialougeSkip: {fileID: 21300000, guid: b55782ec389516040a166dbaed007ea6, type: 3}
   hasChoices: 0
   dialogueText: "\u201C\u4FE1\u53F7\u626B\u63CF\u5B8C\u6210\u3002\u533A\u57DF\u5185\u201C\u8150\u7801\u201D\u4FE1\u53F7\u6D3B\u8DC3\uFF0C\u73AF\u5883\u6570\u636E\u2026\u2026\u5F02\u5E38\u2018\u751F\u52A8\u2019\u3002\u201D"
 --- !u!114 &11400000
@@ -196,9 +200,11 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 1
   answers: []
-  answerTexts: []
+  answer: []
   characterName: "\u5F71"
-  characterIcon: {fileID: 0}
+  characterIcon: {fileID: 21300000, guid: 7dd01d172f32d9a4a81db13fd2bdf5d8, type: 3}
+  dialougeIcon: {fileID: 21300000, guid: 178f28c63664177439d51e0206fca0e1, type: 3}
+  dialougeSkip: {fileID: 21300000, guid: d414496608612104f95e6ba88e3f0f4c, type: 3}
   hasChoices: 0
   dialogueText: "\u201C\u73AF\u5883\u6570\u636E\uFF0C\u65E0\u5173\u3002\u884C\u52A8\u80FD\u91CF\u5145\u8DB3\uFF0C\u6700\u4F18\u8DEF\u5F84\u8BA1\u7B97\u5B8C\u6BD5\u3002\u6548\u7387\u4F18\u5148\u3002\u201D"
 --- !u!114 &260471474891339253
@@ -299,9 +305,11 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 1
   answers: []
-  answerTexts: []
+  answer: []
   characterName: "\u96F6"
-  characterIcon: {fileID: 0}
+  characterIcon: {fileID: 21300000, guid: 265520833bac1914e9f295f69864b7c6, type: 3}
+  dialougeIcon: {fileID: 21300000, guid: b3e3c7501349c2347aa47dba348e6cf1, type: 3}
+  dialougeSkip: {fileID: 21300000, guid: 1be0a8d677ee50a4abe23afe54c2f43e, type: 3}
   hasChoices: 0
   dialogueText: "\u201C\u4EFB\u52A1\u6E05\u5355\u5DF2\u63A5\u6536\u3002\u534F\u8BAE\u68EE\u6797\uFF0C\u91CD\u5EA6\u6C61\u67D3\u533A\u3002\u5B8C\u7F8E\u4FE1\u606F\u754C\u9762\u5DF2\u4E0A\u7EBF\uFF0C\u6240\u6709\u5A01\u80C1\u4E00\u89C8\u65E0\u4F59\u3002\u201D"
 --- !u!114 &1653236321317316053

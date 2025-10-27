@@ -8,10 +8,10 @@ public class NarrationNode : BaseNode
     [Output(dynamicPortList = true, connectionType = Node.ConnectionType.Override)]
     public List<Connection> answers; 
     
-    public List<string> answerTexts; 
+    public List<Sprite> answer; 
     
     public Sprite narrationIcon;
-    public Sprite dialougeSkip;
+    public Sprite narrationSkip;
     
     [TextArea(5, 8)] 
     public string narrationText;

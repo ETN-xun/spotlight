@@ -98,9 +98,11 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 1
   answers: []
-  answerTexts: []
+  answer: []
   characterName: "\u5F71"
-  characterIcon: {fileID: 0}
+  characterIcon: {fileID: 21300000, guid: 7dd01d172f32d9a4a81db13fd2bdf5d8, type: 3}
+  dialougeIcon: {fileID: 21300000, guid: 178f28c63664177439d51e0206fca0e1, type: 3}
+  dialougeSkip: {fileID: 21300000, guid: d414496608612104f95e6ba88e3f0f4c, type: 3}
   hasChoices: 0
   dialogueText: "\u201C\u6838\u5FC3\u79FB\u52A8\u7F13\u6162\uFF0C\u8DEF\u5F84\u66B4\u9732\u3002\u6B64\u65B9\u6848\u5C06\u6781\u5927\u6D88\u8017\u6211\u4EEC\u7684\u884C\u52A8\u80FD\u91CF\uFF0C\u975E\u6700\u4F18\u3002\u201D"
 --- !u!114 &-1321515621821793983
@@ -250,9 +252,11 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 1
   answers: []
-  answerTexts: []
+  answer: []
   characterName: "\u7CFB\u7EDF\u8BED\u97F3"
   characterIcon: {fileID: 0}
+  dialougeIcon: {fileID: 21300000, guid: 7a35cf4b45c5c02479d081b4e984ec03, type: 3}
+  dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
   hasChoices: 0
   dialogueText: "\u3010\u8C03\u8BD5\u8005\u5C0F\u961FZERO\uFF0C\u4E8E\u56DE\u8DEF\u5E73\u539F\u53D1\u73B0\u9AD8\u4EF7\u503C\u6570\u636E\u6838\u5FC3\u3002\u5185\u542B\u5173\u952E\u7CFB\u7EDF\u65E5\u5FD7\u3002\u4F18\u5148\u7EA7\uFF1A\u6700\u9AD8\u3002\u62A4\u9001\u5176\u81F3\u6307\u5B9A\u64A4\u79BB\u70B9\u3002\u3011"
 --- !u!114 &4311938309912051541
@@ -310,9 +314,11 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 1
   answers: []
-  answerTexts: []
+  answer: []
   characterName: "\u77F3"
-  characterIcon: {fileID: 0}
+  characterIcon: {fileID: 21300000, guid: d5f094ddd115fb54499f41129c8ded61, type: 3}
+  dialougeIcon: {fileID: 21300000, guid: c17c365fd1961a047925ab529701bb79, type: 3}
+  dialougeSkip: {fileID: 21300000, guid: b55782ec389516040a166dbaed007ea6, type: 3}
   hasChoices: 0
   dialogueText: "\u201C\u6307\u4EE4\u5DF2\u66F4\u65B0\u3002\u6211\u7684\u5B88\u62A4\u534F\u8BAE\u9501\u5B9A\u65B0\u76EE\u6807\u3002\u201D"
 --- !u!114 &4352843033913067019
@@ -416,8 +422,10 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 1
   answers: []
-  answerTexts: []
+  answer: []
   characterName: "\u96F6"
-  characterIcon: {fileID: 0}
+  characterIcon: {fileID: 21300000, guid: 265520833bac1914e9f295f69864b7c6, type: 3}
+  dialougeIcon: {fileID: 21300000, guid: b3e3c7501349c2347aa47dba348e6cf1, type: 3}
+  dialougeSkip: {fileID: 21300000, guid: 1be0a8d677ee50a4abe23afe54c2f43e, type: 3}
   hasChoices: 0
   dialogueText: "\u201C\u6267\u884C\u547D\u4EE4\u3002\u8FC7\u8F7D\u6A21\u5F0F\u9884\u5907\uFF0C\u4EE5\u5907\u4E0D\u65F6\u4E4B\u9700\u3002\u201D"

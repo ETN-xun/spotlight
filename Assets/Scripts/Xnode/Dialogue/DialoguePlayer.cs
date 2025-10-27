@@ -84,10 +84,10 @@ public class DialoguePlayer : MonoBehaviour
         while (targetNode != null)
         {
             // 如果遇到分支，默认走第一个选项
-            if (targetNode is DialogueNode dialogueNode && dialogueNode.answers.Count > 0)
+            if (targetNode is DialogueNode dialogueNode && dialogueNode.hasChoices)
                 targetNode = dialogueNode.GetNextNode(0);
             
-            else if (targetNode is NarrationNode narrationNode && narrationNode.answers.Count > 0)
+            else if (targetNode is NarrationNode narrationNode && narrationNode.hasChoices)
                 targetNode = narrationNode.GetNextNode(0);
             
             targetNode = targetNode.GetNextNode(); 
@@ -197,7 +197,8 @@ public class DialoguePlayer : MonoBehaviour
         
         //narrationText.text = node.narrationText;
         narrationText.color = narrationText.color;
-        dialogueImage.sprite = node.narrationIcon;
+        narrationImage.sprite = node.narrationIcon;
+        nextButton.image.sprite = node.narrationSkip;
         
         nextButton.gameObject.SetActive(true);
         typingCoroutine = StartCoroutine(TypewriterCoroutine(node, narrationText));
@@ -214,7 +215,8 @@ public class DialoguePlayer : MonoBehaviour
 
         characterPortraitImage.sprite = node.characterIcon;
         nameText.text = node.characterName;
-        dialogueImage.sprite = node.characterIcon;
+        dialogueImage.sprite = node.dialougeIcon;
+        nextButton.image.sprite = node.dialougeSkip;
         
         //storyText.text = node.dialogueText;
         
@@ -235,7 +237,8 @@ public class DialoguePlayer : MonoBehaviour
             spawnedButtons.Add(buttonGO);
 
             // 设置按钮文本
-            buttonGO.GetComponentInChildren<TextMeshProUGUI>().text = node.answerTexts[i]; 
+            buttonGO.GetComponentInChildren<TextMeshProUGUI>().text = null;
+            buttonGO.GetComponent<Button>().image.sprite = node.answer[i];
 
             int choiceIndex = i; 
             
@@ -251,7 +254,8 @@ public class DialoguePlayer : MonoBehaviour
             spawnedButtons.Add(buttonGO);
 
             // 设置按钮文本
-            buttonGO.GetComponentInChildren<TextMeshProUGUI>().text = node.answerTexts[i]; 
+            buttonGO.GetComponentInChildren<TextMeshProUGUI>().text = null;
+            buttonGO.GetComponent<Button>().image.sprite = node.answer[i];
 
             int choiceIndex = i; 
             
