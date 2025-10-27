@@ -29,6 +29,12 @@ namespace Enemy.AI
             var bestCell = enemy.CurrentCell;
             var bestScore = float.MinValue;
 
+            // 如果没有友方单位，直接返回当前位置
+            if (allyUnits == null || allyUnits.Count == 0)
+            {
+                return bestCell;
+            }
+
             foreach (var cell in moveRange)
             {
                 var attackableCells = enemy.GetAttackRange(cell);
