@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitID: BOSS
   unitName: BOSS
-  unitType: 0
+  unitType: 4
   description: 
   unitIcon: {fileID: 21300000, guid: d19d524833a474f0592a3edca8fa160c, type: 3}
   unitPrefab: {fileID: 537052515153772829, guid: 50aa2c7eab3b148d7a54294b2d54c5c9,

@@ -521,6 +521,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2057016318006137985, guid: 10e012879c8a04573b1df688f66d498e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4474199440514737664, guid: 10e012879c8a04573b1df688f66d498e,
         type: 3}
       propertyPath: m_Enabled
@@ -530,6 +535,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: LevelSelectView
+      objectReference: {fileID: 0}
+    - target: {fileID: 8544373521848398559, guid: 10e012879c8a04573b1df688f66d498e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8818132705841421733, guid: 10e012879c8a04573b1df688f66d498e,
         type: 3}

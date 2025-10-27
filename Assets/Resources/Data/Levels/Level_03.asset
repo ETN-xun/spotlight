@@ -21,7 +21,7 @@ MonoBehaviour:
   allyUnits:
   - {fileID: 3075829042547491733, guid: 53a0b888cc7f949ca9898801204b9bbe, type: 3}
   - {fileID: 5430961850942367142, guid: 6856d873129fe4824b6b6e9073b898fc, type: 3}
-  - {fileID: 2245471829770328017, guid: 881147c8cd83f4b60b68e96e936aa887, type: 3}
+  - {fileID: 8050963956305351039, guid: 881147c8cd83f4b60b68e96e936aa887, type: 3}
   addedEnemyPerTurnCount: 1
   "\u521D\u59CB\u4E71\u7801\u722C\u866B\u6570\u91CF": 2
   "\u521D\u59CB\u6B7B\u673A\u4EA1\u7075\u6570\u91CF": 1

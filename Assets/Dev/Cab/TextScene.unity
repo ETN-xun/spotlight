@@ -290,11 +290,14 @@ MonoBehaviour:
   nameText: {fileID: 1490755408}
   storyText: {fileID: 110932621}
   narrationText: {fileID: 1708674171}
+  dialogueImage: {fileID: 0}
+  narrationImage: {fileID: 0}
   choiceButtonContainer: {fileID: 2023337521}
   choiceButtonPrefab: {fileID: 5199896290027866956, guid: c0b9bfb6034f7d44bb09577293c8cd8d,
     type: 3}
   nextButton: {fileID: 48240318}
   skipButton: {fileID: 523777057}
+  charactersPerSecond: 20
 --- !u!4 &802693780
 Transform:
   m_ObjectHideFlags: 0
@@ -879,12 +882,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: -451408746509803620, guid: ba78da04f656dc74583be2af46c88341,
+      objectReference: {fileID: -3819699251099487435, guid: f0e917a9f52726048a8127e0297b95bb,
         type: 2}
     - target: {fileID: 2205494160008385159, guid: c1c154d4f7962ff4ba062a58c5af3e96,
         type: 3}
       propertyPath: m_hasFontAssetChanged
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2712381688426540913, guid: c1c154d4f7962ff4ba062a58c5af3e96,
         type: 3}
@@ -1022,12 +1025,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: -451408746509803620, guid: ba78da04f656dc74583be2af46c88341,
+      objectReference: {fileID: -3819699251099487435, guid: f0e917a9f52726048a8127e0297b95bb,
         type: 2}
     - target: {fileID: 6328731016643404323, guid: c1c154d4f7962ff4ba062a58c5af3e96,
         type: 3}
       propertyPath: m_hasFontAssetChanged
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6350781884460529693, guid: c1c154d4f7962ff4ba062a58c5af3e96,
         type: 3}
@@ -1058,7 +1061,7 @@ PrefabInstance:
     - target: {fileID: 8959300025203212460, guid: c1c154d4f7962ff4ba062a58c5af3e96,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
