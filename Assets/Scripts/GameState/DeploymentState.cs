@@ -41,10 +41,15 @@ public class DeploymentState : GameStateBase
                 var worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 var cell = GridManager.Instance.WorldToCell(worldPoint);
                 if (cell is null || cell.CurrentUnit is not null) return;
-                if (!_availableDeployPositions.Contains(cell.Coordinate)) return;
+                
+                var cellPosition = cell.Coordinate;
+                // 移除有问题的坐标转换调用
+                // Utils.Coordinate.Transform(ref cellPosition);
+                
+                if (!_availableDeployPositions.Contains(cellPosition)) return;
                 _deployedUnitCount++;
                 var unit = GetUnitById(_unitData.unitID);
-                GridManager.Instance.PlaceUnit(cell.Coordinate, unit);
+                GridManager.Instance.PlaceUnit(cellPosition, unit);
                 var view = ViewManager.Instance.GetView<UnitDeploymentView>(ViewType.UnitDeploymentView, _unitData.unitID);
                 view.DisableViewClick();
                 _isClickDeployUnit = false;
@@ -56,7 +61,8 @@ public class DeploymentState : GameStateBase
         }
 
 
-        if (_deployedUnitCount == LevelManager.Instance.GetCurrentLevel().allyUnits.Count)
+        // 检查是否所有单位都已部署完毕
+        if (IsAllUnitsDeployed())
         {
             gameManager.ChangeGameState(GameState.EnemyTurn);
         }
@@ -83,13 +89,28 @@ public class DeploymentState : GameStateBase
         return _allyUnits.FirstOrDefault(unit => unit.data.unitID == unitId);
     }
     
+    /// <summary>
+    /// 检查是否所有我方单位都已部署完毕
+    /// </summary>
+    /// <returns>如果所有单位都已部署则返回true，否则返回false</returns>
+    private bool IsAllUnitsDeployed()
+    {
+        var totalUnits = LevelManager.Instance.GetCurrentLevel().allyUnits.Count;
+        var deployedUnits = _deployedUnitCount;
+        
+        Debug.Log($"部署进度: {deployedUnits}/{totalUnits}");
+        
+        return deployedUnits >= totalUnits;
+    }
+    
     private void ShowDeploymentGrid()
     {
         var deploymentArea = LevelManager.Instance.GetCurrentLevel().allyDeployPositions;
         foreach (var pos in deploymentArea)
         {
             var coord = pos;
-            Utils.Coordinate.Transform(ref coord);
+            // 移除有问题的坐标转换调用，直接使用原始坐标
+            // Utils.Coordinate.Transform(ref coord);
             _availableDeployPositions.Add(coord);
             GridManager.Instance.Highlight(true, coord);
         }
