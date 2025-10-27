@@ -60,6 +60,10 @@ public class StatusAbnormalSkill : Skill
                 {
                     if (dx == 0 && dy == 0) continue; // 跳过中心格子（已添加）
                     
+                    // 使用曼哈顿距离而不是正方形区域，确保只包括非斜向格子
+                    int manhattanDistance = Mathf.Abs(dx) + Mathf.Abs(dy);
+                    if (manhattanDistance > data.effectRadius) continue;
+                    
                     Vector2Int pos = center + new Vector2Int(dx, dy);
                     if (gridManager.IsValidPosition(pos))
                     {

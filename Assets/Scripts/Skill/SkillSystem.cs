@@ -49,15 +49,102 @@ public class SkillSystem : MonoBehaviour
     public void SelectTarget(GridCell targetCell)
     {
         if (currentSkill == null) return;
-        // if (!highlightedCells.Contains(targetCell)) return;
+        
+        // 验证目标是否在有效范围内
+        if (!IsValidTarget(targetCell))
+        {
+            Debug.Log("目标不在有效范围内或不是有效目标");
+            return;
+        }
+        
         //执行技能
         currentSkill.Execute(targetCell, GridManager.Instance);
 
         //清理状态
-        // ClearHighlights();
+        ClearHighlights();
         currentCaster = null;
         currentSkill = null;
         currentSkillData = null;
+    }
+    
+    /// <summary>
+    /// 验证目标是否有效
+    /// </summary>
+    /// <param name="targetCell">目标格子</param>
+    /// <returns>是否为有效目标</returns>
+    private bool IsValidTarget(GridCell targetCell)
+    {
+        if (currentCaster == null || currentSkillData == null || targetCell == null)
+            return false;
+            
+        // 检查目标是否在技能范围内
+        Vector2Int casterPos = currentCaster.CurrentCell.Coordinate;
+        var targetableCells = currentSkillData.GetTargetableCells(casterPos, GridManager.Instance);
+        
+        bool inRange = false;
+        foreach (var pos in targetableCells)
+        {
+            if (pos == targetCell.Coordinate)
+            {
+                inRange = true;
+                break;
+            }
+        }
+        
+        if (!inRange)
+        {
+            Debug.Log("目标不在技能范围内");
+            return false;
+        }
+        
+        // 检查目标类型是否有效
+        return IsValidTargetType(targetCell);
+    }
+    
+    /// <summary>
+    /// 检查目标类型是否有效
+    /// </summary>
+    /// <param name="targetCell">目标格子</param>
+    /// <returns>是否为有效目标类型</returns>
+    private bool IsValidTargetType(GridCell targetCell)
+    {
+        // 如果目标格子有单位
+        if (targetCell.CurrentUnit != null)
+        {
+            Unit target = targetCell.CurrentUnit;
+            bool isTargetEnemy = target.data.isEnemy;
+            bool isCasterEnemy = currentCaster.data.isEnemy;
+            
+            // 检查是否可以对敌军使用
+            if (currentSkillData.canTargetEnemies && isTargetEnemy != isCasterEnemy)
+            {
+                return true;
+            }
+            
+            // 检查是否可以对友军使用
+            if (currentSkillData.canTargetAllies && isTargetEnemy == isCasterEnemy)
+            {
+                return true;
+            }
+            
+            return false;
+        }
+        
+        // 如果目标格子有可摧毁对象
+        if (targetCell.DestructibleObject != null)
+        {
+            // 大部分技能都可以对可摧毁对象使用
+            return true;
+        }
+        
+        // 空格子的情况 - 某些技能（如地形投放）可以对空格子使用
+        if (currentSkillData.skillType == SkillType.Spawn)
+        {
+            return true;
+        }
+        
+        // 其他情况根据技能类型判断
+        return false;
     }
 
     private void ClearHighlights()

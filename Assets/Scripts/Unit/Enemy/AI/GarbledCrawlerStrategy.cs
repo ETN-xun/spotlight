@@ -30,9 +30,16 @@ namespace Enemy.AI
             var bestCell = enemy.CurrentCell;
             var bestScore = float.MaxValue;
 
-            // 如果没有友方单位，直接返回当前位置
+            // 如果没有友方单位，进行随机移动而不是停留在原地
             if (allyUnits == null || allyUnits.Count == 0)
             {
+                var availableCells = moveRange.Where(cell => cell.CurrentUnit == null && cell != enemy.CurrentCell).ToList();
+                if (availableCells.Count > 0)
+                {
+                    // 随机选择一个可移动的位置
+                    int randomIndex = UnityEngine.Random.Range(0, availableCells.Count);
+                    return availableCells[randomIndex];
+                }
                 return bestCell;
             }
 

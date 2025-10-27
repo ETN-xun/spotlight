@@ -114,6 +114,10 @@ public class SkillDataSO : ScriptableObject
             {
                 if (x == 0 && y == 0) continue; // 跳过自身位置
                 
+                // 使用曼哈顿距离而不是正方形区域，确保只包括相邻格子
+                int manhattanDistance = Mathf.Abs(x) + Mathf.Abs(y);
+                if (manhattanDistance > range) continue;
+                
                 Vector2Int targetPos = casterPosition + new Vector2Int(x, y);
                 
                 // 检查是否在网格范围内

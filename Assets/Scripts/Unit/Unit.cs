@@ -79,13 +79,37 @@ public class Unit : MonoBehaviour
 
     public void TakeDamage(int dmg)
     {
-        if(data.Hits>0)
-            data.Hits--;
-        else
-            currentHP -= dmg;
-        Debug.Log($"{data.unitName} 受到 {dmg} 点伤害，剩余生命值: {currentHP}");
+        int remainingDamage = dmg;
+        
+        // 先消耗护盾
+        if (data.Hits > 0)
+        {
+            int shieldDamage = Mathf.Min(data.Hits, remainingDamage);
+            data.Hits -= shieldDamage;
+            remainingDamage -= shieldDamage;
+            Debug.Log($"{data.unitName} 护盾吸收了 {shieldDamage} 点伤害，剩余护盾: {data.Hits}");
+        }
+        
+        // 剩余伤害作用于生命值
+        if (remainingDamage > 0)
+        {
+            currentHP -= remainingDamage;
+            Debug.Log($"{data.unitName} 受到 {remainingDamage} 点生命值伤害，剩余生命值: {currentHP}");
+        }
+        
         MessageCenter.Publish(Defines.UnitTakeDamageEvent, data.unitID);
         if (currentHP <= 0) Die();
+    }
+    
+    /// <summary>
+    /// 设置生命值为0并清除护盾，用于秒杀效果
+    /// </summary>
+    public void SetToZeroHP()
+    {
+        currentHP = 0;
+        data.Hits = 0;
+        MessageCenter.Publish(Defines.UnitTakeDamageEvent, data.unitID);
+        Die();
     }
     
     /// <summary>

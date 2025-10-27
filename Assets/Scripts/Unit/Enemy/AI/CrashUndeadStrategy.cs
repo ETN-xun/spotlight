@@ -29,9 +29,25 @@ namespace Enemy.AI
             var bestCell = enemy.CurrentCell;
             var bestScore = float.MinValue;
 
-            // 如果没有友方单位，直接返回当前位置
+            // 如果没有友方单位，优先寻找BugTile地形，否则进行随机移动
             if (allyUnits == null || allyUnits.Count == 0)
             {
+                // 优先寻找BugTile地形
+                var bugTileCells = moveRange.Where(cell => cell.CurrentUnit == null && 
+                    cell.TerrainData != null && cell.TerrainData.terrainType == TerrainType.BugTile).ToList();
+                if (bugTileCells.Count > 0)
+                {
+                    int randomIndex = UnityEngine.Random.Range(0, bugTileCells.Count);
+                    return bugTileCells[randomIndex];
+                }
+                
+                // 如果没有BugTile，随机移动
+                var availableCells = moveRange.Where(cell => cell.CurrentUnit == null && cell != enemy.CurrentCell).ToList();
+                if (availableCells.Count > 0)
+                {
+                    int randomIndex = UnityEngine.Random.Range(0, availableCells.Count);
+                    return availableCells[randomIndex];
+                }
                 return bestCell;
             }
 

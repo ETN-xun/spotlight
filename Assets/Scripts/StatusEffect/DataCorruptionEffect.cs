@@ -33,16 +33,12 @@ public class DataCorruptionEffect : StatusEffect
         // 获取当前位置周围的所有可移动位置
         List<Vector2Int> validMovePositions = new List<Vector2Int>();
         
-        // 检查8个方向
+        // 检查4个方向（不包括斜向）
         Vector2Int[] directions = {
             new Vector2Int(0, 1),   // 上
-            new Vector2Int(1, 1),   // 右上
             new Vector2Int(1, 0),   // 右
-            new Vector2Int(1, -1),  // 右下
             new Vector2Int(0, -1),  // 下
-            new Vector2Int(-1, -1), // 左下
-            new Vector2Int(-1, 0),  // 左
-            new Vector2Int(-1, 1)   // 左上
+            new Vector2Int(-1, 0)   // 左
         };
 
         foreach (var direction in directions)
@@ -95,6 +91,10 @@ public class DataCorruptionEffect : StatusEffect
             for (int dy = -attackRange; dy <= attackRange; dy++)
             {
                 if (dx == 0 && dy == 0) continue; // 跳过自己的位置
+
+                // 使用曼哈顿距离而不是正方形区域，确保只包括非斜向格子
+                int manhattanDistance = Mathf.Abs(dx) + Mathf.Abs(dy);
+                if (manhattanDistance > attackRange) continue;
 
                 Vector2Int targetPos = currentPos + new Vector2Int(dx, dy);
                 

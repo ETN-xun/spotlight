@@ -66,8 +66,10 @@ public class BreakpointExecutionSkill : Skill
     /// <param name="target">目标单位</param>
     private void ExecuteTarget(Unit target)
     {
-        // 直接将目标生命值设为0，触发死亡
-        target.TakeDamage(target.currentHP);
+        Debug.Log($"{target.data.unitName} 被断点斩杀直接击杀！");
+        
+        // 使用Unit类的SetToZeroHP方法进行秒杀
+        target.SetToZeroHP();
         
         // 可以添加特殊的视觉效果或音效
         // TODO: 添加断点斩杀的特殊效果
@@ -95,6 +97,10 @@ public class BreakpointExecutionSkill : Skill
                 for (int dy = -data.effectRadius; dy <= data.effectRadius; dy++)
                 {
                     if (dx == 0 && dy == 0) continue; // 跳过中心格子（已添加）
+                    
+                    // 使用曼哈顿距离而不是正方形区域，确保只包括非斜向格子
+                    int manhattanDistance = Mathf.Abs(dx) + Mathf.Abs(dy);
+                    if (manhattanDistance > data.effectRadius) continue;
                     
                     Vector2Int pos = center + new Vector2Int(dx, dy);
                     if (gridManager.IsValidPosition(pos))

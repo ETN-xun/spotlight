@@ -140,10 +140,12 @@ namespace Enemy
             EnemyIntentsShowFinished = false;
             Debug.Log("敌人回合第 " + CurrentEnemyTurn + " 轮开始");
 
-            // 第一回合：只显示意图，不执行也不生成新意图
+            // 第一回合：执行部署时生成的意图，然后显示新意图
             if (CurrentEnemyTurn == 1)
             {
+                yield return ExecuteEnemyIntents();
                 yield return ShowEnemyIntents();
+                yield return GenerateNewIntents();
                 yield break;
             }
 
@@ -170,7 +172,6 @@ namespace Enemy
                         yield return new WaitForSeconds(1f);
                         yield return _intentExecutor.ShowMoveIntent(unit, intent);
                         yield return new WaitForSeconds(1f);
-                        yield return _intentExecutor.ExecuteMoveIntent(unit, intent);
                     }
                     else if (intent.type == EnemyIntentType.Attack)
                     {
@@ -202,7 +203,11 @@ namespace Enemy
                 // Execute all intents in order (Move, Attack, Spawn)
                 foreach (var intent in enemyIntent.Value)
                 {
-                    if (intent.type == EnemyIntentType.Attack)
+                    if (intent.type == EnemyIntentType.Move)
+                    {
+                        yield return _intentExecutor.ExecuteMoveIntent(enemyIntent.Key, intent);
+                    }
+                    else if (intent.type == EnemyIntentType.Attack)
                     {
                         yield return _intentExecutor.ExecuteAttackIntent(enemyIntent.Key, intent);
                     }

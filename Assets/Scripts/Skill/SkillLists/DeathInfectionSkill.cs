@@ -66,11 +66,11 @@ public class DeathInfectionSkill : Skill
     {
         List<GridCell> surroundingCells = new List<GridCell>();
         
-        // 获取周围8个方向的格子
+        // 获取周围4个方向的格子（不包括斜向）
         Vector2Int[] directions = {
-            new Vector2Int(-1, -1), new Vector2Int(0, -1), new Vector2Int(1, -1),
+                                   new Vector2Int(0, -1),
             new Vector2Int(-1,  0),                        new Vector2Int(1,  0),
-            new Vector2Int(-1,  1), new Vector2Int(0,  1), new Vector2Int(1,  1)
+                                   new Vector2Int(0,  1)
         };
         
         foreach (var direction in directions)
@@ -94,6 +94,10 @@ public class DeathInfectionSkill : Skill
                 for (int dy = -data.effectRadius; dy <= data.effectRadius; dy++)
                 {
                     if (dx == 0 && dy == 0) continue; // 跳过中心
+                    
+                    // 使用曼哈顿距离而不是正方形区域，确保只包括相邻格子
+                    int manhattanDistance = Mathf.Abs(dx) + Mathf.Abs(dy);
+                    if (manhattanDistance > data.effectRadius) continue;
                     
                     Vector2Int targetPos = centerPos + new Vector2Int(dx, dy);
                     if (gridManager.IsValidPosition(targetPos))
