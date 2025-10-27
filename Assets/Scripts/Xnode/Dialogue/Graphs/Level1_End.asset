@@ -490,7 +490,7 @@ MonoBehaviour:
   characterName: "\u96F6"
   characterIcon: {fileID: 21300000, guid: 265520833bac1914e9f295f69864b7c6, type: 3}
   dialougeIcon: {fileID: 21300000, guid: b3e3c7501349c2347aa47dba348e6cf1, type: 3}
-  dialougeSkip: {fileID: 0}
+  dialougeSkip: {fileID: 21300000, guid: 1be0a8d677ee50a4abe23afe54c2f43e, type: 3}
   hasChoices: 0
   dialogueText: "\u201C\u7EE7\u7EED\u4EFB\u52A1\uFF0C\u4FDD\u6301\u8B66\u60D5\u3002\u201D"
 --- !u!114 &8810410306194197837
