@@ -20,8 +20,8 @@ MonoBehaviour:
   unitPrefab: {fileID: 1615277517264190128, guid: 6856d873129fe4824b6b6e9073b898fc,
     type: 3}
   isEnemy: 0
-  maxHP: 5
-  Hits: 1
+  maxHP: 3
+  Hits: 0
   moveRange: 3
   attackRange: 2
   movementEnergyCost: 1
