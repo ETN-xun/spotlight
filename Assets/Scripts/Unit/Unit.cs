@@ -68,6 +68,7 @@ public class Unit : MonoBehaviour
         var skeletonAnimation = GetComponentInChildren<SkeletonAnimation>();
         if (skeletonAnimation != null)
         {
+            Debug.Log("Playing animation: " + animationName);
             skeletonAnimation.state.SetAnimation(0, animationName, loop);
         }
     }
