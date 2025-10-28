@@ -28,7 +28,6 @@ namespace Action
         {
             MessageCenter.Subscribe(Defines.PlayerTurnStartEvent, OnPlayerTurnStarted);
             MessageCenter.Subscribe(Defines.PlayerTurnEndEvent, OnPlayerTurnEnd);
-            // MessageCenter.Subscribe(Defines.EnemyTurnEndEvent, OnEnemyTurnStart);
         }
         
         private void OnDisable()
@@ -61,8 +60,7 @@ namespace Action
                 Debug.Log("Not enough energy to move.");
                 return;
             }
-            // MovementSystem.Instance.MoveUnit(actor, targetCell);
-            _actorUnit.MoveTo(targetCell);
+            MovementSystem.Instance.TryMoveToCell(actor, targetCell);
             DetectActionEnd();
             // play animation here
         }

@@ -201,6 +201,7 @@ public class GridManager : MonoBehaviour
     {
         var cell = GetCell(coord);
         if (cell == null || cell.CurrentUnit != null) return false;
+        if (cell.DestructibleObject != null || cell.ObjectOnCell != null) return false;
 
         var unit = Instantiate(unitPrefab, CellToWorld(coord), Quaternion.identity, transform);
         unit.PlaceAt(cell);
@@ -218,6 +219,7 @@ public class GridManager : MonoBehaviour
     {
         var targetCell = GetCell(targetCoord);
         if (targetCell == null || targetCell.CurrentUnit != null) return false;
+        if (targetCell.DestructibleObject != null || targetCell.ObjectOnCell != null) return false;
 
         unit.MoveTo(targetCell);
         return true;

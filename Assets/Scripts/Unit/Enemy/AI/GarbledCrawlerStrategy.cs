@@ -61,7 +61,6 @@ namespace Enemy.AI
         {
             var distance = GridManager.Instance.GetDistance(enemy.CurrentCell, target.CurrentCell);
             var distanceScore = 1f / (1 + distance);
-            UnityEngine.Debug.Log($"[GarbledCrawlerStrategy] EvaluateTarget: enemy={enemy?.name}, target={target?.name}, distance={distance}, score={distanceScore}");
             return distanceScore;
         }
     }

@@ -96,6 +96,9 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
                 }
                 SkillSystem.Instance.StartSkill(LastSelectedUnit, _pendingSkill);
                 SkillSystem.Instance.SelectTarget(CurrentSelectedCell);
+                var animationName = Utilities.SkillNameToAnimationName(_pendingSkill.skillName);
+                LastSelectedUnit.PlayAnimation(animationName, false);
+                LastSelectedUnit.PlayAnimation("idle",true);
             }
             else
             {

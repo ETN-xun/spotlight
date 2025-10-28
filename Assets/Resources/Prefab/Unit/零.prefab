@@ -102,7 +102,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3d5724c26eacc4dcca4900927eafdf24, type: 2}
+  - {fileID: 2100000, guid: ba01c3ebe26364968aa07debfd7277a4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -165,7 +165,7 @@ MonoBehaviour:
   updateTiming: 1
   unscaledTime: 0
   _animationName: idle
-  loop: 0
+  loop: 1
   timeScale: 1
 --- !u!33 &423345132207964044
 MeshFilter:

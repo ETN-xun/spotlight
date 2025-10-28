@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6508121144938921130
 Transform:
   m_ObjectHideFlags: 0
@@ -151,7 +151,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4153173957869841761
 Transform:
   m_ObjectHideFlags: 0
@@ -187,7 +187,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3d5724c26eacc4dcca4900927eafdf24, type: 2}
+  - {fileID: 2100000, guid: dd06dce146a0f4be9a4143a3298caf64, type: 2}
+  - {fileID: 2100000, guid: 45ca876463bf347a0b47eca3e331283a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -221,7 +222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: 75a3c06805ed54c0b80daef26910ce0f, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: 309d6e5c34dba44fca724964346f971f, type: 2}
   initialSkinName: 
   fixPrefabOverrideViaMeshFilter: 2
   initialFlipX: 0
@@ -250,7 +251,7 @@ MonoBehaviour:
   updateTiming: 1
   unscaledTime: 0
   _animationName: idle
-  loop: 0
+  loop: 1
   timeScale: 1
 --- !u!33 &5132546399472649263
 MeshFilter:

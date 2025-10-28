@@ -13,6 +13,23 @@ public class MovementSystem : MonoBehaviour
         Instance = this;
     }
 
+    public bool CanEnterCell(GridCell cell)
+    {
+        if (cell == null) return false;
+        if (cell.CurrentUnit != null) return false;
+        if (cell.DestructibleObject != null) return false;
+        if (cell.ObjectOnCell != null) return false;
+        return true;
+    }
+
+    public bool TryMoveToCell(Unit unit, GridCell targetCell)
+    {
+        if (unit == null) return false;
+        if (!CanEnterCell(targetCell)) return false;
+        unit.MoveTo(targetCell);
+        return true;
+    }
+
     /// <summary>
     /// 执行逐格位移
     /// </summary>
@@ -383,3 +400,4 @@ public class MovementSystem : MonoBehaviour
         }
     }
 }
+
