@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: BreakpointExecutionSkill
   m_EditorClassIdentifier: 
   skillID: breakpoint_execution_01
-  skillName: 断点斩杀
-  description: 代码刺客-影的特殊技能：如果目标处于异常状态，则直接击杀；否则造成普通伤害
-  skillIcon: {fileID: 0}
+  skillName: "\u65AD\u70B9\u65A9\u6740"
+  description: "\u4EE3\u7801\u523A\u5BA2-\u5F71\u7684\u7279\u6B8A\u6280\u80FD\uFF1A\u5982\u679C\u76EE\u6807\u5904\u4E8E\u5F02\u5E38\u72B6\u6001\uFF0C\u5219\u76F4\u63A5\u51FB\u6740\uFF1B\u5426\u5219\u9020\u6210\u666E\u901A\u4F24\u5BB3"
+  skillIcon: {fileID: 21300000, guid: 16be98b1fd9b14f08b2f54f51eb6fb41, type: 3}
   skillType: 0
   energyCost: 1
   range: 1
@@ -30,12 +30,11 @@ MonoBehaviour:
   spawnTile: {fileID: 0}
   effectRadius: 0
   effectPattern: []
-  effects: 
-  - 0
+  effects: 00000000
   cooldownTurns: 3
-  isPassive: 0
   statusAbnormalType: 0
   statusDuration: 0
   statusIntensity: 0
   statusCanStack: 0
   statusMaxStacks: 0
+  isPassive: 0

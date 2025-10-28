@@ -19,6 +19,9 @@ namespace View.GameViews
         [SerializeField] private Sprite energyBright;
         [SerializeField] private Sprite energyDark;
         
+        [SerializeField] private Sprite overloadModeActiveSprite;
+        [SerializeField] private Sprite overloadModeInactiveSprite;
+        
         protected override void InitView()
         {
             base.InitView();
@@ -31,6 +34,12 @@ namespace View.GameViews
             ViewManager.Instance.RegisterView(ViewType.TerrainInfoView, new ViewInfo()
             {
                 PrefabName = "TerrainInfoView",
+                ParentTransform = transform.Find("Background")
+            });
+
+            ViewManager.Instance.RegisterView(ViewType.EnemyInfoView, new ViewInfo()
+            {
+                PrefabName = "EnemyInfoView",
                 ParentTransform = transform.Find("Background")
             });
             
@@ -46,7 +55,10 @@ namespace View.GameViews
             MessageCenter.Subscribe(Defines.UnitTakeDamageEvent, OnUnitTakeDamage);
             Find<Button>("Background/Settings_Btn").onClick.AddListener(OnClickSettingsButton);
             Find<Button>("Background/EndTurn_Btn").onClick.AddListener(OnClickEndTurnButton);
+            Find<TextMeshProUGUI>("Background/TurnTarget/Text (TMP)").text = LevelManager.Instance.GetCurrentLevel().levelTarget;
             UpdateEnergyBar(ActionManager.EnergySystem.GetCurrentEnergy());
+            
+            Find<Button>("Background/EndTurn_Btn").interactable = false;
             
             InitializeOverloadModeButton();
         }
@@ -97,7 +109,6 @@ namespace View.GameViews
         private void InitializeOverloadModeButton()
         {
             Find<Button>("Background/OverloadMode_Btn").onClick.AddListener(OnClickOverloadModeButton);
-            Find<TextMeshProUGUI>("Background/OverloadMode_Btn/Text").text = "激活过载";
             UpdateOverloadModeButtonState();
         }
         
@@ -129,15 +140,11 @@ namespace View.GameViews
                 
             if (isActive)
             {
-                Find<TextMeshProUGUI>("Background/OverloadMode_Btn/Text").text = $"ing ({overloadManager.OverloadRemainingTurns})";
-            }
-            else if (canActivate)
-            {
-                Find<TextMeshProUGUI>("Background/OverloadMode_Btn/Text").text = "active";
+                Find<Image>("Background/OverloadMode_Btn").sprite = overloadModeActiveSprite;
             }
             else
             {
-                Find<TextMeshProUGUI>("Background/OverloadMode_Btn/Text").text = "not enough";
+                Find<Image>("Background/OverloadMode_Btn").sprite = overloadModeInactiveSprite;
             }
         }
 

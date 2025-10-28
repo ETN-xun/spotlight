@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: FlashbackDisplacementSkill
   m_EditorClassIdentifier: 
   skillID: flashback_displacement_01
-  skillName: "闪回位移"
-  description: "能量消耗1，无技能范围和伤害，效果为在此位置留下一个嘲讽敌人的残影，同时本体回到上次移动前的位置"
-  skillIcon: {fileID: 0}
+  skillName: "\u95EA\u56DE\u4F4D\u79FB"
+  description: "\u80FD\u91CF\u6D88\u80171\uFF0C\u65E0\u6280\u80FD\u8303\u56F4\u548C\u4F24\u5BB3\uFF0C\u6548\u679C\u4E3A\u5728\u6B64\u4F4D\u7F6E\u7559\u4E0B\u4E00\u4E2A\u5632\u8BBD\u654C\u4EBA\u7684\u6B8B\u5F71\uFF0C\u540C\u65F6\u672C\u4F53\u56DE\u5230\u4E0A\u6B21\u79FB\u52A8\u524D\u7684\u4F4D\u7F6E"
+  skillIcon: {fileID: 21300000, guid: bb30521b8729a4e238b3153f61a2dc76, type: 3}
   skillType: 1
   energyCost: 1
   range: 0

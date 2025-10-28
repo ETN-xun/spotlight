@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Common;
 using UnityEngine;
 using UnityEngine.UI;
 using View.Base;
@@ -26,29 +27,41 @@ namespace View.GameViews
             base.Open(args);
             if (args[0] is not Unit unit) return;
 
+            _skillsData.Clear();
+            foreach (var skill in unit.data.skills)
+                _skillsData.Add(skill);
+            
             switch (unit.data.unitType)
-            {
+            { 
                 case UnitType.Shadow:
                     gameObject.GetComponent<Image>().sprite = 影Icon;
-                    Find<Image>("SkillView").sprite = 强制位移Icon;
-                    Find<Image>("SkillView (1)").sprite = 断点斩杀Icon;
+                    Find<Image>("SkillView/SkillSprite").sprite = _skillsData[0].skillIcon;
+                    Find<Image>("SkillView (1)/SkillSprite").sprite = _skillsData[1].skillIcon;
                     break;
                 case UnitType.Stone:
                     gameObject.GetComponent<Image>().sprite = 石Icon;
-                    Find<Image>("SkillView").sprite = 堆栈护盾Icon;
-                    Find<Image>("SkillView (1)").sprite = 地形投放Icon;
+                    Find<Image>("SkillView/SkillSprite").sprite = _skillsData[0].skillIcon;
+                    Find<Image>("SkillView (1)/SkillSprite").sprite = _skillsData[1].skillIcon;
                     break;
                 case UnitType.Zero:
                     gameObject.GetComponent<Image>().sprite = 零Icon;
-                    Find<Image>("SkillView").sprite = 强制位移Icon;
-                    Find<Image>("SkillView (1)").sprite = 移形换影Icon;
+                    Find<Image>("SkillView/SkillSprite").sprite = _skillsData[0].skillIcon;
+                    Find<Image>("SkillView (1)/SkillSprite").sprite = _skillsData[1].skillIcon;
                     break;
             }
+            
+            Find<Button>("SkillView").onClick.AddListener(OnClickSkillView);
+            Find<Button>("SkillView (1)").onClick.AddListener(OnClickSkillView1);
         }
 
-        public override void Close(params object[] args)
+        private void OnClickSkillView()
         {
-            base.Close(args);
+            MessageCenter.Publish(Defines.ClickSkillViewEvent, _skillsData[0]);
+        }
+
+        private void OnClickSkillView1()
+        {
+            MessageCenter.Publish(Defines.ClickSkillViewEvent, _skillsData[1]);
         }
     }
 }
