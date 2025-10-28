@@ -14,6 +14,7 @@ namespace Enemy.AI
         private readonly IEnemyStrategy _garbledCrawlerStrategy = new GarbledCrawlerStrategy();
         private readonly IEnemyStrategy _crashUndeadStrategy = new CrashUndeadStrategy();
         private readonly IEnemyStrategy _nullPointerStrategy = new NullPointerStrategy();
+        private readonly IEnemyStrategy _recursivePhantomStrategy = new RecursivePhantomStrategy();
 
         public void BuildIntent(Unit enemy)
         {
@@ -30,6 +31,7 @@ namespace Enemy.AI
                     intents = _nullPointerStrategy.BuildIntent(enemy);
                     break;
                 case UnitType.RecursivePhantom:
+                    intents = _recursivePhantomStrategy.BuildIntent(enemy);
                     break;
 
             }
