@@ -50,3 +50,6 @@ TagManager:
   - name: Unit
     uniqueID: 812182303
     locked: 0
+  - name: BloodBar
+    uniqueID: 1230325953
+    locked: 0
