@@ -110,9 +110,10 @@ public class DeploymentState : GameStateBase
         {
             var coord = pos;
             // 移除有问题的坐标转换调用，直接使用原始坐标
-            // Utils.Coordinate.Transform(ref coord);
+            Utils.Coordinate.Transform(ref coord);
             _availableDeployPositions.Add(coord);
             GridManager.Instance.Highlight(true, coord);
+            Debug.Log("高亮显示部署格子: " + coord);
         }
     }
 }

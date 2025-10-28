@@ -4,6 +4,7 @@ using Action;
 using Common;
 using Level;
 using TMPro;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.UI;
 using View.Base;
@@ -21,9 +22,9 @@ namespace View.GameViews
         protected override void InitView()
         {
             base.InitView();
-            ViewManager.Instance.RegisterView(ViewType.UnitInfoView, new ViewInfo()
+            ViewManager.Instance.RegisterView(ViewType.SkillSelectView, new ViewInfo()
             {
-                PrefabName = "UnitInfoView",
+                PrefabName = "SkillSelectView",
                 ParentTransform = transform.Find("Background")
             });
 
@@ -32,6 +33,9 @@ namespace View.GameViews
                 PrefabName = "TerrainInfoView",
                 ParentTransform = transform.Find("Background")
             });
+            
+            MessageCenter.Subscribe(Defines.PlayerTurnStartEvent, OnPlayerTurnStart);
+            MessageCenter.Subscribe(Defines.PlayerTurnEndEvent, OnPlayerTurnEnd);
         }
         
 
@@ -165,6 +169,22 @@ namespace View.GameViews
         {
             base.OnUpdate();
             UpdateOverloadModeButtonState();
+        }
+
+        protected void OnDestroy()
+        {
+            MessageCenter.Unsubscribe(Defines.PlayerTurnStartEvent, OnPlayerTurnStart);
+            MessageCenter.Unsubscribe(Defines.PlayerTurnEndEvent, OnPlayerTurnEnd);
+        }
+
+        private void OnPlayerTurnStart(object[] args)
+        {
+            Find<Button>("Background/EndTurn_Btn").interactable = true;
+        }
+
+        private void OnPlayerTurnEnd(object[] args)
+        {
+            Find<Button>("Background/EndTurn_Btn").interactable = false;
         }
     }
 }
