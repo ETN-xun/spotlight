@@ -8,12 +8,23 @@ public class DestructibleObject
     public Vector2Int coordinate;
     public bool isDestroyed = false;
     
+    public DestructibleObject(DestructibleObjectSO so, Vector2Int coord)
+    {
+        data = so;
+        coordinate = coord;
+        isDestroyed = false;
+    }
+    
     public DestructibleObject(int hits, string name, Vector2Int coord)
     {
+        data = ScriptableObject.CreateInstance<DestructibleObjectSO>();
         data.canDestroy = true;
         data.Hits = hits;
         data.Name = name;
+        data.Type = DestructibleObjectType.Register;
+        data.isActive = false;
         coordinate = coord;
+        isDestroyed = false;
     }
 
     public void TakeHits()
@@ -32,14 +43,12 @@ public class DestructibleObject
         if (isDestroyed) return;
         isDestroyed = true;
 
-        //从逻辑格子中移除
         GridCell cell = GridManager.Instance.GetCell(coordinate);
         if (cell != null)
         {
             cell.DestructibleObject = null;
         }
 
-        //从Tilemap中移除对应Tile
         if (GridManager.Instance.objectTilemap != null)
         {
             Vector3Int tilePos = new Vector3Int(coordinate.x, coordinate.y, 0);
@@ -49,14 +58,12 @@ public class DestructibleObject
     
     public bool CanUnitPassThrough(Unit unit)
     {
-        // 可破坏物体通常不允许单位穿过
         return false;
     }
     
     public bool CanTakeDamage()
     {
-        // 可破坏物体可以受到伤害
-        return !isDestroyed||data.canDestroy;
+        return !isDestroyed && data.canDestroy;
     }
 
 }

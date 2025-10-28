@@ -8,6 +8,7 @@ using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.UI;
 using View.Base;
+using Enemy; // for EnemyManager
 
 namespace View.GameViews
 {
@@ -74,26 +75,69 @@ namespace View.GameViews
         
         private void OnEnergyChanged(object[] args)
         {
+            if (args == null || args.Length == 0) return;
             if (args[0] is not int energy) return;
             UpdateEnergyBar(energy);
         }
 
         private void OnUnitTakeDamage(object[] args)
         {
-            if (args[0] is not string unitId) return;   //根据unit id从ally_manager 或 enemy_manager 获取对应单位的信息进行显示更新
-            var ally = Ally.AllyManager.Instance.GetAliveAllyByID(unitId);
-            switch (ally.data.unitType)
+            // 根据 unit id 从 AllyManager 或 EnemyManager 获取单位，做 UI 更新（避免空引用）
+            if (args == null || args.Length == 0) return;
+            if (args[0] is not string unitId || string.IsNullOrEmpty(unitId)) return;
+
+            // 先尝试我方
+            var allyMgr = Ally.AllyManager.Instance;
+            var ally = allyMgr != null ? allyMgr.GetAliveAllyByID(unitId) : null;
+            if (ally != null)
             {
-                case UnitType.Zero:
-                    // Find<Image>("Background/PlayerLists/Zero").sprite = 
-                    break;
-                case UnitType.Shadow:
-                    break;
-                case UnitType.Stone:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                switch (ally.data.unitType)
+                {
+                    case UnitType.Zero:
+                        // TODO: 更新 Zero 的受伤 UI
+                        break;
+                    case UnitType.Shadow:
+                        // TODO: 更新 Shadow 的受伤 UI
+                        break;
+                    case UnitType.Stone:
+                        // TODO: 更新 Stone 的受伤 UI
+                        break;
+                    default:
+                        // 其他未定义我方单位类型
+                        Debug.LogWarning($"未处理的我方单位类型: {ally.data.unitType}");
+                        break;
+                }
+                return;
             }
+
+            // 再尝试敌方
+            var enemyMgr = EnemyManager.Instance;
+            var enemy = enemyMgr != null ? enemyMgr.GetAliveEnemyByID(unitId) : null;
+            if (enemy != null)
+            {
+                switch (enemy.data.unitType)
+                {
+                    case UnitType.GarbledCrawler:
+                        // TODO: 更新 敌方乱码爬虫 的受伤 UI
+                        break;
+                    case UnitType.CrashUndead:
+                        // TODO: 更新 敌方死机亡灵 的受伤 UI
+                        break;
+                    case UnitType.NullPointer:
+                        // TODO: 更新 敌方空指针 的受伤 UI
+                        break;
+                    case UnitType.RecursivePhantom:
+                        // TODO: 更新 敌方递归幻影 的受伤 UI
+                        break;
+                    default:
+                        Debug.LogWarning($"未处理的敌方单位类型: {enemy.data.unitType}");
+                        break;
+                }
+                return;
+            }
+
+            // 既不是我方也不是敌方（可能单位刚好死亡或未注册），忽略
+            Debug.LogWarning($"未找到受伤单位，unitId: {unitId}");
         }
 
         private void OnClickSettingsButton()

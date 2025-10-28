@@ -29,28 +29,50 @@ namespace Enemy.AI
             var bestMoveCell = FindBestMoveTarget(enemy, allyUnits);
             if (bestMoveCell is not null && bestMoveCell != enemy.CurrentCell)
             {
+                // 先尝试到达最优单元格
                 var movePath = MovementSystem.Instance.FindPathForEnemy(enemy.CurrentCell, bestMoveCell);
-                var moveIntent = new EnemyIntent
-                {
-                    type = EnemyIntentType.Move,
-                    moveTargetCell = bestMoveCell,
-                    movePath = movePath,
-                    priority = enemy.data.aiPriority,
-                };
-                enemyIntents.Add(moveIntent);
 
-                var postMoveAttackRange = enemy.GetAttackRange(bestMoveCell);
-                var postMoveTargets = allyUnits.Where(u => postMoveAttackRange.Contains(u.CurrentCell)).ToList();
-
-                if (postMoveTargets.Count <= 0) return enemyIntents;
-                var attackTarget = FindBestAttackTarget(enemy, postMoveTargets);
-                var attackIntent = new EnemyIntent
+                // 如果最优单元格不可达，回退到任一可达的空单元格
+                if (movePath == null || movePath.Count < 2)
                 {
-                    type = EnemyIntentType.Attack,
-                    attackTargetCell = attackTarget.CurrentCell,
-                    priority = enemy.data.aiPriority
-                };
-                enemyIntents.Add(attackIntent);
+                    var fallbackCell = enemy
+                        .GetMoveRange()
+                        .FirstOrDefault(c => c.CurrentUnit == null && MovementSystem.Instance.FindPathForEnemy(enemy.CurrentCell, c)?.Count >= 2);
+
+                    if (fallbackCell != null)
+                    {
+                        bestMoveCell = fallbackCell;
+                        movePath = MovementSystem.Instance.FindPathForEnemy(enemy.CurrentCell, bestMoveCell);
+                    }
+                }
+
+                // 最终确认路径有效再添加移动意图
+                if (movePath != null && movePath.Count >= 2)
+                {
+                    var moveIntent = new EnemyIntent
+                    {
+                        type = EnemyIntentType.Move,
+                        moveTargetCell = bestMoveCell,
+                        movePath = movePath,
+                        priority = enemy.data.aiPriority,
+                    };
+                    enemyIntents.Add(moveIntent);
+
+                    var postMoveAttackRange = enemy.GetAttackRange(bestMoveCell);
+                    var postMoveTargets = allyUnits.Where(u => postMoveAttackRange.Contains(u.CurrentCell)).ToList();
+
+                    if (postMoveTargets.Count > 0)
+                    {
+                        var attackTarget = FindBestAttackTarget(enemy, postMoveTargets);
+                        var attackIntent = new EnemyIntent
+                        {
+                            type = EnemyIntentType.Attack,
+                            attackTargetCell = attackTarget.CurrentCell,
+                            priority = enemy.data.aiPriority
+                        };
+                        enemyIntents.Add(attackIntent);
+                    }
+                }
             }
 
             return enemyIntents;

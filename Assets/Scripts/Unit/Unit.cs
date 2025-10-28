@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Common;
+using Spine.Unity;
 using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -28,6 +29,7 @@ public class Unit : MonoBehaviour
     {
         InitFromData();
         InitStatusEffectManager();
+        GetComponentInChildren<SkeletonAnimation>().state.SetAnimation(0, "idle", true);
     }
 
     private void OnEnable()
@@ -53,6 +55,15 @@ public class Unit : MonoBehaviour
             StatusEffectManager = gameObject.AddComponent<StatusEffectManager>();
         }
     }
+    
+    public void PlayAnimation(string animationName, bool loop)
+    {
+        var skeletonAnimation = GetComponentInChildren<SkeletonAnimation>();
+        if (skeletonAnimation != null)
+        {
+            skeletonAnimation.state.SetAnimation(0, animationName, loop);
+        }
+    }
 
     public void InitFromData()
     {
@@ -74,6 +85,7 @@ public class Unit : MonoBehaviour
     public void MoveTo(GridCell targetCell)
     {
         if (targetCell == null || targetCell.CurrentUnit != null) return;
+        if (targetCell.DestructibleObject != null || targetCell.ObjectOnCell != null) return;
         PlaceAt(targetCell);
     }
 
@@ -191,7 +203,7 @@ public class Unit : MonoBehaviour
                 if (dist <= range)
                 {
                     var target = GridManager.Instance.GetCell(CurrentCell.Coordinate + new Vector2Int(dx, dy));
-                    if (target != null && target.CurrentUnit == null)
+                    if (target != null && target.CurrentUnit == null && target.DestructibleObject == null && target.ObjectOnCell == null)
                     {
                         result.Add(target);
                     }

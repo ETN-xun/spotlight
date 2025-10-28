@@ -30,6 +30,7 @@ public class SpawnSkill : Skill
             {
                 targetCell.CurrentUnit.TakeDamage(1);
                 Debug.Log($"{caster.data.unitName} 对 {targetCell.CurrentUnit.data.unitName} 造成了1点伤害");
+                return;
             }
         }
 

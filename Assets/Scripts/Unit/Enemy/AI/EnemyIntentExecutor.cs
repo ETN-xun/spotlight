@@ -84,9 +84,9 @@ namespace Enemy.AI
             if (intent is not { type: EnemyIntentType.Move }) 
                 yield break;
             
-            if (enemy.data.unitType == UnitType.NullPointer)        // Special case for NullPointer: no movement
+            if (enemy.data.unitType == UnitType.NullPointer)
             {
-                enemy.MoveTo(intent.moveTargetCell);
+                MovementSystem.Instance.TryMoveToCell(enemy, intent.moveTargetCell);
                 yield break;
             }
             
@@ -109,6 +109,7 @@ namespace Enemy.AI
             var targetUnit = intent.attackTargetCell.CurrentUnit;
             if (targetUnit != null)
             {
+                enemy.PlayAnimation("Attack", false);
                 targetUnit.TakeDamage(enemy.data.baseDamage);
                 if (!enemy.attackedUnits.TryAdd(targetUnit, 2))
                     enemy.attackedUnits[targetUnit] = 2; 
