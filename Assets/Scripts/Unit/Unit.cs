@@ -9,6 +9,8 @@ using UnityEngine.Serialization;
 
 public class Unit : MonoBehaviour
 {
+    public GameObject bloodBar;
+    public List<Sprite> bloodSprites;
     public UnitDataSO data; // 静态数据
     public int currentHP { get; private set; }
     
@@ -24,6 +26,11 @@ public class Unit : MonoBehaviour
     /// 状态效果管理器
     /// </summary>
     public StatusEffectManager StatusEffectManager { get; private set; }
+
+    public void Update()
+    {
+        bloodBar.GetComponent<SpriteRenderer>().sprite = bloodSprites[currentHP];
+    }
 
     private void Start()
     {
