@@ -426,7 +426,7 @@ MonoBehaviour:
   answers: []
   answer: []
   characterName: "\u7CFB\u7EDF\u8BED\u97F3"
-  characterIcon: {fileID: 0}
+  characterIcon: {fileID: 21300000, guid: 1aa98e569c5e7584cb3180be9f0327c0, type: 3}
   dialougeIcon: {fileID: 21300000, guid: 7a35cf4b45c5c02479d081b4e984ec03, type: 3}
   dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
   hasChoices: 0

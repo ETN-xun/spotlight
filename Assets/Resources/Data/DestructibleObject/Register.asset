@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 717357f9d617ab9498f624ad4817e491, type: 3}
+  m_Name: Register
+  m_EditorClassIdentifier: 
+  Name: Register
+  canDestroy: 0
+  Hits: 0
+  Type: 0
+  isActive: 0
+  tileFullHP: {fileID: 11400000, guid: f2748fa16d9a347f684eb591faea3bb1, type: 2}
+  tileInactive: {fileID: 11400000, guid: 071205b28b892b44e824832f7394da49, type: 2}
+  tileDead: {fileID: 11400000, guid: c09959e919529ed40a238f97f5619a7e, type: 2}
+  deathDelay: 1.5
