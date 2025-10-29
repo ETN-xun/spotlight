@@ -8,14 +8,14 @@ namespace Common
             switch (skillName)
             {
                 case "断点斩杀":
-                    return "BreakpointKill";
+                    return "Attack";
                 case "堆栈护盾":
                     return "Shield";
                 case "强制迁移":
-                    return "ForceMigration";
+                    return "Attack";
                 case "闪回位移":
                 case "Flashback":
-                    return "idle"; // 使用idle动画作为闪回位移的动画
+                    return "Attack"; // 修改为Attack动画
                 default:
                     return "Attack";
             }
