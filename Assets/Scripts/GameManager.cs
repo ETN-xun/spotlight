@@ -147,7 +147,7 @@ public class GameManager : MonoBehaviour
             dialogueChainQueue.Clear();
             if (eventName == "StartLevel1")
             {
-                StartGame();
+                PlayerCompletedLevel(1);
             }
         }
         else if (eventName == "ReturnToMenu")
@@ -232,6 +232,10 @@ public class GameManager : MonoBehaviour
         Debug.Log($"GameManager: 状态转换 {oldState} -> {newState}");
         
         // 进入新状态
+        if (_currentGameState == GameState.GameOver)
+        {
+            //PlayerCompletedLevel(1);
+        }
         _currentStateInstance?.Enter();
         
     }
@@ -311,7 +315,7 @@ public class GameManager : MonoBehaviour
         
         // 重新初始化游戏
         InitializeGame();
-        StartGame();
+        StartDialogueChain(demoStartTrigger, level1StartTrigger);
     }
     
     public void PauseGame()

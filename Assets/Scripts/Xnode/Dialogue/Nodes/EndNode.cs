@@ -1,6 +1,6 @@
 using XNode;
 
-public class EndNode : BaseNode
+public class EndNode : InNode
 {
     
 }

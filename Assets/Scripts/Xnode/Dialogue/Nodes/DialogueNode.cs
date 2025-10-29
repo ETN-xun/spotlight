@@ -1,34 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using XNode;
+using Xnode.Dialogue.Nodes;
 
-public class DialogueNode : BaseNode
+// 实现IChoiceNode接口，以支持通用的选项处理逻辑
+public class DialogueNode : InOutNode
 {
-    [Output(dynamicPortList = true, connectionType = Node.ConnectionType.Override)]
-    public List<Connection> answers; 
-    
-    public List<Sprite> answer; 
     
     public string characterName;
     public Sprite characterIcon;
     public Sprite dialougeIcon;
     public Sprite dialougeSkip;
-    public bool hasChoices;
+    public Color textColor = Color.white;
     
     [TextArea(3,5)]
     public string dialogueText;
-
-    public BaseNode GetNextNode(int answerIndex)
-    {
-        if(answerIndex >= answers.Count || answerIndex < 0)
-            return null;
-        //获得名字为answer且编号为answerIndex的端点
-        NodePort outputPort = GetOutputPort("answers " + answerIndex);
-        
-        if (outputPort == null || !outputPort.IsConnected)
-            return null;
-        
-        return outputPort.Connection.node as BaseNode;
-    }
 }

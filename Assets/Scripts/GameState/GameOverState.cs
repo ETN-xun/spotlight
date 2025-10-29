@@ -24,7 +24,7 @@ public class GameOverState : GameStateBase
         // 停止游戏时间
         Time.timeScale = 0f;
         
-        GameManager.Instance.PlayerCompletedLevel(1);
+        //GameManager.Instance.PlayerCompletedLevel(1);
         
         Debug.Log($"游戏结束 - {(isVictory ? "胜利" : "失败")}");
     }
