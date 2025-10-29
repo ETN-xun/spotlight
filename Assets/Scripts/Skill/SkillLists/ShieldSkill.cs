@@ -26,7 +26,7 @@ public class ShieldSkill : Skill
                 Debug.Log($"无法对 {target.data.unitName} 使用护盾技能：只能对友方单位使用");
             }
         }
-        // 检查目标格子是否有可摧毁对象
+        // 检查目标格子是否有建筑对象
         else if (targetCell.DestructibleObject != null)
         {
             targetCell.DestructibleObject.data.Hits++;

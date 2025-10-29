@@ -26,7 +26,7 @@ public class SpawnSkill : Skill
                 targetCell.DestructibleObject.TakeHits();
                 Debug.Log($"{caster.data.unitName} 摧毁了可摧毁对象");
             }
-            else if (targetCell.CurrentUnit != null)
+            else if (targetCell.CurrentUnit != null && targetCell.CurrentUnit.data.isEnemy)
             {
                 targetCell.CurrentUnit.TakeDamage(1);
                 Debug.Log($"{caster.data.unitName} 对 {targetCell.CurrentUnit.data.unitName} 造成了1点伤害");
@@ -59,8 +59,13 @@ public class SpawnSkill : Skill
     /// <returns>是否为有效位置</returns>
     private bool IsValidSpawnTarget(GridCell targetCell)
     {
-        // 地形投放技能可以在任何位置使用
-        // 如果有单位或可摧毁对象，会先清除它们再生成新地形
-        return true;
+        if (targetCell == null) return false;
+        if (caster == null || caster.CurrentCell == null) return false;
+
+        // 计算曼哈顿距离（用于方格地图）
+        int dist = Mathf.Abs(targetCell.Coordinate.x - caster.CurrentCell.Coordinate.x)
+                   + Mathf.Abs(targetCell.Coordinate.y - caster.CurrentCell.Coordinate.y);
+
+        return dist <= data.range;
     }
 }
