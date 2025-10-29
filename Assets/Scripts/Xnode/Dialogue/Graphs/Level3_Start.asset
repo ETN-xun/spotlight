@@ -425,7 +425,7 @@ MonoBehaviour:
   answers: []
   answer: []
   characterName: "\u8BD7\u4EBA"
-  characterIcon: {fileID: 0}
+  characterIcon: {fileID: 21300000, guid: 177ad2aa77179b448801eee33ecc974f, type: 3}
   dialougeIcon: {fileID: 21300000, guid: 7a35cf4b45c5c02479d081b4e984ec03, type: 3}
   dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
   hasChoices: 0
@@ -487,7 +487,7 @@ MonoBehaviour:
   answers: []
   answer: []
   characterName: "\u8BD7\u4EBA"
-  characterIcon: {fileID: 0}
+  characterIcon: {fileID: 21300000, guid: 177ad2aa77179b448801eee33ecc974f, type: 3}
   dialougeIcon: {fileID: 21300000, guid: 7a35cf4b45c5c02479d081b4e984ec03, type: 3}
   dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
   hasChoices: 0

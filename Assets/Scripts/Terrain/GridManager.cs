@@ -82,12 +82,6 @@ public class GridManager : MonoBehaviour
 
             var coord = new Vector2Int(pos.x, pos.y);
             var cell = new GridCell(coord);
-            
-            //绑定部署区
-            if (deploymentZoneTilemap != null && deploymentZoneTilemap.HasTile(tilePos))
-            {
-                cell.isDeployableZone = true;
-            }
 
             // 绑定地形数据
             var terrainTile = terrainTilemap.GetTile(tilePos);

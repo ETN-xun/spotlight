@@ -154,10 +154,10 @@ public class GameManager : MonoBehaviour
             dialogueChainQueue.Clear(); 
             SceneManager.LoadScene("MainMenu");
         }
-        else if (eventName == "EndGame")
+        /*else if (eventName == "EndGame")
         {
             PlayerCompletedLevel(1);
-        }
+        }*/
         else 
         {
             Debug.Log(123456);

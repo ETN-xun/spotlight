@@ -137,7 +137,7 @@ MonoBehaviour:
   hasChoices: 0
   textColor:
     serializedVersion: 2
-    rgba: 0
+    rgba: 4294967295
 --- !u!114 &-6825342279879408140
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -522,7 +522,7 @@ MonoBehaviour:
   hasChoices: 0
   textColor:
     serializedVersion: 2
-    rgba: 0
+    rgba: 4294967295
 --- !u!114 &-3580241083903590849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -585,7 +585,7 @@ MonoBehaviour:
   hasChoices: 0
   textColor:
     serializedVersion: 2
-    rgba: 0
+    rgba: 4294967295
 --- !u!114 &-2163067123341654541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -756,7 +756,7 @@ MonoBehaviour:
   hasChoices: 0
   textColor:
     serializedVersion: 2
-    rgba: 0
+    rgba: 4294967295
 --- !u!114 &-468874805633513703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -819,7 +819,7 @@ MonoBehaviour:
   hasChoices: 0
   textColor:
     serializedVersion: 2
-    rgba: 0
+    rgba: 4294967295
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -986,7 +986,7 @@ MonoBehaviour:
   answers: []
   answer: []
   characterName: "\u8BD7\u4EBA"
-  characterIcon: {fileID: 0}
+  characterIcon: {fileID: 21300000, guid: 177ad2aa77179b448801eee33ecc974f, type: 3}
   dialougeIcon: {fileID: 21300000, guid: 7a35cf4b45c5c02479d081b4e984ec03, type: 3}
   dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
   hasChoices: 0
@@ -1115,7 +1115,7 @@ MonoBehaviour:
   hasChoices: 0
   textColor:
     serializedVersion: 2
-    rgba: 0
+    rgba: 4294967295
 --- !u!114 &2294661799877090850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1224,7 +1224,7 @@ MonoBehaviour:
   hasChoices: 0
   textColor:
     serializedVersion: 2
-    rgba: 255
+    rgba: 4278190335
 --- !u!114 &2570163251876267345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1282,7 +1282,7 @@ MonoBehaviour:
   answers: []
   answer: []
   characterName: "\u7CFB\u7EDF\u8BED\u97F3"
-  characterIcon: {fileID: 0}
+  characterIcon: {fileID: 21300000, guid: 1aa98e569c5e7584cb3180be9f0327c0, type: 3}
   dialougeIcon: {fileID: 21300000, guid: 7a35cf4b45c5c02479d081b4e984ec03, type: 3}
   dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
   hasChoices: 0
@@ -1344,7 +1344,7 @@ MonoBehaviour:
   answers: []
   answer: []
   characterName: "\u7CFB\u7EDF\u8BED\u97F3"
-  characterIcon: {fileID: 0}
+  characterIcon: {fileID: 21300000, guid: 1aa98e569c5e7584cb3180be9f0327c0, type: 3}
   dialougeIcon: {fileID: 21300000, guid: 7a35cf4b45c5c02479d081b4e984ec03, type: 3}
   dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
   hasChoices: 0
@@ -1411,7 +1411,7 @@ MonoBehaviour:
   hasChoices: 0
   textColor:
     serializedVersion: 2
-    rgba: 0
+    rgba: 4294967295
 --- !u!114 &4083854307382390528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1474,7 +1474,7 @@ MonoBehaviour:
   hasChoices: 0
   textColor:
     serializedVersion: 2
-    rgba: 0
+    rgba: 4294967295
 --- !u!114 &6512668086207404505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1537,7 +1537,7 @@ MonoBehaviour:
   hasChoices: 0
   textColor:
     serializedVersion: 2
-    rgba: 0
+    rgba: 4294967295
 --- !u!114 &6617766274493190204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1600,7 +1600,7 @@ MonoBehaviour:
   hasChoices: 0
   textColor:
     serializedVersion: 2
-    rgba: 0
+    rgba: 4294967295
 --- !u!114 &7170833294341767684
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1663,7 +1663,7 @@ MonoBehaviour:
   hasChoices: 0
   textColor:
     serializedVersion: 2
-    rgba: 255
+    rgba: 4278190335
 --- !u!114 &7262865426433851213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1788,7 +1788,7 @@ MonoBehaviour:
   hasChoices: 0
   textColor:
     serializedVersion: 2
-    rgba: 0
+    rgba: 4294967295
 --- !u!114 &8235411540362601651
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -80,6 +80,7 @@ public class DialoguePlayer : MonoBehaviour
     //跳过逻辑
     private void SkipToNextCheckpoint()
     {
+        ForceStopTyping();
         BaseNode targetNode = currentNode;
         while (targetNode != null)
         {
@@ -105,28 +106,7 @@ public class DialoguePlayer : MonoBehaviour
     {
         if (isTyping && typingCoroutine != null)
         {
-            StopCoroutine(typingCoroutine);
-            
-            isTyping = false;
-            typingCoroutine = null;
-            
-            if (currentNode is DialogueNode dn) storyText.text = dn.dialogueText;
-            if (currentNode is NarrationNode nn) narrationText.text = nn.narrationText;
-
-            if (currentNode is DialogueNode dialogueNode && dialogueNode.hasChoices)
-            {
-                DisplayChoices(currentNode as DialogueNode);
-                nextButton.gameObject.SetActive(false);
-            }
-            else if (currentNode is NarrationNode narrationNode && narrationNode.hasChoices)
-            {
-                DisplayChoices(currentNode as NarrationNode);
-                nextButton.gameObject.SetActive(false);
-            }
-            else
-            {
-                nextButton.gameObject.SetActive(true);
-            }
+            ForceStopTyping();
         }
         else
         {
@@ -200,11 +180,13 @@ public class DialoguePlayer : MonoBehaviour
     //显示旁白
     private void DisplayNarration(NarrationNode node)
     {
+        if(typingCoroutine != null) StopCoroutine(typingCoroutine);
+        
         narrationLayout.SetActive(true);
         dialogueLayout.SetActive(false);
         
         //narrationText.text = node.narrationText;
-        narrationText.color = narrationText.color;
+        narrationText.color = node.textColor;
         narrationImage.sprite = node.narrationIcon;
         nextButton.image.sprite = node.narrationSkip;
         
@@ -218,6 +200,8 @@ public class DialoguePlayer : MonoBehaviour
     //显示对话
     private void DisplayDialogue(DialogueNode node)
     {
+        if(typingCoroutine != null) StopCoroutine(typingCoroutine);
+        
         dialogueLayout.SetActive(true);
         narrationLayout.SetActive(false);
 
@@ -274,11 +258,17 @@ public class DialoguePlayer : MonoBehaviour
     // 根据选择的索引找到下一个节点
     private void OnChoiceSelected(int choiceIndex)
     {
-        
+        NarrationNode narrationNode = currentNode as NarrationNode;
         DialogueNode dialogueNode = currentNode as DialogueNode;
         if (dialogueNode != null)
         {
             currentNode = dialogueNode.GetNextNode(choiceIndex);
+            ProcessNode(currentNode);
+        }
+
+        else if (narrationNode != null)
+        {
+            currentNode = narrationNode.GetNextNode(choiceIndex);
             ProcessNode(currentNode);
         }
     }
@@ -334,17 +324,50 @@ public class DialoguePlayer : MonoBehaviour
         if (currentNode is DialogueNode dialogueNode && dialogueNode.hasChoices)
         {
             DisplayChoices(node as DialogueNode);
+            Debug.Log(1111);
             nextButton.gameObject.SetActive(false);
         }
 
         else if (currentNode is NarrationNode narrationNode && narrationNode.hasChoices)
         {
             DisplayChoices(node as NarrationNode);
+            Debug.Log(2222);
             nextButton.gameObject.SetActive(false);
         }
         else
         {
             nextButton.gameObject.SetActive(true);
+        }
+    }
+    /// <summary>
+    /// 强制停止当前正在运行的打字协程，并立即显示完整文本。
+    /// </summary>
+    private void ForceStopTyping()
+    {
+        if (isTyping && typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+            
+            isTyping = false;
+            typingCoroutine = null;
+            
+            if (currentNode is DialogueNode dn) storyText.text = dn.dialogueText;
+            if (currentNode is NarrationNode nn) narrationText.text = nn.narrationText;
+
+            if (currentNode is DialogueNode dialogueNode && dialogueNode.hasChoices)
+            {
+                DisplayChoices(currentNode as DialogueNode);
+                nextButton.gameObject.SetActive(false);
+            }
+            else if (currentNode is NarrationNode narrationNode && narrationNode.hasChoices)
+            {
+                DisplayChoices(currentNode as NarrationNode);
+                nextButton.gameObject.SetActive(false);
+            }
+            else
+            {
+                nextButton.gameObject.SetActive(true);
+            }
         }
     }
 }

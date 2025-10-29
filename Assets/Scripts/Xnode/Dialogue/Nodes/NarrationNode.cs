@@ -24,7 +24,7 @@ public class NarrationNode : BaseNode
         if(answerIndex >= answers.Count || answerIndex < 0)
             return null;
         //获得名字为answer且编号为answerIndex的端点
-        NodePort outputPort = GetOutputPort("answers" + answerIndex);
+        NodePort outputPort = GetOutputPort("answers " + answerIndex);
         
         if (outputPort == null || !outputPort.IsConnected)
             return null;
