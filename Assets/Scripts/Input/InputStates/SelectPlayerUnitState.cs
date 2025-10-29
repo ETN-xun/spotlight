@@ -140,6 +140,15 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
     {
         if (obj[0] is not SkillDataSO skill) return;
         _pendingSkill = skill;
+        
+        // 检查是否为闪回位移技能
+        if (skill.skillName.Contains("闪回") || skill.skillName.Contains("Flashback"))
+        {
+            // 闪回位移技能直接执行，不需要选择目标
+            ExecuteFlashbackSkill(skill);
+            return;
+        }
+        
         _isPreparingSkill = true;
         Debug.Log("Preparing to use skill: " + skill.skillName);
         // 显示技能范围高亮
@@ -151,5 +160,46 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
         }
         LastSelectedUnit = CurrentSelectedUnit;
         LastSelectedCell = CurrentSelectedCell;
+    }
+    
+    /// <summary>
+    /// 执行闪回位移技能
+    /// </summary>
+    /// <param name="skill">闪回位移技能数据</param>
+    private void ExecuteFlashbackSkill(SkillDataSO skill)
+    {
+        if (CurrentSelectedUnit == null)
+        {
+            Debug.Log("没有选中的单位");
+            return;
+        }
+        
+        // 检查能量是否足够
+        if (!ActionManager.EnergySystem.TrySpendEnergy(skill.energyCost))
+        {
+            Debug.Log("能量不足，无法使用闪回位移技能");
+            return;
+        }
+        
+        // 检查是否可以使用闪回位移
+        if (!FlashbackDisplacementSkill.CanUseFlashback(CurrentSelectedUnit))
+        {
+            Debug.Log($"{CurrentSelectedUnit.data.unitName} 没有可用的闪回记录");
+            return;
+        }
+        
+        Debug.Log($"{CurrentSelectedUnit.data.unitName} 使用闪回位移技能");
+        
+        // 直接创建并执行闪回位移技能（不需要通过SkillSystem的目标验证）
+        FlashbackDisplacementSkill flashbackSkill = new FlashbackDisplacementSkill(skill, CurrentSelectedUnit);
+        flashbackSkill.Execute(CurrentSelectedUnit.CurrentCell, GridManager.Instance);
+        
+        // 播放动画
+        var animationName = Utilities.SkillNameToAnimationName(skill.skillName);
+        CurrentSelectedUnit.PlayAnimation(animationName, false);
+        CurrentSelectedUnit.PlayAnimation("idle", true);
+        
+        // 技能执行完毕，返回空闲状态
+        stateMachine.ChangeState(InputState.IdleState);
     }
 }

@@ -197,11 +197,11 @@ public class Afterimage : MonoBehaviour, IObjectOnCell
     /// <summary>
     /// 检查残影是否可以受到伤害
     /// </summary>
-    /// <returns>残影不能受到伤害，返回false</returns>
+    /// <returns>残影可以受到伤害，用于嘲讽敌人</returns>
     public bool CanTakeDamage()
     {
-        // 残影是虚幻的，不能受到伤害
-        return false;
+        // 残影可以受到伤害，这样可以嘲讽敌人攻击它
+        return canBeAttacked;
     }
     
     /// <summary>

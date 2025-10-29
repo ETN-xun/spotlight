@@ -91,6 +91,13 @@ public class Unit : MonoBehaviour
 
     public void PlaceAt(GridCell cell)
     {
+        // 检查对象是否已被销毁
+        if (this == null || gameObject == null)
+        {
+            Debug.LogWarning("尝试移动已销毁的单位");
+            return;
+        }
+        
         if (cell == null || cell.CurrentUnit != null) return;
         if (CurrentCell != null) CurrentCell.CurrentUnit = null;
         
@@ -100,10 +107,50 @@ public class Unit : MonoBehaviour
         transform.position = new Vector3(GridManager.Instance.CellToWorld(cell.Coordinate).x,GridManager.Instance.CellToWorld(cell.Coordinate).y,GridManager.Instance.CellToWorld(cell.Coordinate).y);
     }
 
+    /// <summary>
+    /// 检查单位是否拥有闪回位移技能
+    /// </summary>
+    /// <returns>如果拥有闪回位移技能返回true，否则返回false</returns>
+    private bool HasFlashbackDisplacementSkill()
+    {
+        if (data == null || data.skills == null) return false;
+        
+        foreach (var skill in data.skills)
+        {
+            if (skill == null) continue;
+            
+            // 检查技能名称是否包含"闪回"或技能ID是否为闪回位移
+            if (skill.skillName.Contains("闪回") || skill.skillID == "flashback_displacement_01")
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void MoveTo(GridCell targetCell)
     {
+        // 检查对象是否已被销毁
+        if (this == null || gameObject == null)
+        {
+            Debug.LogWarning("尝试移动已销毁的单位");
+            return;
+        }
+        
         if (targetCell == null || targetCell.CurrentUnit != null) return;
         if (targetCell.DestructibleObject != null || targetCell.ObjectOnCell != null) return;
+        
+        // 如果该单位拥有闪回位移技能，记录移动前的位置
+        if (HasFlashbackDisplacementSkill() && CurrentCell != null)
+        {
+            Vector2Int oldPosition = CurrentCell.Coordinate;
+            Debug.Log($"[闪回位移] {data.unitName} 移动前位置: ({oldPosition.x}, {oldPosition.y})");
+            
+            // 获取当前回合数并记录移动
+            int currentTurn = GameManager.Instance != null ? GameManager.Instance.CurrentTurn : 1;
+            FlashbackDisplacementSkill.RecordMovement(this, CurrentCell, currentTurn);
+        }
+        
         PlaceAt(targetCell);
     }
 
