@@ -19,6 +19,9 @@ public class GridManager : MonoBehaviour
     [Header("瓦片地图")]
     public Tilemap terrainTilemap; //绘制地形
     public Tilemap objectTilemap; //绘制建筑或障碍物
+    
+    [Tooltip("用于指定可部署区域的Tilemap")]
+    public Tilemap deploymentZoneTilemap;
 
     [Header("地形类型")]
     public TerrainDataSO[] terrainLibrary; //存放预制地形类型
@@ -79,6 +82,12 @@ public class GridManager : MonoBehaviour
 
             var coord = new Vector2Int(pos.x, pos.y);
             var cell = new GridCell(coord);
+            
+            //绑定部署区
+            if (deploymentZoneTilemap != null && deploymentZoneTilemap.HasTile(tilePos))
+            {
+                cell.isDeployableZone = true;
+            }
 
             // 绑定地形数据
             var terrainTile = terrainTilemap.GetTile(tilePos);

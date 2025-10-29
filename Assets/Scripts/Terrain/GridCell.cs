@@ -10,6 +10,7 @@ public class GridCell
     public GridCellController GridCellController;
     public IObjectOnCell ObjectOnCell;      // 残影
     public DestructibleObject DestructibleObject;   //建筑
+    public bool isDeployableZone; //是否可以部署
     
 
     public GridCell(Vector2Int coord)
@@ -19,6 +20,7 @@ public class GridCell
         CurrentUnit = null;
         ObjectOnCell = null;
         DestructibleObject = null;
+        isDeployableZone = false;
     }
     
     public bool IsWalkableForAlly()
