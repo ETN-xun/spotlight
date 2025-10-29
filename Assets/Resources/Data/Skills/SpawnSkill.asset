@@ -27,7 +27,7 @@ MonoBehaviour:
   displacementDirection: 0
   displacementDistance: 0
   spawnHits: 1
-  spawnTile: {fileID: 11400000, guid: f392e33b7c4994dfba186e5f5723c8d6, type: 2}
+  spawnTile: {fileID: 0}
   effectRadius: 0
   effectPattern: []
   effects: 
