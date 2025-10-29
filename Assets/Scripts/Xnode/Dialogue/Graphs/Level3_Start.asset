@@ -135,7 +135,7 @@ MonoBehaviour:
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
-  eventName: 
+  eventName: Continue
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0

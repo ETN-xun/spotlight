@@ -342,7 +342,7 @@ MonoBehaviour:
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
-  eventName: 
+  eventName: StartLevel1
 --- !u!114 &2250885356090842851
 MonoBehaviour:
   m_ObjectHideFlags: 0

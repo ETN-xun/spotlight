@@ -10,8 +10,10 @@ public class DialogueTrigger : ScriptableObject
     /// </summary>
     public void Trigger()
     {
+//        Debug.Log(11111);
         if (dialogueGraph != null && DialoguePlayer.Instance != null)
         {
+           // Debug.Log(2222222);
             DialoguePlayer.Instance.StartDialogue(dialogueGraph);
         }
         

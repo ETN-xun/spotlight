@@ -176,6 +176,7 @@ public class DialoguePlayer : MonoBehaviour
     //  淡出淡入
     private void ExecuteFade(FadeScreenNode node)
     {
+//        Debug.Log(node);
         ScreenFader.Instance.StartFade(
             node.fadeDuration, 
             node.holdDuration, 
@@ -185,6 +186,13 @@ public class DialoguePlayer : MonoBehaviour
                 dialoguePanel.SetActive(false); // 关闭UI
                 skipButton.gameObject.SetActive(false);
                 ClearChoices();
+            },
+            onComplete: () => {
+                Debug.Log(123456465);
+                // 从 FadeScreenNode 获取它的下一个连接节点
+                BaseNode nextNode = node.GetNextNode(); 
+                // 直接处理下一个节点，实现无缝衔接！
+                ProcessNode(nextNode); 
             }
         );
     }

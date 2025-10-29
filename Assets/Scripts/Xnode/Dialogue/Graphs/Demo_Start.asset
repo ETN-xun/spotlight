@@ -75,7 +75,7 @@ MonoBehaviour:
   m_Name: Fade Screen
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 504, y: -264}
+  position: {x: 504, y: -248}
   ports:
     keys:
     - output
@@ -128,6 +128,7 @@ MonoBehaviour:
   - {fileID: 7962049431355616665}
   - {fileID: 5466922913602985840}
   - {fileID: -4788676818869568383}
+  - {fileID: 1339747324961467127}
 --- !u!114 &698184605591644829
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,6 +191,62 @@ MonoBehaviour:
   dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
   hasChoices: 0
   dialogueText: "\u3010\u8B66\u544A\uFF01\u534F\u8BAE\u68EE\u6797\u533A\u57DF\u201C\u8150\u7801\u201D\u6C61\u67D3\u7B49\u7EA7\u6025\u5267\u5347\u9AD8\u3002\u8C03\u8BD5\u8005\u5C0F\u961FZERO\uFF0C\u8FDE\u63A5\u8FDB\u5165\u7CFB\u7EDF\uFF0C\u7ACB\u5373\u6267\u884C\u51C0\u5316\u534F\u8BAE\u3002\u3011"
+--- !u!114 &1339747324961467127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5eecfaa5ac8e342aa5b4df2bd723c6, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 785.5, y: 13}
+  ports:
+    keys:
+    - answers
+    - input
+    - answers 0
+    values:
+    - _fieldName: answers
+      _node: {fileID: 1339747324961467127}
+      _typeQualifiedName: System.Collections.Generic.List`1[[BaseNode+Connection,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: input
+      _node: {fileID: 1339747324961467127}
+      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: answers 0
+      _node: {fileID: 1339747324961467127}
+      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+  answers: []
+  answer: []
+  characterName: "\u96F6"
+  characterIcon: {fileID: 21300000, guid: 265520833bac1914e9f295f69864b7c6, type: 3}
+  dialougeIcon: {fileID: 21300000, guid: b3e3c7501349c2347aa47dba348e6cf1, type: 3}
+  dialougeSkip: {fileID: 21300000, guid: 1be0a8d677ee50a4abe23afe54c2f43e, type: 3}
+  hasChoices: 0
+  dialogueText: "\u201C\u7CFB\u7EDF\u5E26\u5BBD\u7A33\u5B9A\uFF0C\u8BBE\u5907\u8FDE\u63A5\u7A33\u5B9A\uFF0C\u4EFB\u52A1\u76EE\u6807\u6E05\u6670\u3002\u4E00\u5982\u65E2\u5F80\u3002\u201D"
 --- !u!114 &2842572429807498693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,7 +379,7 @@ MonoBehaviour:
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
-  eventName: 
+  eventName: Continue
 --- !u!114 &7962049431355616665
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using Common;
 using Enemy;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using View;
 
 public class GameManager : MonoBehaviour
@@ -47,6 +49,17 @@ public class GameManager : MonoBehaviour
     
     public bool IsMaxTurnReached => _currentTurn >= _maxTurns;
     
+    public DialogueTrigger demoStartTrigger;
+    public DialogueTrigger level1StartTrigger;
+    public DialogueTrigger level1EndTrigger;
+    public DialogueTrigger level2StartTrigger;
+    public DialogueTrigger level2EndTrigger;
+    public DialogueTrigger level3StartTrigger;
+    public DialogueTrigger level3EndTrigger;
+    // 内部状态变量
+    private Queue<DialogueTrigger> dialogueChainQueue = new Queue<DialogueTrigger>();
+    private bool isChainedPlaybackActive = false; // 标记是否处于“剧情链自动播放”模式
+    
     
     private void Awake()
     {
@@ -70,9 +83,88 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
-        // 开始游戏
-        StartGame();
+        // 开始播放剧情
+        StartDialogueChain(demoStartTrigger, level1StartTrigger);
     }
+    private void OnEnable()
+    {
+        DialoguePlayer.OnSectionEnd += HandleSectionEndEvent;
+    }
+
+    private void OnDisable()
+    {
+        DialoguePlayer.OnSectionEnd -= HandleSectionEndEvent;
+    }
+    
+    public void PlayerCompletedLevel(int levelIndex)
+    {
+        switch (levelIndex)
+        {
+            case 1:
+                StartDialogueChain(
+                    level1EndTrigger,
+                    level2StartTrigger,
+                    level2EndTrigger,
+                    level3StartTrigger,
+                    level3EndTrigger
+                );
+                break;
+        }
+    }
+
+    /// <summary>
+    /// 准备并启动一个剧情链。
+    /// </summary>
+    /// <param name="triggers">要按顺序播放的剧情触发器数组。</param>
+    private void StartDialogueChain(params DialogueTrigger[] triggers)
+    {
+        dialogueChainQueue.Clear();
+        foreach (var trigger in triggers)
+        {
+            if (trigger != null) dialogueChainQueue.Enqueue(trigger);
+        }
+        PlayNextInChain();
+    }
+
+
+    /// <summary>
+    /// 播放剧情链队列中的下一个剧情。
+    /// </summary>
+    private void PlayNextInChain()
+    {
+        if (dialogueChainQueue.Count > 0)
+        {
+            dialogueChainQueue.Dequeue().Trigger();
+        }
+    }
+
+    private void HandleSectionEndEvent(string eventName)
+    {
+        Debug.Log(eventName);
+        if (eventName.StartsWith("StartLevel"))
+        {
+            dialogueChainQueue.Clear();
+            if (eventName == "StartLevel1")
+            {
+                StartGame();
+            }
+        }
+        else if (eventName == "ReturnToMenu")
+        {
+            dialogueChainQueue.Clear(); 
+            SceneManager.LoadScene("MainMenu");
+        }
+        else if (eventName == "EndGame")
+        {
+            PlayerCompletedLevel(1);
+        }
+        else 
+        {
+            Debug.Log(123456);
+            PlayNextInChain();
+        }
+    }
+
 
     /// <summary>
     /// 初始化游戏

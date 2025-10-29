@@ -27,12 +27,13 @@ public class ScreenFader : MonoBehaviour
     /// <param name="holdTime">全黑停留时长</param>
     /// <param name="color">渐变颜色</param>
     /// <param name="onPeak">当画面达到最黑时执行的回调</param>
-    public void StartFade(float duration, float holdTime, Color color, System.Action onPeak)
+    public void StartFade(float duration, float holdTime, Color color, System.Action onPeak,System.Action onComplete)
     {
-        StartCoroutine(FadeCoroutine(duration, holdTime, color, onPeak));
+//        Debug.Log(333333);
+        StartCoroutine(FadeCoroutine(duration, holdTime, color, onPeak,onComplete));
     }
 
-    private IEnumerator FadeCoroutine(float duration, float holdTime, Color color, System.Action onPeak)
+    private IEnumerator FadeCoroutine(float duration, float holdTime, Color color, System.Action onPeak,System.Action onComplete)
     {
         float timer = 0f;
         
@@ -50,15 +51,16 @@ public class ScreenFader : MonoBehaviour
         onPeak?.Invoke();
         yield return new WaitForSeconds(holdTime);
         
-        timer = 0f;
+        /*timer = 0f;
         while (timer < duration)
         {
             timer += Time.deltaTime;
             float alpha = Mathf.Lerp(1, 0, timer / duration);
             fadeImage.color = new Color(color.r, color.g, color.b, alpha);
             yield return null;
-        }
+        }*/
         // 确保最终是全透明
         fadeImage.color = new Color(color.r, color.g, color.b, 0);
+        onComplete?.Invoke(); 
     }
 }
