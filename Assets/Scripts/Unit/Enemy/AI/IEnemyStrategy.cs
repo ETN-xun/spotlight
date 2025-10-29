@@ -9,7 +9,7 @@ namespace Enemy.AI
     {
         public List<EnemyIntent> BuildIntent(Unit enemy)
         {
-            var allyUnits = AllyManager.Instance.GetAliveAllies();
+            var allyUnits = GetAllTargetableUnits();
             var attackRange = enemy.GetAttackRange(enemy.CurrentCell);
             var enemyIntents = new List<EnemyIntent>();
 
@@ -77,6 +77,35 @@ namespace Enemy.AI
 
             return enemyIntents;
         }
+        
+        /// <summary>
+        /// 获取所有可攻击的目标单位，包括友军和闪回复制
+        /// </summary>
+        /// <returns>可攻击的目标单位列表</returns>
+        public List<Unit> GetAllTargetableUnits()
+        {
+            var targetableUnits = new List<Unit>();
+            
+            // 添加所有友军单位
+            if (AllyManager.Instance != null)
+            {
+                targetableUnits.AddRange(AllyManager.Instance.GetAliveAllies());
+            }
+            
+            // 查找所有闪回复制并添加到目标列表
+            var flashbackCopies = Object.FindObjectsOfType<FlashbackCopyTag>();
+            foreach (var copyTag in flashbackCopies)
+            {
+                var copyUnit = copyTag.GetComponent<Unit>();
+                if (copyUnit != null && copyUnit.CurrentCell != null)
+                {
+                    targetableUnits.Add(copyUnit);
+                }
+            }
+            
+            return targetableUnits;
+        }
+        
         public GridCell FindBestMoveTarget(Unit enemy, List<Unit> allyUnits);
         public Unit FindBestAttackTarget(Unit enemy, List<Unit> candidates);
     }

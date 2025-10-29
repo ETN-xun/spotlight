@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Spine.Unity;
 
 /// <summary>
 /// 闪回位移技能
@@ -178,24 +179,80 @@ public class FlashbackDisplacementSkill : Skill
     /// <param name="gridManager">网格管理器</param>
     private void CreateUnitCopy(GridCell cell, GridManager gridManager)
     {
-        // 创建单位复制对象
-        GameObject unitCopyObj = new GameObject($"UnitCopy_{caster.data.unitName}");
+        // 直接复制原始单位的GameObject（相当于Ctrl+C、Ctrl+V）
+        GameObject unitCopyObj = Object.Instantiate(caster.gameObject);
         
-        // 使用GridManager的CellToWorld方法获取世界坐标，避免空引用
+        // 设置GridManager为父对象
+        unitCopyObj.transform.SetParent(gridManager.transform);
+        
+        // 设置名称以区分复制品
+        unitCopyObj.name = $"{caster.data.unitName}_FlashbackCopy";
+        
+        // 使用GridManager的CellToWorld方法获取世界坐标
         Vector3 worldPosition = gridManager.CellToWorld(cell.Coordinate);
         unitCopyObj.transform.position = worldPosition;
         
-        // 添加单位复制组件
-        UnitCopy unitCopy = unitCopyObj.AddComponent<UnitCopy>();
-        unitCopy.Initialize(caster, 2); // 持续2回合
+        // 获取复制的Unit组件
+        Unit copiedUnit = unitCopyObj.GetComponent<Unit>();
+        if (copiedUnit != null)
+        {
+            // 设置复制体的透明度为50%
+            SetCopyTransparency(unitCopyObj, 0.5f);
+            
+            // 保持复制体的isEnemy属性与施法者相同，这样敌人AI会将其识别为友军并攻击
+            // 不需要修改isEnemy属性，因为复制体应该保持与原单位相同的阵营
+            
+            // 添加闪回复制标识组件
+            FlashbackCopyTag copyTag = unitCopyObj.GetComponent<FlashbackCopyTag>();
+            if (copyTag == null)
+            {
+                copyTag = unitCopyObj.AddComponent<FlashbackCopyTag>();
+            }
+            copyTag.Initialize(caster, 2); // 持续2回合
+            
+            // 设置复制体的坐标
+            copiedUnit.PlaceAt(cell); // 使用PlaceAt方法正确设置位置
+            
+            Debug.Log($"在位置 ({cell.Coordinate.x}, {cell.Coordinate.y}) 创建了 {caster.data.unitName} 的完全相同复制（50%透明度）");
+        }
+        else
+        {
+            Debug.LogError("复制的GameObject没有Unit组件");
+            Object.Destroy(unitCopyObj);
+        }
+    }
+    
+    /// <summary>
+    /// 设置复制体的透明度
+    /// </summary>
+    /// <param name="copyObj">复制的GameObject</param>
+    /// <param name="alpha">透明度值（0-1）</param>
+    private void SetCopyTransparency(GameObject copyObj, float alpha)
+    {
+        // 设置Spine动画的透明度
+        SkeletonAnimation skeletonAnimation = copyObj.GetComponentInChildren<SkeletonAnimation>();
+        if (skeletonAnimation != null && skeletonAnimation.skeleton != null)
+        {
+            skeletonAnimation.skeleton.A = alpha;
+        }
         
-        // 设置复制的坐标
-        unitCopy.coordinate = cell.Coordinate;
+        // 设置所有SpriteRenderer的透明度
+        SpriteRenderer[] spriteRenderers = copyObj.GetComponentsInChildren<SpriteRenderer>();
+        foreach (SpriteRenderer renderer in spriteRenderers)
+        {
+            Color color = renderer.color;
+            color.a = alpha;
+            renderer.color = color;
+        }
         
-        // 设置复制到格子
-        cell.ObjectOnCell = unitCopy;
+        // 设置所有CanvasRenderer的透明度（UI元素）
+        CanvasRenderer[] canvasRenderers = copyObj.GetComponentsInChildren<CanvasRenderer>();
+        foreach (CanvasRenderer renderer in canvasRenderers)
+        {
+            renderer.SetAlpha(alpha);
+        }
         
-        Debug.Log($"在位置 ({cell.Coordinate.x}, {cell.Coordinate.y}) 创建了 {caster.data.unitName} 的完全相同复制");
+        Debug.Log($"设置复制体透明度为 {alpha * 100}%");
     }
     
     /// <summary>

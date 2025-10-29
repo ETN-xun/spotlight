@@ -10,6 +10,30 @@ namespace Enemy.AI
         {
             if (candidates == null || candidates.Count == 0)
                 return null;
+            
+            // 优先攻击闪回复制
+            var flashbackCopies = candidates.Where(u => u.GetComponent<FlashbackCopyTag>() != null).ToList();
+            if (flashbackCopies.Count > 0)
+            {
+                // 在闪回复制中选择最佳目标
+                Unit bestFlashbackTarget = null;
+                var bestFlashbackScore = float.MinValue;
+                
+                foreach (var unit in flashbackCopies)
+                {
+                    var score = EvaluateAttackTarget(enemy, unit);
+                    if (score > bestFlashbackScore)
+                    {
+                        bestFlashbackScore = score;
+                        bestFlashbackTarget = unit;
+                    }
+                }
+                
+                if (bestFlashbackTarget != null)
+                    return bestFlashbackTarget;
+            }
+            
+            // 如果没有闪回复制，按原逻辑选择目标
             Unit bestTarget = null;
             var bestScore = float.MinValue;
 

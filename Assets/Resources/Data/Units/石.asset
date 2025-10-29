@@ -22,7 +22,7 @@ MonoBehaviour:
   isEnemy: 0
   maxHP: 4
   Hits: 0
-  moveRange: 3
+  moveRange: 2
   attackRange: 1
   movementEnergyCost: 1
   Energy: 1
