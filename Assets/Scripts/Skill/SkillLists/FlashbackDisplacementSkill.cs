@@ -19,14 +19,14 @@ public class FlashbackDisplacementSkill : Skill
         public Vector2Int previousPosition;
         public GridCell previousCell;
         public int turnUsed;
-        public bool hasAfterimage;
+        public bool hasUnitCopy;
         
         public FlashbackData(Vector2Int pos, GridCell cell, int turn)
         {
             previousPosition = pos;
             previousCell = cell;
             turnUsed = turn;
-            hasAfterimage = false;
+            hasUnitCopy = false;
         }
     }
     
@@ -34,6 +34,7 @@ public class FlashbackDisplacementSkill : Skill
 
     public override void Execute(GridCell targetCell, GridManager gridManager)
     {
+        // 闪回位移技能是自我目标技能，targetCell应该是施法者当前位置
         // 检查是否有可用的闪回记录
         if (!flashbackHistory.ContainsKey(caster))
         {
@@ -65,21 +66,44 @@ public class FlashbackDisplacementSkill : Skill
     {
         if (unit == null || fromCell == null) return;
         
+        Debug.Log($"尝试为 {unit.data.unitName} 记录移动，从位置 ({fromCell.Coordinate.x}, {fromCell.Coordinate.y})");
+        
         // 检查单位是否有闪回位移技能
         bool hasFlashbackSkill = false;
         if (unit.data.skills != null)
         {
+            Debug.Log($"{unit.data.unitName} 拥有 {unit.data.skills.Length} 个技能:");
             foreach (var skill in unit.data.skills)
             {
-                if (skill.skillName.Contains("闪回") || skill.skillName.Contains("Flashback"))
+                if (skill != null)
                 {
-                    hasFlashbackSkill = true;
-                    break;
+                    Debug.Log($"  技能: {skill.skillName} (ID: {skill.skillID})");
+                    // 检查技能ID或技能名称
+                    if (skill.skillID == "flashback_displacement_01" || 
+                        skill.skillName.Contains("闪回") || 
+                        skill.skillName.Contains("Flashback"))
+                    {
+                        hasFlashbackSkill = true;
+                        Debug.Log($"  找到闪回技能: {skill.skillName}");
+                        break;
+                    }
+                }
+                else
+                {
+                    Debug.Log("  技能为null");
                 }
             }
         }
+        else
+        {
+            Debug.Log($"{unit.data.unitName} 没有技能数据");
+        }
         
-        if (!hasFlashbackSkill) return;
+        if (!hasFlashbackSkill) 
+        {
+            Debug.Log($"{unit.data.unitName} 没有闪回位移技能，不记录移动");
+            return;
+        }
         
         // 记录位移信息
         FlashbackData flashbackData = new FlashbackData(fromCell.Coordinate, fromCell, currentTurn);
@@ -106,6 +130,11 @@ public class FlashbackDisplacementSkill : Skill
     /// </summary>
     /// <param name="flashbackData">闪回数据</param>
     /// <param name="gridManager">网格管理器</param>
+/// <summary>
+    /// 执行闪回位移
+    /// </summary>
+    /// <param name="flashbackData">闪回数据</param>
+    /// <param name="gridManager">网格管理器</param>
     private void ExecuteFlashback(FlashbackData flashbackData, GridManager gridManager)
     {
         GridCell currentCell = caster.CurrentCell;
@@ -119,11 +148,13 @@ public class FlashbackDisplacementSkill : Skill
         }
         
         // 在当前位置留下残影
-        CreateAfterimage(currentCell, gridManager);
+        CreateUnitCopy(currentCell, gridManager);
         
-        // 移动单位到闪回位置
+        // 移动单位到闪回位置 - 修复位置更新问题
+        // 先清理当前位置
         currentCell.CurrentUnit = null;
-        targetCell.CurrentUnit = caster;
+        
+        // 使用PlaceAt方法正确更新单位的逻辑和视觉位置
         caster.PlaceAt(targetCell);
         
         // 播放闪回效果
@@ -132,10 +163,7 @@ public class FlashbackDisplacementSkill : Skill
         Debug.Log($"{caster.data.unitName} 闪回到位置 ({targetCell.Coordinate.x}, {targetCell.Coordinate.y})");
         
         // 标记已使用闪回
-        flashbackData.hasAfterimage = true;
-        
-        // 移除闪回记录（一次性使用）
-        flashbackHistory.Remove(caster);
+        flashbackData.hasUnitCopy = true;
     }
     
     /// <summary>
@@ -143,20 +171,31 @@ public class FlashbackDisplacementSkill : Skill
     /// </summary>
     /// <param name="cell">残影位置</param>
     /// <param name="gridManager">网格管理器</param>
-    private void CreateAfterimage(GridCell cell, GridManager gridManager)
+/// <summary>
+    /// 在指定位置创建单位复制
+    /// </summary>
+    /// <param name="cell">复制位置</param>
+    /// <param name="gridManager">网格管理器</param>
+    private void CreateUnitCopy(GridCell cell, GridManager gridManager)
     {
-        // 创建残影对象
-        GameObject afterimageObj = new GameObject($"Afterimage_{caster.data.unitName}");
-        afterimageObj.transform.position = cell.GridCellController.transform.position;
+        // 创建单位复制对象
+        GameObject unitCopyObj = new GameObject($"UnitCopy_{caster.data.unitName}");
         
-        // 添加残影组件
-        Afterimage afterimage = afterimageObj.AddComponent<Afterimage>();
-        afterimage.Initialize(caster, data.spawnHits); // 使用技能数据中的持续时间
+        // 使用GridManager的CellToWorld方法获取世界坐标，避免空引用
+        Vector3 worldPosition = gridManager.CellToWorld(cell.Coordinate);
+        unitCopyObj.transform.position = worldPosition;
         
-        // 设置残影到格子
-        cell.ObjectOnCell = afterimage;
+        // 添加单位复制组件
+        UnitCopy unitCopy = unitCopyObj.AddComponent<UnitCopy>();
+        unitCopy.Initialize(caster, 2); // 持续2回合
         
-        Debug.Log($"在位置 ({cell.Coordinate.x}, {cell.Coordinate.y}) 创建了 {caster.data.unitName} 的残影");
+        // 设置复制的坐标
+        unitCopy.coordinate = cell.Coordinate;
+        
+        // 设置复制到格子
+        cell.ObjectOnCell = unitCopy;
+        
+        Debug.Log($"在位置 ({cell.Coordinate.x}, {cell.Coordinate.y}) 创建了 {caster.data.unitName} 的完全相同复制");
     }
     
     /// <summary>
