@@ -9,11 +9,10 @@
       }
     },
     "com.github.siccity.xnode": {
-      "version": "https://github.com/siccity/xNode.git",
+      "version": "file:C:/Users/LWX/Downloads/xNode-1.8.0",
       "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "d6effd70f5574369e3415c423ef3e621ea309564"
+      "source": "local",
+      "dependencies": {}
     },
     "com.unity.2d.animation": {
       "version": "9.1.0",
