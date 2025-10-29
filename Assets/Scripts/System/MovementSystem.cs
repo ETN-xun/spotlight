@@ -7,7 +7,6 @@ public class MovementSystem : MonoBehaviour
 {
     public static MovementSystem Instance { get; private set; }
     public static SkillDataSO StatusAbnormalSkill;
-    private bool canSkip;
 
     private void Awake()
     {
@@ -57,9 +56,17 @@ public class MovementSystem : MonoBehaviour
         if (nextCell.CurrentUnit is not null)
         {
             var other = nextCell.CurrentUnit;
-            unit.TakeDamage(unit.data.baseDamage);
-            other.TakeDamage(unit.data.baseDamage);
-            Debug.Log("撞到单位，双方各自受到" + unit.data.baseDamage + "点伤害");
+            // 只有不同阵营的单位碰撞才会造成伤害
+            if (unit.data.isEnemy != other.data.isEnemy)
+            {
+                unit.TakeDamage(unit.data.baseDamage);
+                other.TakeDamage(unit.data.baseDamage);
+                Debug.Log("撞到敌方单位，双方各自受到" + unit.data.baseDamage + "点伤害");
+            }
+            else
+            {
+                Debug.Log("撞到同阵营单位，无法移动但不造成伤害");
+            }
             yield break;
         }
         //撞到地形
@@ -126,27 +133,22 @@ public class MovementSystem : MonoBehaviour
                         destructibleObject.data.canDestroy = true;
                         destructibleObject.data.isActive = true;
                     }
-                    else
-                    {
-                        yield break;
-                    }
                     break;
-                case DestructibleObjectType.FireWall:
-                    if (destructibleObject.data.isActive)
-                        yield break;
-                    break;
-                
             }
+            yield break;
         }
         RegisterActivation(nextCell,unit);
         
         yield return new WaitForSeconds(1.0f);
-        unit.MoveTo(nextCell);      // TODO: 需要更改的移动方式
-        if (originalCell != unit.CurrentCell)
+        
+        // 检查单位是否仍然存在（可能在等待期间被销毁）
+        if (unit == null || unit.gameObject == null)
         {
-            var currentTurn = GameManager.Instance != null ? GameManager.Instance.CurrentTurn : 1;      // TODO: 可能需要更改获取当前回合
-            FlashbackDisplacementSkill.RecordMovement(unit, originalCell, currentTurn);
+            Debug.Log("单位在移动过程中被销毁，停止移动");
+            yield break;
         }
+        
+        unit.MoveTo(nextCell);      // TODO: 需要更改的移动方式
     }
 
     private void StatusAbnormal(Unit unit, GridCell nowCell)
@@ -166,6 +168,13 @@ public class MovementSystem : MonoBehaviour
 
         for (int step = 0; step < distance; step++)
         {
+            // 在每次循环开始时检查单位是否仍然存在
+            if (unit == null || unit.gameObject == null)
+            {
+                Debug.Log("单位在移动过程中被销毁，停止移动");
+                yield break;
+            }
+            
             Vector2Int nextPos = currentCell.Coordinate + direction;
             
             if (!grid.IsValidPosition(nextPos))
@@ -181,8 +190,17 @@ public class MovementSystem : MonoBehaviour
             {
                 Unit other = nextCell.CurrentUnit;
 
-                unit.TakeDamage(unit.data.baseDamage);
-                other.TakeDamage(unit.data.baseDamage);
+                // 只有不同阵营的单位碰撞才会造成伤害
+                if (unit.data.isEnemy != other.data.isEnemy)
+                {
+                    unit.TakeDamage(unit.data.baseDamage);
+                    other.TakeDamage(unit.data.baseDamage);
+                    Debug.Log("撞到敌方单位，双方各自受到" + unit.data.baseDamage + "点伤害");
+                }
+                else
+                {
+                    Debug.Log("撞到同阵营单位，无法移动但不造成伤害");
+                }
 
                 yield break;
             }
@@ -250,19 +268,18 @@ public class MovementSystem : MonoBehaviour
                             destructibleObject.data.canDestroy = true;
                             destructibleObject.data.isActive = true;
                         }
-                        else
-                        {
-                            yield break;
-                        }
-                        break;
-                    case DestructibleObjectType.FireWall:
-                        if (destructibleObject.data.isActive)
-                            yield break;
                         break;
                 }
                 yield break;
             }
             RegisterActivation(nextCell,unit);
+            
+            // 检查单位是否仍然存在（可能在处理过程中被销毁）
+            if (unit == null || unit.gameObject == null)
+            {
+                Debug.Log("单位在移动过程中被销毁，停止移动");
+                yield break;
+            }
             
             unit.MoveTo(nextCell);
             currentCell = nextCell;
@@ -274,6 +291,7 @@ public class MovementSystem : MonoBehaviour
         if (originalCell != unit.CurrentCell)
         {
             int currentTurn = GameManager.Instance != null ? GameManager.Instance.CurrentTurn : 1;
+            Debug.Log($"MovementSystem (MoveUnit): 为 {unit.data.unitName} 记录移动，从 ({originalCell.Coordinate.x}, {originalCell.Coordinate.y}) 到 ({unit.CurrentCell.Coordinate.x}, {unit.CurrentCell.Coordinate.y})");
             FlashbackDisplacementSkill.RecordMovement(unit, originalCell, currentTurn);
         }
 
@@ -412,7 +430,6 @@ public class MovementSystem : MonoBehaviour
                     //建筑激活，可以被攻击
                     DestructibleObject.data.Hits = 1;
                     DestructibleObject.data.canDestroy = true;
-                    DestructibleObject.data.isActive = true;
                 }
             }
         }

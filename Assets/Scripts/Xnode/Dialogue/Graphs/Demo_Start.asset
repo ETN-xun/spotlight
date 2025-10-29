@@ -57,9 +57,9 @@ MonoBehaviour:
   answers: []
   answer: []
   characterName: "\u7CFB\u7EDF\u8BED\u97F3"
-  characterIcon: {fileID: 21300000, guid: 1aa98e569c5e7584cb3180be9f0327c0, type: 3}
-  dialougeIcon: {fileID: 21300000, guid: 7a35cf4b45c5c02479d081b4e984ec03, type: 3}
-  dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
+  characterIcon: {fileID: 0}
+  dialougeIcon: {fileID: 0}
+  dialougeSkip: {fileID: 0}
   hasChoices: 0
   dialogueText: "\u3010\u9996\u8981\u76EE\u6807\uFF1A\u5B9A\u4F4D\u5E76\u683C\u5F0F\u5316\u5F02\u5E38\u4E2A\u4F53\u201C\u8BD7\u4EBA\u201D\u3002\u6E05\u9664\u6240\u6709Bug\u3002\u5360\u9886\u7F13\u5B58\u533A\u4EE5\u7EF4\u6301\u7CFB\u7EDF\u5E26\u5BBD\u3002\u3011"
 --- !u!114 &-4788676818869568383
@@ -186,9 +186,9 @@ MonoBehaviour:
   answers: []
   answer: []
   characterName: "\u7CFB\u7EDF\u8BED\u97F3"
-  characterIcon: {fileID: 21300000, guid: 1aa98e569c5e7584cb3180be9f0327c0, type: 3}
-  dialougeIcon: {fileID: 21300000, guid: 7a35cf4b45c5c02479d081b4e984ec03, type: 3}
-  dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
+  characterIcon: {fileID: 21300000, guid: e81021ebf4637dd46a0dd54c9dae0069, type: 3}
+  dialougeIcon: {fileID: 0}
+  dialougeSkip: {fileID: 0}
   hasChoices: 0
   dialogueText: "\u3010\u8B66\u544A\uFF01\u534F\u8BAE\u68EE\u6797\u533A\u57DF\u201C\u8150\u7801\u201D\u6C61\u67D3\u7B49\u7EA7\u6025\u5267\u5347\u9AD8\u3002\u8C03\u8BD5\u8005\u5C0F\u961FZERO\uFF0C\u8FDE\u63A5\u8FDB\u5165\u7CFB\u7EDF\uFF0C\u7ACB\u5373\u6267\u884C\u51C0\u5316\u534F\u8BAE\u3002\u3011"
 --- !u!114 &1339747324961467127
@@ -304,9 +304,9 @@ MonoBehaviour:
   answers: []
   answer: []
   characterName: "\u96F6"
-  characterIcon: {fileID: 21300000, guid: 265520833bac1914e9f295f69864b7c6, type: 3}
-  dialougeIcon: {fileID: 21300000, guid: b3e3c7501349c2347aa47dba348e6cf1, type: 3}
-  dialougeSkip: {fileID: 21300000, guid: 1be0a8d677ee50a4abe23afe54c2f43e, type: 3}
+  characterIcon: {fileID: 21300000, guid: e81021ebf4637dd46a0dd54c9dae0069, type: 3}
+  dialougeIcon: {fileID: 0}
+  dialougeSkip: {fileID: 0}
   hasChoices: 0
   dialogueText: "\u201C\u7CFB\u7EDF\u5E26\u5BBD\u7A33\u5B9A\uFF0C\u8BBE\u5907\u8FDE\u63A5\u7A33\u5B9A\uFF0C\u4EFB\u52A1\u76EE\u6807\u6E05\u6670\u3002\u4E00\u5982\u65E2\u5F80\u3002\u201D"
 --- !u!114 &5299067223920629866
