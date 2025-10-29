@@ -44,6 +44,8 @@ public class FlashbackCopyTag : MonoBehaviour
     /// </summary>
     public void OnTurnEnd(object[] args)
     {
+        DestroyCopy();
+        /*
         remainingTurns--;
         Debug.Log($"闪回复制 {gameObject.name} 剩余回合: {remainingTurns}");
         
@@ -51,6 +53,7 @@ public class FlashbackCopyTag : MonoBehaviour
         {
             DestroyCopy();
         }
+        */
     }
     
     /// <summary>
