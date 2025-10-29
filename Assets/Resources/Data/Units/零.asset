@@ -27,7 +27,7 @@ MonoBehaviour:
   movementEnergyCost: 1
   Energy: 3
   RecoverEnergy: 1
-  baseDamage: 2
+  baseDamage: 1
   canDestroy: 0
   collisionDamage: 1
   skills:

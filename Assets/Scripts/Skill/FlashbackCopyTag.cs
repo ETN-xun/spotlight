@@ -25,7 +25,7 @@ public class FlashbackCopyTag : MonoBehaviour
     /// </summary>
     /// <param name="original">原始单位</param>
     /// <param name="durationTurns">持续回合数</param>
-    public void Initialize(Unit original, int durationTurns = 2)
+    public void Initialize(Unit original, int durationTurns = 1)
     {
         originalUnit = original;
         duration = durationTurns;
@@ -44,6 +44,8 @@ public class FlashbackCopyTag : MonoBehaviour
     /// </summary>
     public void OnTurnEnd(object[] args)
     {
+        DestroyCopy();
+        /*
         remainingTurns--;
         Debug.Log($"闪回复制 {gameObject.name} 剩余回合: {remainingTurns}");
         
@@ -51,6 +53,7 @@ public class FlashbackCopyTag : MonoBehaviour
         {
             DestroyCopy();
         }
+        */
     }
     
     /// <summary>
