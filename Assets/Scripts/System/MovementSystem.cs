@@ -7,6 +7,7 @@ public class MovementSystem : MonoBehaviour
 {
     public static MovementSystem Instance { get; private set; }
     public static SkillDataSO StatusAbnormalSkill;
+    private bool canSkip;
 
     private void Awake()
     {
@@ -133,9 +134,17 @@ public class MovementSystem : MonoBehaviour
                         destructibleObject.data.canDestroy = true;
                         destructibleObject.data.isActive = true;
                     }
+                    else
+                    {
+                        yield break;
+                    }
                     break;
+                case DestructibleObjectType.FireWall:
+                    if (destructibleObject.data.isActive)
+                        yield break;
+                    break;
+                
             }
-            yield break;
         }
         RegisterActivation(nextCell,unit);
         
@@ -268,6 +277,14 @@ public class MovementSystem : MonoBehaviour
                             destructibleObject.data.canDestroy = true;
                             destructibleObject.data.isActive = true;
                         }
+                        else
+                        {
+                            yield break;
+                        }
+                        break;
+                    case DestructibleObjectType.FireWall:
+                        if (destructibleObject.data.isActive)
+                            yield break;
                         break;
                 }
                 yield break;
@@ -430,6 +447,7 @@ public class MovementSystem : MonoBehaviour
                     //建筑激活，可以被攻击
                     DestructibleObject.data.Hits = 1;
                     DestructibleObject.data.canDestroy = true;
+                    DestructibleObject.data.isActive = true;
                 }
             }
         }
