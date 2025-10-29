@@ -64,6 +64,7 @@ namespace View.GameViews
             Find<Button>("Background/PopupSettings/SkipFight").onClick.AddListener(OnClickSkipFightButton);
             Find<TextMeshProUGUI>("Background/TurnTarget/Text (TMP)").text = LevelManager.Instance.GetCurrentLevel().levelTarget;
             UpdateEnergyBar(ActionManager.EnergySystem.GetCurrentEnergy());
+            popupSettingsView.SetActive(false);
             
             Find<Button>("Background/EndTurn_Btn").interactable = false;
             
