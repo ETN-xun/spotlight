@@ -122,6 +122,8 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+<<<<<<< HEAD
+<<<<<<< HEAD
 --- !u!1 &45231023
 GameObject:
   m_ObjectHideFlags: 0
@@ -166,6 +168,8 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+=======
+>>>>>>> parent of c88d3e3 (修改：自适应以及选关界面)
 --- !u!1 &69665098
 GameObject:
   m_ObjectHideFlags: 0
@@ -738,7 +742,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1545def521cb4d6cb4bb2f7ba17bdb78, type: 3}
   m_Name: 
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
+=======
+>>>>>>> parent of 7984c05 (修改：移动逻辑)
 --- !u!1 &928502663
 GameObject:
   m_ObjectHideFlags: 0
