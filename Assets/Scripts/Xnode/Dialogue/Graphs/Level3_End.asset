@@ -541,7 +541,6 @@ MonoBehaviour:
     keys:
     - answers
     - input
-    - answers 0
     values:
     - _fieldName: answers
       _node: {fileID: -3580241083903590849}
@@ -565,18 +564,6 @@ MonoBehaviour:
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
-    - _fieldName: answers 0
-      _node: {fileID: -3580241083903590849}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: input
-        node: {fileID: -468874805633513703}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 1
   answers: []
   answer: []
   narrationIcon: {fileID: 21300000, guid: 7a35cf4b45c5c02479d081b4e984ec03, type: 3}
@@ -791,10 +778,7 @@ MonoBehaviour:
       _node: {fileID: -468874805633513703}
       _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: answers 0
-        node: {fileID: -3580241083903590849}
-        reroutePoints: []
+      connections: []
       _direction: 0
       _connectionType: 1
       _typeConstraint: 0
@@ -1282,7 +1266,7 @@ MonoBehaviour:
   answers: []
   answer: []
   characterName: "\u7CFB\u7EDF\u8BED\u97F3"
-  characterIcon: {fileID: 0}
+  characterIcon: {fileID: 21300000, guid: 1aa98e569c5e7584cb3180be9f0327c0, type: 3}
   dialougeIcon: {fileID: 21300000, guid: 7a35cf4b45c5c02479d081b4e984ec03, type: 3}
   dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
   hasChoices: 0
@@ -1344,7 +1328,7 @@ MonoBehaviour:
   answers: []
   answer: []
   characterName: "\u7CFB\u7EDF\u8BED\u97F3"
-  characterIcon: {fileID: 0}
+  characterIcon: {fileID: 21300000, guid: 1aa98e569c5e7584cb3180be9f0327c0, type: 3}
   dialougeIcon: {fileID: 21300000, guid: 7a35cf4b45c5c02479d081b4e984ec03, type: 3}
   dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
   hasChoices: 0
