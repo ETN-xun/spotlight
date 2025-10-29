@@ -25,7 +25,6 @@ namespace View
             {
                 Instance = this;
             }
-            
         }
 
         private void Start()
