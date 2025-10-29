@@ -8,7 +8,8 @@ using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.UI;
 using View.Base;
-using Enemy; // for EnemyManager
+using Enemy;
+using Scene; // for EnemyManager
 
 namespace View.GameViews
 {
@@ -22,6 +23,8 @@ namespace View.GameViews
         
         [SerializeField] private Sprite overloadModeActiveSprite;
         [SerializeField] private Sprite overloadModeInactiveSprite;
+
+        [SerializeField] private GameObject popupSettingsView;
         
         protected override void InitView()
         {
@@ -56,21 +59,43 @@ namespace View.GameViews
             MessageCenter.Subscribe(Defines.UnitTakeDamageEvent, OnUnitTakeDamage);
             Find<Button>("Background/Settings_Btn").onClick.AddListener(OnClickSettingsButton);
             Find<Button>("Background/EndTurn_Btn").onClick.AddListener(OnClickEndTurnButton);
+            Find<Button>("Background/PopupSettings/ContineGame").onClick.AddListener(OnClickContinueGameButton);
+            Find<Button>("Background/PopupSettings/ReturnMainMenu").onClick.AddListener(OnClickReturnMainMenuButton);
+            Find<Button>("Background/PopupSettings/SkipFight").onClick.AddListener(OnClickSkipFightButton);
             Find<TextMeshProUGUI>("Background/TurnTarget/Text (TMP)").text = LevelManager.Instance.GetCurrentLevel().levelTarget;
             UpdateEnergyBar(ActionManager.EnergySystem.GetCurrentEnergy());
             
             Find<Button>("Background/EndTurn_Btn").interactable = false;
             
-            InitializeOverloadModeButton();
+            // InitializeOverloadModeButton();
         }
-        
+
+        private void OnClickSkipFightButton()
+        {
+            GameManager.Instance.ChangeGameState(GameState.GameOver);
+        }
+
         public override void Close(params object[] args)
         {
             base.Close();
+            Debug.Log("Close");
             MessageCenter.Unsubscribe(Defines.EnergyChangedEvent, OnEnergyChanged);
             MessageCenter.Unsubscribe(Defines.UnitTakeDamageEvent, OnUnitTakeDamage);
             Find<Button>("Background/Settings_Btn").onClick.RemoveListener(OnClickSettingsButton);
             Find<Button>("Background/EndTurn_Btn").onClick.RemoveListener(OnClickEndTurnButton);
+            Find<Button>("Background/PopupSettings/ContineGame").onClick.RemoveListener(OnClickContinueGameButton);
+            Find<Button>("Background/PopupSettings/SkipFight").onClick.RemoveListener(OnClickSkipFightButton);
+            Find<Button>("Background/PopupSettings/ReturnMainMenu").onClick.RemoveListener(OnClickReturnMainMenuButton);
+        }
+        
+        private void OnClickContinueGameButton()
+        {
+            popupSettingsView.SetActive(!popupSettingsView.activeSelf);
+        }
+
+        private void OnClickReturnMainMenuButton()
+        {
+            SceneLoadManager.Instance.LoadScene(SceneType.MainMenu);
         }
         
         private void OnEnergyChanged(object[] args)
@@ -142,7 +167,7 @@ namespace View.GameViews
 
         private void OnClickSettingsButton()
         {
-            
+            popupSettingsView.SetActive(!popupSettingsView.activeSelf);
         }
         
         private void OnClickEndTurnButton()

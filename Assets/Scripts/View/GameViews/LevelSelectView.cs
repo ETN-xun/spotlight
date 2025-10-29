@@ -24,13 +24,13 @@ namespace View.GameViews
             }
         }
         
-        // public override void Close(params object[] args)
-        // {
-        //     base.Close(args);
-        //     foreach (var levelData in _allLevelData)
-        //     {
-        //         ViewManager.Instance.CloseView(ViewType.UnitDeploymentView, levelData.levelId, levelData);
-        //     }
-        // }
+        public override void Close(params object[] args)
+        {
+            base.Close(args);
+            foreach (var levelData in _allLevelData)
+            {
+                ViewManager.Instance.CloseView(ViewType.LevelView);
+            }
+        }
     }
 }

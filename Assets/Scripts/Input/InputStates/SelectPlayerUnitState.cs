@@ -31,7 +31,7 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
             GridManager.Instance.Highlight(true, cell.Coordinate);
         }
         ViewManager.Instance.OpenView(ViewType.SkillSelectView, "", CurrentSelectedUnit);
-        ViewManager.Instance.OpenView(ViewType.TerrainInfoView, "", CurrentSelectedCell);
+        // ViewManager.Instance.OpenView(ViewType.TerrainInfoView, "", CurrentSelectedCell);
     }
     
     public override void Exit()
@@ -43,7 +43,7 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
             GridManager.Instance.Highlight(false, cell.Coordinate);
         }
         ViewManager.Instance.CloseView(ViewType.SkillSelectView);
-        ViewManager.Instance.CloseView(ViewType.TerrainInfoView);
+        // ViewManager.Instance.CloseView(ViewType.TerrainInfoView);
         
         MessageCenter.Unsubscribe(Defines.ClickSkillViewEvent, OnClickSkillView);
     }

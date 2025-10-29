@@ -9,12 +9,12 @@ namespace System
         private int _baseEnergy;
         private int _currentEnergy;
 
-public EnergySystem()
+        public EnergySystem()
         {
             // 不在构造函数中初始化，延迟到需要时初始化
         }
 
-private void Init()
+        private void Init()
         {
             if (Level.LevelManager.Instance == null)
             {
@@ -34,7 +34,7 @@ private void Init()
             _currentEnergy = _baseEnergy;
         }
         
-                private bool _isInitialized = false;
+        private bool _isInitialized = false;
         
         private void EnsureInitialized()
         {
@@ -45,13 +45,13 @@ private void Init()
             }
         }
         
-public int GetCurrentEnergy()
+        public int GetCurrentEnergy()
         {
             EnsureInitialized();
             return _currentEnergy;
         }
         
-public void IncreaseEnergy(int amount)
+        public void IncreaseEnergy(int amount)
         {
             EnsureInitialized();
             if (_currentEnergy >= _maxEnergy) return;
@@ -63,7 +63,7 @@ public void IncreaseEnergy(int amount)
             MessageCenter.Publish(Defines.EnergyChangedEvent, _currentEnergy);
         }
 
-public void DecreaseEnergy(int amount)
+        public void DecreaseEnergy(int amount)
         {
             EnsureInitialized();
             if (_currentEnergy <= 0) return;
@@ -75,7 +75,7 @@ public void DecreaseEnergy(int amount)
             MessageCenter.Publish(Defines.EnergyChangedEvent, _currentEnergy);
         }
         
-public bool TrySpendEnergy(int amount)
+        public bool TrySpendEnergy(int amount)
         {
             EnsureInitialized();
             if (_currentEnergy < amount) return false;

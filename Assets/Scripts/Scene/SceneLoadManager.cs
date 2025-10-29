@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using View;
 
 namespace Scene
 {
@@ -40,7 +41,7 @@ namespace Scene
         private void OnSceneLoadEnd(AsyncOperation op)
         {
             _asyncOperation.completed -= OnSceneLoadEnd;
-            
+            ViewManager.Instance.CloseAllViews();
         }
     }
 }

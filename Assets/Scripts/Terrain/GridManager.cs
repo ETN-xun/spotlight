@@ -235,9 +235,9 @@ public class GridManager : MonoBehaviour
         var tile = terrainTilemap.GetTile(cellPos);
         if (tile == null) return;
 
-        // terrainTilemap.SetTileFlags(cellPos, TileFlags.None);
-        // terrainTilemap.SetColor(cellPos, highlight ? Color.green : Color.white);
-        EffectSystem.Instance.Play("gezi_gaoliang", cellPos);
+        terrainTilemap.SetTileFlags(cellPos, TileFlags.None);
+        terrainTilemap.SetColor(cellPos, highlight ? Color.green : Color.white);
+        // EffectSystem.Instance.Play("gezi_gaoliang", cellPos);
     }
 
     public void ClearAllHighlights()

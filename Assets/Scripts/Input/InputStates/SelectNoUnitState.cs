@@ -11,13 +11,13 @@ public class SelectNoUnitState : BaseInputState
     
     public override void Enter()
     {
-        ViewManager.Instance.OpenView(ViewType.TerrainInfoView, "", CurrentSelectedCell);
+        // ViewManager.Instance.OpenView(ViewType.TerrainInfoView, "", CurrentSelectedCell);
         
     }
     
     public override void Exit()
     {
-        ViewManager.Instance.CloseView(ViewType.TerrainInfoView);
+        // ViewManager.Instance.CloseView(ViewType.TerrainInfoView);
     }
 
     public override void Update()

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -66,7 +65,17 @@ namespace View.Base
 
         public virtual void SetVisible(bool visible)
         {
-            gameObject.SetActive(visible);
+            try
+            {
+                if (this == null) return;
+                var go = gameObject;
+                if (go == null) return;
+                if (go.activeSelf != visible)
+                    go.SetActive(visible);
+            }
+            catch (MissingReferenceException)
+            {
+            }
         }
 
 
@@ -82,11 +91,11 @@ namespace View.Base
             return tf.gameObject;
         }
 
-        
-        
         public T Find<T>(string goName) where T : Component
         {
-            return Find(goName).GetComponent<T>();
+            var go = Find(goName);
+            if (go == null) return null;
+            return go.GetComponent<T>();
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Common;
 using Enemy;
+using Scene;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using View;
@@ -152,7 +153,8 @@ public class GameManager : MonoBehaviour
         else if (eventName == "ReturnToMenu")
         {
             dialogueChainQueue.Clear(); 
-            SceneManager.LoadScene("MainMenu");
+            // SceneManager.LoadScene("MainMenu");
+            SceneLoadManager.Instance.LoadScene(SceneType.MainMenu);
         }
         /*else if (eventName == "EndGame")
         {
@@ -199,6 +201,7 @@ public class GameManager : MonoBehaviour
         EnemyManager.Instance.InitEnemies();
         ViewManager.Instance.OpenView(ViewType.FightView);
         _currentStateInstance?.Enter();
+        Debug.Log("000000Game Started");
     }
 
 
