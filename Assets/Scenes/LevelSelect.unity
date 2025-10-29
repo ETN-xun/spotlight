@@ -122,6 +122,50 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &45231023
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 45231025}
+  - component: {fileID: 45231024}
+  m_Layer: 0
+  m_Name: SelectController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &45231024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 45231023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d87b03e45b45b34fbae6a65d6c31323, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &45231025
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 45231023}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1106.7345, y: 875.9755, z: -8.690866}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &69665098
 GameObject:
   m_ObjectHideFlags: 0
@@ -206,7 +250,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 821850347}
+      - m_Target: {fileID: 45231024}
         m_TargetAssemblyTypeName: Selectcontroller, Assembly-CSharp
         m_MethodName: changeScene
         m_Mode: 1
@@ -480,7 +524,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 821850347}
+      - m_Target: {fileID: 45231024}
         m_TargetAssemblyTypeName: Selectcontroller, Assembly-CSharp
         m_MethodName: changeScene
         m_Mode: 1
@@ -530,24 +574,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 374616463}
   m_CullTransparentMesh: 1
---- !u!1 &821850345 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5196944245920999117, guid: 0c93ae2587c1843aca8e3ec17fd7788e,
-    type: 3}
-  m_PrefabInstance: {fileID: 1262384571}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &821850347
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 821850345}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d87b03e45b45b34fbae6a65d6c31323, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &844859892
 GameObject:
   m_ObjectHideFlags: 0
@@ -633,7 +659,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 821850347}
+      - m_Target: {fileID: 45231024}
         m_TargetAssemblyTypeName: Selectcontroller, Assembly-CSharp
         m_MethodName: changeScene
         m_Mode: 1
@@ -884,11 +910,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5196944245920999117, guid: 0c93ae2587c1843aca8e3ec17fd7788e,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 821850347}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0c93ae2587c1843aca8e3ec17fd7788e, type: 3}
 --- !u!1 &1624921253
 GameObject:
@@ -1419,6 +1441,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3155762503456470575, guid: 10e012879c8a04573b1df688f66d498e,
+        type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3155762503456470575, guid: 10e012879c8a04573b1df688f66d498e,
+        type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4474199440514737664, guid: 10e012879c8a04573b1df688f66d498e,
         type: 3}
       propertyPath: m_Enabled
@@ -1563,3 +1595,4 @@ SceneRoots:
   - {fileID: 2719368113976085379}
   - {fileID: 2103225744}
   - {fileID: 1262384571}
+  - {fileID: 45231025}
