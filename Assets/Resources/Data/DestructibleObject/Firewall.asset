@@ -12,13 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 717357f9d617ab9498f624ad4817e491, type: 3}
   m_Name: Firewall
   m_EditorClassIdentifier: 
-  Name: 
-  canDestroy: 0
+  Name: FireWall
+  canDestroy: 1
   Hits: 0
-  Type: 0
-  isActive: 0
-  tileFullHP: {fileID: 0}
-  tileDamaged: {fileID: 0}
+  Type: 1
+  isActive: 1
+  tileFullHP: {fileID: 11400000, guid: f392e33b7c4994dfba186e5f5723c8d6, type: 2}
   tileInactive: {fileID: 0}
-  tileDead: {fileID: 0}
+  tileDead: {fileID: 11400000, guid: da10a6838919d1446bcd5fbddb74171e, type: 2}
   deathDelay: 1.5
