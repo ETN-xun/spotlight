@@ -6,6 +6,7 @@ using Spine.Unity;
 using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.Serialization;
+using System.Linq;
 
 public class Unit : MonoBehaviour
 {
@@ -154,9 +155,34 @@ public class Unit : MonoBehaviour
         PlaceAt(targetCell);
     }
 
-    public void TakeDamage(int dmg)
+    /// <summary>
+    /// 单位承受伤害
+    /// </summary>
+    /// <param name="damage">伤害数值</param>
+    public void TakeDamage(int damage)
     {
-        int remainingDamage = dmg;
+        if (currentHP<=0) return;
+
+        // 检查是否是友方非虚影角色
+        if (!data.isEnemy && GetComponent<FlashbackCopyTag>() == null)
+        {
+            // 查找所有虚影角色
+            var phantoms = FindObjectsOfType<FlashbackCopyTag>()
+                .Select(tag => tag.GetComponent<Unit>())
+                .Where(unit => unit != null && unit.currentHP>0 && !unit.data.isEnemy)
+                .ToList();
+
+            if (phantoms.Any())
+            {
+                // 随机选择一个虚影来承受伤害
+                var randomPhantom = phantoms[UnityEngine.Random.Range(0, phantoms.Count)];
+                Debug.Log($"伤害从 {data.unitName} 转移到虚影 {randomPhantom.data.unitName}");
+                randomPhantom.TakeDamage(damage);
+                return; // 伤害已转移，直接返回
+            }
+        }
+
+        int remainingDamage = damage;
         
         // 先消耗护盾
         if (data.Hits > 0)

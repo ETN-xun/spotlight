@@ -25,7 +25,7 @@ public class FlashbackCopyTag : MonoBehaviour
     /// </summary>
     /// <param name="original">原始单位</param>
     /// <param name="durationTurns">持续回合数</param>
-    public void Initialize(Unit original, int durationTurns = 2)
+    public void Initialize(Unit original, int durationTurns = 1)
     {
         originalUnit = original;
         duration = durationTurns;
