@@ -13,6 +13,9 @@ namespace Common
                     return "Shield";
                 case "强制迁移":
                     return "ForceMigration";
+                case "闪回位移":
+                case "Flashback":
+                    return "idle"; // 使用idle动画作为闪回位移的动画
                 default:
                     return "Attack";
             }
