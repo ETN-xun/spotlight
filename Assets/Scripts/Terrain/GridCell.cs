@@ -28,6 +28,6 @@ public class GridCell
 
     public bool IsWalkableForEnemy()
     {
-        return DestructibleObject is null && CurrentUnit is null && ObjectOnCell is null && (TerrainData is null || TerrainData.terrainType == TerrainType.CorrosionTile);
+        return DestructibleObject is null && CurrentUnit is null && ObjectOnCell is null && (TerrainData is null || TerrainData.terrainType != TerrainType.BugTile);
     }
 }

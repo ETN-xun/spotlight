@@ -21,7 +21,7 @@ MonoBehaviour:
     type: 3}
   isEnemy: 0
   maxHP: 3
-  Hits: 2
+  Hits: 0
   moveRange: 4
   attackRange: 1
   movementEnergyCost: 1

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +20,7 @@ public class ShieldSkill : Skill
             if (CanTargetUnit(target))
             {
                 target.data.Hits++;
+                EffectSystem.Instance.Play("hudun_shifa", target.transform.position);
                 Debug.Log($"{caster.data.unitName} 为 {target.data.unitName} 增加了护盾");
             }
             else

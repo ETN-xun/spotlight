@@ -25,7 +25,7 @@ Material:
     m_TexEnvs:
     - _CameraColorAttachmentA:
         m_Texture: {fileID: 2800000, guid: 25c47688d29100d43bdd1d669d2d3b4f, type: 3}
-        m_Scale: {x: 0.05, y: 6.07}
+        m_Scale: {x: -0.25, y: 6.07}
         m_Offset: {x: 0, y: 0}
     - _NoiseTex:
         m_Texture: {fileID: 2800000, guid: 1605dba2b93e794479cd233d6fb5e2af, type: 3}
@@ -50,13 +50,13 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaCutoff: 0.5
-    - _B: -0.0034
-    - _NoiseInsensity: 0.346
-    - _NoiseSpeed_X: 0
-    - _NoiseSpeed_Y: 0
+    - _B: 0
+    - _NoiseInsensity: 0.54
+    - _NoiseSpeed_X: 9.82
+    - _NoiseSpeed_Y: 8.25
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _R: 0.0028
+    - _R: -0
     - _ReceiveShadows: 1
     m_Colors:
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}

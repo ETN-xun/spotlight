@@ -9,6 +9,8 @@ using UnityEngine.Serialization;
 
 public class Unit : MonoBehaviour
 {
+    public GameObject bloodBar;
+    public List<Sprite> bloodSprites;
     public UnitDataSO data; // 静态数据
     public int currentHP { get; private set; }
     
@@ -24,6 +26,21 @@ public class Unit : MonoBehaviour
     /// 状态效果管理器
     /// </summary>
     public StatusEffectManager StatusEffectManager { get; private set; }
+
+    public void Update()
+    {
+        // 添加边界检查，防止索引越界
+        if (bloodSprites != null && bloodSprites.Count > 0 && currentHP >= 0 && currentHP < bloodSprites.Count)
+        {
+            bloodBar.GetComponent<SpriteRenderer>().sprite = bloodSprites[currentHP];
+        }
+        else if (bloodSprites != null && bloodSprites.Count > 0)
+        {
+            // 如果currentHP超出范围，使用最后一个sprite（通常代表0血量）
+            int clampedIndex = Mathf.Clamp(currentHP, 0, bloodSprites.Count - 1);
+            bloodBar.GetComponent<SpriteRenderer>().sprite = bloodSprites[clampedIndex];
+        }
+    }
 
     private void Start()
     {
@@ -61,6 +78,7 @@ public class Unit : MonoBehaviour
         var skeletonAnimation = GetComponentInChildren<SkeletonAnimation>();
         if (skeletonAnimation != null)
         {
+            Debug.Log("Playing animation: " + animationName);
             skeletonAnimation.state.SetAnimation(0, animationName, loop);
         }
     }
@@ -79,7 +97,7 @@ public class Unit : MonoBehaviour
         CurrentCell = cell;
         cell.CurrentUnit = this;
         
-        transform.position = GridManager.Instance.CellToWorld(cell.Coordinate);
+        transform.position = new Vector3(GridManager.Instance.CellToWorld(cell.Coordinate).x,GridManager.Instance.CellToWorld(cell.Coordinate).y,GridManager.Instance.CellToWorld(cell.Coordinate).y);
     }
 
     public void MoveTo(GridCell targetCell)
