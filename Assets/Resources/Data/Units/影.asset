@@ -22,12 +22,12 @@ MonoBehaviour:
   isEnemy: 0
   maxHP: 3
   Hits: 0
-  moveRange: 1
+  moveRange: 4
   attackRange: 1
   movementEnergyCost: 1
   Energy: 1
   RecoverEnergy: 0
-  baseDamage: 0
+  baseDamage: 1
   canDestroy: 0
   collisionDamage: 1
   skills:
