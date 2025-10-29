@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class DestructibleObject
 {
@@ -31,12 +32,40 @@ public class DestructibleObject
     {
         if (isDestroyed || !data.canDestroy) return;
         data.Hits -= 1;
+        if (data.Hits >= 1)
+            UpdateTileVisual();
         if (data.Hits <= 0)
         {
             Die();
         }
     }
     
+    private void UpdateTileVisual()
+    {
+        if (GridManager.Instance.objectTilemap == null) return;
+
+        Vector3Int tilePos = new Vector3Int(coordinate.x, coordinate.y, 0);
+        TileBase nextTile = null;
+
+        if (data.Type == DestructibleObjectType.Register)
+        {
+            if (!data.isActive)
+                nextTile = data.tileInactive;
+            else if (data.Hits > 0)
+                nextTile = data.tileFullHP;
+            else
+                nextTile = data.tileDead;
+        }
+        else if (data.Type == DestructibleObjectType.FireWall)
+        {
+            if (data.Hits >= 1)
+                nextTile = data.tileFullHP;
+            else
+                nextTile = data.tileDead;
+        }
+
+        GridManager.Instance.objectTilemap.SetTile(tilePos, nextTile);
+    }
 
     public void Die()
     {
@@ -52,8 +81,15 @@ public class DestructibleObject
         if (GridManager.Instance.objectTilemap != null)
         {
             Vector3Int tilePos = new Vector3Int(coordinate.x, coordinate.y, 0);
-            GridManager.Instance.objectTilemap.SetTile(tilePos, null);
+            GridManager.Instance.objectTilemap.SetTile(tilePos, data.tileDead);
+            GridManager.Instance.StartCoroutine(DelayedRemoveTile(tilePos, data.deathDelay));
         }
+    }
+    
+    private IEnumerator DelayedRemoveTile(Vector3Int tilePos, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        GridManager.Instance.objectTilemap.SetTile(tilePos, null);
     }
     
     public bool CanUnitPassThrough(Unit unit)
