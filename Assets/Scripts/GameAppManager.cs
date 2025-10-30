@@ -30,15 +30,12 @@ public class GameAppManager : MonoBehaviour
         }
         DontDestroyOnLoad(gameObject);
         
-        RegisterViews();
+        
     }
 
     private void Start()
     {
-#if !UNITY_EDITOR
-        ViewManager.Instance.CloseAllViews();
-        SceneLoadManager.Instance.LoadScene(SceneType.MainMenu);
-#endif
+        RegisterViews();
     }
     
     private void Update()
