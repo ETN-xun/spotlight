@@ -57,6 +57,7 @@ public class GameManager : MonoBehaviour
     public DialogueTrigger level2EndTrigger;
     public DialogueTrigger level3StartTrigger;
     public DialogueTrigger level3EndTrigger;
+    public GameObject sceneTransitionCover; 
     // 内部状态变量
     private Queue<DialogueTrigger> dialogueChainQueue = new Queue<DialogueTrigger>();
     private bool isChainedPlaybackActive = false; // 标记是否处于“剧情链自动播放”模式
@@ -147,13 +148,18 @@ public class GameManager : MonoBehaviour
             dialogueChainQueue.Clear();
             if (eventName == "StartLevel1")
             {
-                PlayerCompletedLevel(1);
+                StartGame();
             }
         }
         else if (eventName == "ReturnToMenu")
         {
+            
             dialogueChainQueue.Clear(); 
             // SceneManager.LoadScene("MainMenu");
+            if (sceneTransitionCover != null)
+            {
+                sceneTransitionCover.SetActive(true);
+            }
             SceneLoadManager.Instance.LoadScene(SceneType.MainMenu);
         }
         /*else if (eventName == "EndGame")
@@ -234,7 +240,7 @@ public class GameManager : MonoBehaviour
         // 进入新状态
         if (_currentGameState == GameState.GameOver)
         {
-            //PlayerCompletedLevel(1);
+            PlayerCompletedLevel(1);
         }
         _currentStateInstance?.Enter();
         

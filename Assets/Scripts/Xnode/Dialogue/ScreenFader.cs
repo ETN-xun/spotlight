@@ -55,14 +55,14 @@ public class ScreenFader : MonoBehaviour
         yield return new WaitForSeconds(holdTime);
         
         // --- 淡出过程 (已修复) ---
-        timer = 0f;
+        /*timer = 0f;
         while (timer < duration)
         {
             timer += Time.deltaTime;
             float alpha = Mathf.Lerp(1, 0, timer / duration);
             fadeImage.color = new Color(color.r, color.g, color.b, alpha);
             yield return null;
-        }
+        }*/
         // 确保最终是全透明
         fadeImage.color = new Color(color.r, color.g, color.b, 0);
 

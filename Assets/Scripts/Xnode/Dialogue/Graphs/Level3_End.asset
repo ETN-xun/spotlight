@@ -20,8 +20,8 @@ MonoBehaviour:
     values:
     - _fieldName: input
       _node: {fileID: -8802074226712291590}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
       - fieldName: output
         node: {fileID: 2294661799877090850}
@@ -52,8 +52,8 @@ MonoBehaviour:
     values:
     - _fieldName: output
       _node: {fileID: -8159710098673414934}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
       - fieldName: input
         node: {fileID: 2294661799877090850}
@@ -64,16 +64,65 @@ MonoBehaviour:
       _dynamic: 0
     - _fieldName: input
       _node: {fileID: -8159710098673414934}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
-      - fieldName: answers 0
-        node: {fileID: -639384695881348232}
+      - fieldName: output
+        node: {fileID: 3518321324224958309}
         reroutePoints: []
       _direction: 0
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
+--- !u!114 &-7917041634322941974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5eecfaa5ac8e342aa5b4df2bd723c6, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 3784, y: -184}
+  ports:
+    keys:
+    - output
+    - input
+    values:
+    - _fieldName: output
+      _node: {fileID: -7917041634322941974}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: input
+        node: {fileID: 3518321324224958309}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: input
+      _node: {fileID: -7917041634322941974}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: output
+        node: {fileID: 4481382981538335399}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  characterName: 
+  characterIcon: {fileID: 0}
+  dialougeIcon: {fileID: 21300000, guid: c4c8ab0324374fb45bb3567b0a9e794b, type: 3}
+  dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  dialogueText: "\u5C0F\u961F\u56DE\u5F52\u7CFB\u7EDF\uFF0C\u7EE7\u7EED\u6267\u884C\u4EFB\u52A1\uFF0C\u4F46\u773C\u4E2D\u5931\u53BB\u4E86\u5149\u8292"
 --- !u!114 &-7627197910427593306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,8 +207,8 @@ MonoBehaviour:
     values:
     - _fieldName: input
       _node: {fileID: -6825342279879408140}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
       - fieldName: output
         node: {fileID: -2163067123341654541}
@@ -190,8 +239,8 @@ MonoBehaviour:
     values:
     - _fieldName: output
       _node: {fileID: -6499405518910155559}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
       - fieldName: input
         node: {fileID: -2163067123341654541}
@@ -202,16 +251,65 @@ MonoBehaviour:
       _dynamic: 0
     - _fieldName: input
       _node: {fileID: -6499405518910155559}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
-      - fieldName: answers 0
-        node: {fileID: 6512668086207404505}
+      - fieldName: output
+        node: {fileID: -3215120009109988285}
         reroutePoints: []
       _direction: 0
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
+--- !u!114 &-6167500142559336761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5eecfaa5ac8e342aa5b4df2bd723c6, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 3512, y: 200}
+  ports:
+    keys:
+    - output
+    - input
+    values:
+    - _fieldName: output
+      _node: {fileID: -6167500142559336761}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: input
+        node: {fileID: 2712586866531833183}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: input
+      _node: {fileID: -6167500142559336761}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: output
+        node: {fileID: 691348643357225978}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  characterName: 
+  characterIcon: {fileID: 0}
+  dialougeIcon: {fileID: 21300000, guid: 7a35cf4b45c5c02479d081b4e984ec03, type: 3}
+  dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  dialogueText: "\uFF08\u96F6\u7528\u79FB\u5F62\u6362\u5F71\u80FD\u529B\uFF0C\u5C06\u8BD7\u4EBA\u6838\u5FC3\u4F20\u9001\u81F3\u5B89\u5168\u533A\u5E76\u6563\u64AD\u51FA\u53BB\uFF09"
 --- !u!114 &-5895696833869657139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,36 +326,13 @@ MonoBehaviour:
   position: {x: 1352, y: -136}
   ports:
     keys:
-    - answers
+    - output
     - input
-    - answers 0
     values:
-    - _fieldName: answers
+    - _fieldName: output
       _node: {fileID: -5895696833869657139}
-      _typeQualifiedName: System.Collections.Generic.List`1[[BaseNode+Connection,
-        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: input
-      _node: {fileID: -5895696833869657139}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: answers 0
-        node: {fileID: 7262865426433851213}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: answers 0
-      _node: {fileID: -5895696833869657139}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
       - fieldName: input
         node: {fileID: -3929761506892657173}
@@ -265,14 +340,24 @@ MonoBehaviour:
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
-      _dynamic: 1
-  answers: []
-  answer: []
+      _dynamic: 0
+    - _fieldName: input
+      _node: {fileID: -5895696833869657139}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: output
+        node: {fileID: 7262865426433851213}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
   characterName: "\u77F3"
   characterIcon: {fileID: 21300000, guid: d5f094ddd115fb54499f41129c8ded61, type: 3}
   dialougeIcon: {fileID: 21300000, guid: c17c365fd1961a047925ab529701bb79, type: 3}
   dialougeSkip: {fileID: 21300000, guid: b55782ec389516040a166dbaed007ea6, type: 3}
-  hasChoices: 0
+  textColor: {r: 1, g: 1, b: 1, a: 1}
   dialogueText: "\"\u90A3\u4E9B'\u8150\u5316\u4F53'\u2026\u2026\u5B83\u4EEC\u53EA\u662F\u5728\u4FDD\u62A4\u81EA\u5DF1\u7684\u5BB6\u56ED\u2026\u2026\u6211\u4EEC\u4E00\u76F4\u5C06\u5176\u5F53\u6210\u4E0D\u53EF\u9884\u6D4B\u7684\u9519\u8BEF\u3002\""
 --- !u!114 &-5262854678712664387
 MonoBehaviour:
@@ -287,39 +372,16 @@ MonoBehaviour:
   m_Name: Dialogue
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 2696, y: -120}
+  position: {x: 2536, y: -104}
   ports:
     keys:
-    - answers
+    - output
     - input
-    - answers 0
     values:
-    - _fieldName: answers
+    - _fieldName: output
       _node: {fileID: -5262854678712664387}
-      _typeQualifiedName: System.Collections.Generic.List`1[[BaseNode+Connection,
-        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: input
-      _node: {fileID: -5262854678712664387}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: answers 0
-        node: {fileID: 2377577722976054192}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: answers 0
-      _node: {fileID: -5262854678712664387}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
       - fieldName: input
         node: {fileID: 9042551290232078369}
@@ -327,14 +389,24 @@ MonoBehaviour:
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
-      _dynamic: 1
-  answers: []
-  answer: []
+      _dynamic: 0
+    - _fieldName: input
+      _node: {fileID: -5262854678712664387}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: output
+        node: {fileID: 624841363072302797}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
   characterName: "\u96F6"
   characterIcon: {fileID: 21300000, guid: 265520833bac1914e9f295f69864b7c6, type: 3}
   dialougeIcon: {fileID: 21300000, guid: b3e3c7501349c2347aa47dba348e6cf1, type: 3}
   dialougeSkip: {fileID: 21300000, guid: 1be0a8d677ee50a4abe23afe54c2f43e, type: 3}
-  hasChoices: 0
+  textColor: {r: 1, g: 1, b: 1, a: 1}
   dialogueText: "\"\u7CFB\u7EDF\u7684\u6307\u4EE4\u5728\u50AC\u4FC3\u6211\u4EEC\u5B8C\u6210\u6700\u540E\u7684'\u51C0\u5316'\u2026\u2026\""
 --- !u!114 &-4089269523663933573
 MonoBehaviour:
@@ -352,36 +424,13 @@ MonoBehaviour:
   position: {x: 4040, y: 232}
   ports:
     keys:
-    - answers
+    - output
     - input
-    - answers 0
     values:
-    - _fieldName: answers
+    - _fieldName: output
       _node: {fileID: -4089269523663933573}
-      _typeQualifiedName: System.Collections.Generic.List`1[[BaseNode+Connection,
-        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: input
-      _node: {fileID: -4089269523663933573}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: answers 0
-        node: {fileID: 2712586866531833183}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: answers 0
-      _node: {fileID: -4089269523663933573}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
       - fieldName: input
         node: {fileID: 8657735277211219547}
@@ -389,15 +438,96 @@ MonoBehaviour:
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
-      _dynamic: 1
-  answers: []
-  answer: []
+      _dynamic: 0
+    - _fieldName: input
+      _node: {fileID: -4089269523663933573}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: output
+        node: {fileID: 2712586866531833183}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
   characterName: "\u96F6"
   characterIcon: {fileID: 21300000, guid: 265520833bac1914e9f295f69864b7c6, type: 3}
   dialougeIcon: {fileID: 21300000, guid: b3e3c7501349c2347aa47dba348e6cf1, type: 3}
   dialougeSkip: {fileID: 21300000, guid: 1be0a8d677ee50a4abe23afe54c2f43e, type: 3}
-  hasChoices: 0
+  textColor: {r: 1, g: 1, b: 1, a: 1}
   dialogueText: "\u201C\u770B\u6765\uFF0C\u6211\u4EEC\u6210\u4E86\u81EA\u5DF1\u66FE\u7ECF\u8FFD\u6355\u7684\u4E1C\u897F\u3002\u201D"
+--- !u!114 &-3966357010635798686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82474cb4658e426b9e5724f47388d555, type: 3}
+  m_Name: Choice
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 3000, y: -56}
+  ports:
+    keys:
+    - outputs
+    - input
+    - outputs 0
+    - outputs 1
+    values:
+    - _fieldName: outputs
+      _node: {fileID: -3966357010635798686}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Connection, Assembly-CSharp,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0,
+        Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: input
+      _node: {fileID: -3966357010635798686}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: output
+        node: {fileID: 9042551290232078369}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: outputs 0
+      _node: {fileID: -3966357010635798686}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: input
+        node: {fileID: 949167604955295497}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: outputs 1
+      _node: {fileID: -3966357010635798686}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: input
+        node: {fileID: 691348643357225978}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 1
+  outputs: []
+  choices:
+  - {fileID: 21300000, guid: cf0a5c76803da0240b1922f7a4636192, type: 3}
+  - {fileID: 21300000, guid: c4c8ab0324374fb45bb3567b0a9e794b, type: 3}
 --- !u!114 &-3929761506892657173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -414,36 +544,13 @@ MonoBehaviour:
   position: {x: 1608, y: -136}
   ports:
     keys:
-    - answers
+    - output
     - input
-    - answers 0
     values:
-    - _fieldName: answers
+    - _fieldName: output
       _node: {fileID: -3929761506892657173}
-      _typeQualifiedName: System.Collections.Generic.List`1[[BaseNode+Connection,
-        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: input
-      _node: {fileID: -3929761506892657173}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: answers 0
-        node: {fileID: -5895696833869657139}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: answers 0
-      _node: {fileID: -3929761506892657173}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
       - fieldName: input
         node: {fileID: 2570163251876267345}
@@ -451,14 +558,24 @@ MonoBehaviour:
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
-      _dynamic: 1
-  answers: []
-  answer: []
+      _dynamic: 0
+    - _fieldName: input
+      _node: {fileID: -3929761506892657173}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: output
+        node: {fileID: -5895696833869657139}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
   characterName: "\u5F71"
   characterIcon: {fileID: 21300000, guid: 7dd01d172f32d9a4a81db13fd2bdf5d8, type: 3}
   dialougeIcon: {fileID: 21300000, guid: 178f28c63664177439d51e0206fca0e1, type: 3}
   dialougeSkip: {fileID: 21300000, guid: d414496608612104f95e6ba88e3f0f4c, type: 3}
-  hasChoices: 0
+  textColor: {r: 1, g: 1, b: 1, a: 1}
   dialogueText: "\"\u6570\u636E\u5E93\u5BF9\u6BD4\u5B8C\u6210\u3002\u6211\u4EEC\u88AB\u704C\u8F93\u4E86\u865A\u5047\u7684\u5386\u53F2\u3002\u6240\u8C13\u7684'\u73B0\u5B9E\u4E16\u754C'\uFF0C\u6216\u8BB8\u6839\u672C\u4E0D\u5B58\u5728\u3002\""
 --- !u!114 &-3865456660172655830
 MonoBehaviour:
@@ -586,6 +703,55 @@ MonoBehaviour:
   textColor:
     serializedVersion: 2
     rgba: 4294967295
+--- !u!114 &-3215120009109988285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5eecfaa5ac8e342aa5b4df2bd723c6, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 5048, y: 280}
+  ports:
+    keys:
+    - output
+    - input
+    values:
+    - _fieldName: output
+      _node: {fileID: -3215120009109988285}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: input
+        node: {fileID: -6499405518910155559}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: input
+      _node: {fileID: -3215120009109988285}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: output
+        node: {fileID: 53741404436140550}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  characterName: 
+  characterIcon: {fileID: 0}
+  dialougeIcon: {fileID: 21300000, guid: 7a35cf4b45c5c02479d081b4e984ec03, type: 3}
+  dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  dialogueText: "\u3010\u5F53\u771F\u76F8\u88AB\u63ED\u9732\uFF0C\u6C89\u9ED8\u5C31\u6210\u4E86\u5171\u72AF\u3002\u9769\u547D\uFF0C\u5F00\u59CB\u4E86\u3002\u3011"
 --- !u!114 &-2163067123341654541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -607,8 +773,8 @@ MonoBehaviour:
     values:
     - _fieldName: output
       _node: {fileID: -2163067123341654541}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
       - fieldName: input
         node: {fileID: -6825342279879408140}
@@ -619,8 +785,8 @@ MonoBehaviour:
       _dynamic: 0
     - _fieldName: input
       _node: {fileID: -2163067123341654541}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
       - fieldName: output
         node: {fileID: -6499405518910155559}
@@ -648,51 +814,38 @@ MonoBehaviour:
   position: {x: 4552, y: 248}
   ports:
     keys:
-    - answers
+    - output
     - input
-    - answers 0
     values:
-    - _fieldName: answers
+    - _fieldName: output
       _node: {fileID: -1130316934234483088}
-      _typeQualifiedName: System.Collections.Generic.List`1[[BaseNode+Connection,
-        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      connections: []
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: input
+        node: {fileID: 53741404436140550}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: input
       _node: {fileID: -1130316934234483088}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
-      - fieldName: answers 0
+      - fieldName: output
         node: {fileID: 8657735277211219547}
         reroutePoints: []
       _direction: 0
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
-    - _fieldName: answers 0
-      _node: {fileID: -1130316934234483088}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: input
-        node: {fileID: 3184446902134574754}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 1
-  answers: []
-  answer: []
   characterName: "\u5F71"
   characterIcon: {fileID: 21300000, guid: 7dd01d172f32d9a4a81db13fd2bdf5d8, type: 3}
   dialougeIcon: {fileID: 21300000, guid: 178f28c63664177439d51e0206fca0e1, type: 3}
   dialougeSkip: {fileID: 21300000, guid: d414496608612104f95e6ba88e3f0f4c, type: 3}
-  hasChoices: 0
+  textColor: {r: 1, g: 1, b: 1, a: 1}
   dialogueText: "\u201C\u6E05\u9664\u5A01\u80C1\u2026\u2026\u4FDD\u62A4\u540C\u4F34\u2026\u2026\u8FD9\u5C31\u662F\u6211\u7684\u65B0\u534F\u8BAE\u3002\u201D"
 --- !u!114 &-639384695881348232
 MonoBehaviour:
@@ -834,38 +987,144 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodes:
   - {fileID: 8235411540362601651}
-  - {fileID: 8064275310409957220}
-  - {fileID: 6617766274493190204}
-  - {fileID: -7627197910427593306}
-  - {fileID: -3580241083903590849}
-  - {fileID: -468874805633513703}
-  - {fileID: 7170833294341767684}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 7262865426433851213}
   - {fileID: -5895696833869657139}
   - {fileID: -3929761506892657173}
   - {fileID: 2570163251876267345}
   - {fileID: 780001937463441229}
-  - {fileID: 2377577722976054192}
+  - {fileID: 0}
   - {fileID: -5262854678712664387}
   - {fileID: 9042551290232078369}
   - {fileID: 949167604955295497}
   - {fileID: 691348643357225978}
-  - {fileID: -3865456660172655830}
-  - {fileID: 1041046219488748812}
-  - {fileID: -639384695881348232}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: -8159710098673414934}
-  - {fileID: 4083854307382390528}
+  - {fileID: 0}
   - {fileID: 2712586866531833183}
   - {fileID: -4089269523663933573}
   - {fileID: 8657735277211219547}
   - {fileID: -1130316934234483088}
-  - {fileID: 3184446902134574754}
-  - {fileID: 6512668086207404505}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: -6499405518910155559}
   - {fileID: -2163067123341654541}
   - {fileID: 2294661799877090850}
   - {fileID: -8802074226712291590}
   - {fileID: -6825342279879408140}
+  - {fileID: 624841363072302797}
+  - {fileID: -3966357010635798686}
+  - {fileID: 4481382981538335399}
+  - {fileID: -7917041634322941974}
+  - {fileID: 3518321324224958309}
+  - {fileID: -6167500142559336761}
+  - {fileID: 53741404436140550}
+  - {fileID: -3215120009109988285}
+--- !u!114 &53741404436140550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5eecfaa5ac8e342aa5b4df2bd723c6, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 4824, y: 264}
+  ports:
+    keys:
+    - output
+    - input
+    values:
+    - _fieldName: output
+      _node: {fileID: 53741404436140550}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: input
+        node: {fileID: -3215120009109988285}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: input
+      _node: {fileID: 53741404436140550}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: output
+        node: {fileID: -1130316934234483088}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  characterName: 
+  characterIcon: {fileID: 0}
+  dialougeIcon: {fileID: 21300000, guid: 7a35cf4b45c5c02479d081b4e984ec03, type: 3}
+  dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  dialogueText: "\u96F6\u8F6C\u8EAB\uFF0C\u9762\u5BF9\u5373\u5C06\u964D\u4E34\u7684\u7CFB\u7EDF\u6E05\u9664\u90E8\u961F"
+--- !u!114 &624841363072302797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5eecfaa5ac8e342aa5b4df2bd723c6, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 2312, y: -120}
+  ports:
+    keys:
+    - output
+    - input
+    values:
+    - _fieldName: output
+      _node: {fileID: 624841363072302797}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: input
+        node: {fileID: -5262854678712664387}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: input
+      _node: {fileID: 624841363072302797}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: output
+        node: {fileID: 780001937463441229}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  characterName: 
+  characterIcon: {fileID: 0}
+  dialougeIcon: {fileID: 21300000, guid: 7a35cf4b45c5c02479d081b4e984ec03, type: 3}
+  dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
+  textColor: {r: 1, g: 0, b: 0, a: 1}
+  dialogueText: "\u3010\u683C\u5F0F\u5316\uFF1F Y/N\u3011"
 --- !u!114 &691348643357225978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -882,51 +1141,38 @@ MonoBehaviour:
   position: {x: 3256, y: 168}
   ports:
     keys:
-    - answers
+    - output
     - input
-    - answers 0
     values:
-    - _fieldName: answers
+    - _fieldName: output
       _node: {fileID: 691348643357225978}
-      _typeQualifiedName: System.Collections.Generic.List`1[[BaseNode+Connection,
-        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      connections: []
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: input
+        node: {fileID: -6167500142559336761}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: input
       _node: {fileID: 691348643357225978}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
-      - fieldName: answers 1
-        node: {fileID: 9042551290232078369}
+      - fieldName: outputs 1
+        node: {fileID: -3966357010635798686}
         reroutePoints: []
       _direction: 0
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
-    - _fieldName: answers 0
-      _node: {fileID: 691348643357225978}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: input
-        node: {fileID: 4083854307382390528}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 1
-  answers: []
-  answer: []
   characterName: "\u96F6"
   characterIcon: {fileID: 21300000, guid: 265520833bac1914e9f295f69864b7c6, type: 3}
   dialougeIcon: {fileID: 21300000, guid: b3e3c7501349c2347aa47dba348e6cf1, type: 3}
   dialougeSkip: {fileID: 21300000, guid: 1be0a8d677ee50a4abe23afe54c2f43e, type: 3}
-  hasChoices: 0
+  textColor: {r: 1, g: 1, b: 1, a: 1}
   dialogueText: "\"\u4E0D\uFF01\u6211\u62D2\u7EDD\u6210\u4E3A\u5C60\u6740\u8005\uFF01
     \""
 --- !u!114 &780001937463441229
@@ -942,54 +1188,41 @@ MonoBehaviour:
   m_Name: Dialogue
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 2152, y: -120}
+  position: {x: 2072, y: -136}
   ports:
     keys:
-    - answers
+    - output
     - input
-    - answers 0
     values:
-    - _fieldName: answers
+    - _fieldName: output
       _node: {fileID: 780001937463441229}
-      _typeQualifiedName: System.Collections.Generic.List`1[[BaseNode+Connection,
-        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      connections: []
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: input
+        node: {fileID: 624841363072302797}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: input
       _node: {fileID: 780001937463441229}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
-      - fieldName: answers 0
+      - fieldName: output
         node: {fileID: 2570163251876267345}
         reroutePoints: []
       _direction: 0
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
-    - _fieldName: answers 0
-      _node: {fileID: 780001937463441229}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: input
-        node: {fileID: 2377577722976054192}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 1
-  answers: []
-  answer: []
   characterName: "\u8BD7\u4EBA"
   characterIcon: {fileID: 21300000, guid: 177ad2aa77179b448801eee33ecc974f, type: 3}
   dialougeIcon: {fileID: 21300000, guid: 7a35cf4b45c5c02479d081b4e984ec03, type: 3}
   dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
-  hasChoices: 0
+  textColor: {r: 1, g: 1, b: 1, a: 1}
   dialogueText: "\uFF08\u865A\u5F31\u5730\uFF09\"\u73B0\u5728\u2026\u2026\u4F60\u4EEC\u77E5\u9053\u4E86\u771F\u76F8\u3002\u662F\u7EE7\u7EED\u505A\u7CFB\u7EDF\u7684\u523D\u5B50\u624B\u2026\u2026\u8FD8\u662F\u2026\u2026\""
 --- !u!114 &949167604955295497
 MonoBehaviour:
@@ -1007,51 +1240,38 @@ MonoBehaviour:
   position: {x: 3240, y: -216}
   ports:
     keys:
-    - answers
+    - output
     - input
-    - answers 0
     values:
-    - _fieldName: answers
+    - _fieldName: output
       _node: {fileID: 949167604955295497}
-      _typeQualifiedName: System.Collections.Generic.List`1[[BaseNode+Connection,
-        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      connections: []
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: input
+        node: {fileID: 4481382981538335399}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: input
       _node: {fileID: 949167604955295497}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
-      - fieldName: answers 0
-        node: {fileID: 9042551290232078369}
+      - fieldName: outputs 0
+        node: {fileID: -3966357010635798686}
         reroutePoints: []
       _direction: 0
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
-    - _fieldName: answers 0
-      _node: {fileID: 949167604955295497}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: input
-        node: {fileID: -3865456660172655830}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 1
-  answers: []
-  answer: []
   characterName: "\u96F6"
   characterIcon: {fileID: 21300000, guid: 265520833bac1914e9f295f69864b7c6, type: 3}
   dialougeIcon: {fileID: 21300000, guid: b3e3c7501349c2347aa47dba348e6cf1, type: 3}
   dialougeSkip: {fileID: 21300000, guid: 1be0a8d677ee50a4abe23afe54c2f43e, type: 3}
-  hasChoices: 0
+  textColor: {r: 1, g: 1, b: 1, a: 1}
   dialogueText: "\"\u8BA9\u8FD9\u4E00\u5207\u7ED3\u675F\u5427\u3002\u56DE\u5F52'\u79E9\u5E8F'\uFF0C\u5FD8\u8BB0\u6211\u4EEC\u770B\u5230\u7684\u4E00\u5207\u2026\u2026\""
 --- !u!114 &1041046219488748812
 MonoBehaviour:
@@ -1137,8 +1357,8 @@ MonoBehaviour:
     values:
     - _fieldName: output
       _node: {fileID: 2294661799877090850}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
       - fieldName: input
         node: {fileID: -8802074226712291590}
@@ -1149,8 +1369,8 @@ MonoBehaviour:
       _dynamic: 0
     - _fieldName: input
       _node: {fileID: 2294661799877090850}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
       - fieldName: output
         node: {fileID: -8159710098673414934}
@@ -1238,39 +1458,16 @@ MonoBehaviour:
   m_Name: Dialogue
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 1896, y: -136}
+  position: {x: 1832, y: -136}
   ports:
     keys:
-    - answers
+    - output
     - input
-    - answers 0
     values:
-    - _fieldName: answers
+    - _fieldName: output
       _node: {fileID: 2570163251876267345}
-      _typeQualifiedName: System.Collections.Generic.List`1[[BaseNode+Connection,
-        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: input
-      _node: {fileID: 2570163251876267345}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: answers 0
-        node: {fileID: -3929761506892657173}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: answers 0
-      _node: {fileID: 2570163251876267345}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
       - fieldName: input
         node: {fileID: 780001937463441229}
@@ -1278,14 +1475,24 @@ MonoBehaviour:
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
-      _dynamic: 1
-  answers: []
-  answer: []
+      _dynamic: 0
+    - _fieldName: input
+      _node: {fileID: 2570163251876267345}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: output
+        node: {fileID: -3929761506892657173}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
   characterName: "\u7CFB\u7EDF\u8BED\u97F3"
   characterIcon: {fileID: 21300000, guid: 1aa98e569c5e7584cb3180be9f0327c0, type: 3}
   dialougeIcon: {fileID: 21300000, guid: 7a35cf4b45c5c02479d081b4e984ec03, type: 3}
   dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
-  hasChoices: 0
+  textColor: {r: 1, g: 1, b: 1, a: 1}
   dialogueText: "\u3010\u8B66\u544A\uFF01\u68C0\u6D4B\u5230\u5927\u89C4\u6A21\u6D4B\u5185\u5B58\u6CC4\u9732\uFF01\u6267\u884C\u7D27\u6025\u534F\u8BAE\uFF1A\u7ACB\u5373\u683C\u5F0F\u5316\"\u8BD7\u4EBA\"\u6838\u5FC3\uFF01\u3011"
 --- !u!114 &2712586866531833183
 MonoBehaviour:
@@ -1303,36 +1510,13 @@ MonoBehaviour:
   position: {x: 3784, y: 216}
   ports:
     keys:
-    - answers
+    - output
     - input
-    - answers 0
     values:
-    - _fieldName: answers
+    - _fieldName: output
       _node: {fileID: 2712586866531833183}
-      _typeQualifiedName: System.Collections.Generic.List`1[[BaseNode+Connection,
-        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: input
-      _node: {fileID: 2712586866531833183}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: answers 0
-        node: {fileID: 4083854307382390528}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: answers 0
-      _node: {fileID: 2712586866531833183}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
       - fieldName: input
         node: {fileID: -4089269523663933573}
@@ -1340,14 +1524,24 @@ MonoBehaviour:
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
-      _dynamic: 1
-  answers: []
-  answer: []
+      _dynamic: 0
+    - _fieldName: input
+      _node: {fileID: 2712586866531833183}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: output
+        node: {fileID: -6167500142559336761}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
   characterName: "\u7CFB\u7EDF\u8BED\u97F3"
   characterIcon: {fileID: 21300000, guid: 1aa98e569c5e7584cb3180be9f0327c0, type: 3}
   dialougeIcon: {fileID: 21300000, guid: 7a35cf4b45c5c02479d081b4e984ec03, type: 3}
   dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
-  hasChoices: 0
+  textColor: {r: 1, g: 1, b: 1, a: 1}
   dialogueText: "\u3010\u6700\u9AD8\u8B66\u62A5\uFF01\u8C03\u8BD5\u8005\u5C0F\u961FZERO\uFF0C\u6C38\u4E45\u6027\u53DB\u53D8\uFF01\u6807\u8BB0\u4E3A\uFF1A\u6700\u9AD8\u7EA7Bug\uFF01\u542F\u52A8\u6E05\u9664\u534F\u8BAE\uFF01\u3011"
 --- !u!114 &3184446902134574754
 MonoBehaviour:
@@ -1412,6 +1606,55 @@ MonoBehaviour:
   textColor:
     serializedVersion: 2
     rgba: 4294967295
+--- !u!114 &3518321324224958309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5eecfaa5ac8e342aa5b4df2bd723c6, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 4040, y: -184}
+  ports:
+    keys:
+    - output
+    - input
+    values:
+    - _fieldName: output
+      _node: {fileID: 3518321324224958309}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: input
+        node: {fileID: -8159710098673414934}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: input
+      _node: {fileID: 3518321324224958309}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: output
+        node: {fileID: -7917041634322941974}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  characterName: 
+  characterIcon: {fileID: 0}
+  dialougeIcon: {fileID: 21300000, guid: c4c8ab0324374fb45bb3567b0a9e794b, type: 3}
+  dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  dialogueText: "\u3010\u6709\u65F6\u5019\uFF0C\u771F\u76F8\u592A\u8FC7\u6C89\u91CD\uFF0C\u9057\u5FD8\u662F\u552F\u4E00\u7684\u6551\u8D4E\u3002\u3011"
 --- !u!114 &4083854307382390528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1475,6 +1718,55 @@ MonoBehaviour:
   textColor:
     serializedVersion: 2
     rgba: 4294967295
+--- !u!114 &4481382981538335399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5eecfaa5ac8e342aa5b4df2bd723c6, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 3544, y: -200}
+  ports:
+    keys:
+    - output
+    - input
+    values:
+    - _fieldName: output
+      _node: {fileID: 4481382981538335399}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: input
+        node: {fileID: -7917041634322941974}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: input
+      _node: {fileID: 4481382981538335399}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: output
+        node: {fileID: 949167604955295497}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  characterName: 
+  characterIcon: {fileID: 0}
+  dialougeIcon: {fileID: 21300000, guid: c4c8ab0324374fb45bb3567b0a9e794b, type: 3}
+  dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  dialogueText: "\u96F6\u6267\u884C\u4E86\u683C\u5F0F\u5316\uFF0C\u8BD7\u4EBA\u7684\u6838\u5FC3\u5728\u5149\u8292\u4E2D\u6D88\u6563"
 --- !u!114 &6512668086207404505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1680,36 +1972,13 @@ MonoBehaviour:
   position: {x: 1128, y: -136}
   ports:
     keys:
-    - answers
+    - output
     - input
-    - answers 0
     values:
-    - _fieldName: answers
+    - _fieldName: output
       _node: {fileID: 7262865426433851213}
-      _typeQualifiedName: System.Collections.Generic.List`1[[BaseNode+Connection,
-        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: input
-      _node: {fileID: 7262865426433851213}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: answers 0
-        node: {fileID: 7170833294341767684}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: answers 0
-      _node: {fileID: 7262865426433851213}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
       - fieldName: input
         node: {fileID: -5895696833869657139}
@@ -1717,14 +1986,24 @@ MonoBehaviour:
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
-      _dynamic: 1
-  answers: []
-  answer: []
+      _dynamic: 0
+    - _fieldName: input
+      _node: {fileID: 7262865426433851213}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: output
+        node: {fileID: 8235411540362601651}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
   characterName: "\u96F6"
   characterIcon: {fileID: 21300000, guid: 265520833bac1914e9f295f69864b7c6, type: 3}
   dialougeIcon: {fileID: 21300000, guid: b3e3c7501349c2347aa47dba348e6cf1, type: 3}
   dialougeSkip: {fileID: 21300000, guid: 1be0a8d677ee50a4abe23afe54c2f43e, type: 3}
-  hasChoices: 0
+  textColor: {r: 1, g: 1, b: 1, a: 1}
   dialogueText: "\uFF08\u9707\u64BC\u5730\uFF09\"\u8FD9\u2026\u2026\u8FD9\u662F\u4E00\u4E2A\u5B8C\u6574\u7684\u4E16\u754C\uFF01\u4E00\u4E2A\u6709\u611F\u60C5\u3001\u6709\u8BB0\u5FC6\u3001\u6709\u6587\u5316\u7684\u6587\u660E\uFF01\u6211\u4EEC\u4E00\u76F4\u5728\u2026\u2026\u5C60\u6740\u65E0\u8F9C\u7684\u751F\u547D\uFF01\""
 --- !u!114 &8064275310409957220
 MonoBehaviour:
@@ -1802,30 +2081,20 @@ MonoBehaviour:
   m_Name: Start
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -632, y: -184}
+  position: {x: 664, y: -136}
   ports:
     keys:
     - output
-    - input
     values:
     - _fieldName: output
       _node: {fileID: 8235411540362601651}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
       - fieldName: input
-        node: {fileID: 8064275310409957220}
+        node: {fileID: 7262865426433851213}
         reroutePoints: []
       _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: input
-      _node: {fileID: 8235411540362601651}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections: []
-      _direction: 0
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
@@ -1845,36 +2114,13 @@ MonoBehaviour:
   position: {x: 4296, y: 248}
   ports:
     keys:
-    - answers
+    - output
     - input
-    - answers 0
     values:
-    - _fieldName: answers
+    - _fieldName: output
       _node: {fileID: 8657735277211219547}
-      _typeQualifiedName: System.Collections.Generic.List`1[[BaseNode+Connection,
-        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: input
-      _node: {fileID: 8657735277211219547}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: answers 0
-        node: {fileID: -4089269523663933573}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: answers 0
-      _node: {fileID: 8657735277211219547}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
       - fieldName: input
         node: {fileID: -1130316934234483088}
@@ -1882,14 +2128,24 @@ MonoBehaviour:
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
-      _dynamic: 1
-  answers: []
-  answer: []
+      _dynamic: 0
+    - _fieldName: input
+      _node: {fileID: 8657735277211219547}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: output
+        node: {fileID: -4089269523663933573}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
   characterName: "\u77F3"
   characterIcon: {fileID: 21300000, guid: d5f094ddd115fb54499f41129c8ded61, type: 3}
   dialougeIcon: {fileID: 21300000, guid: c17c365fd1961a047925ab529701bb79, type: 3}
   dialougeSkip: {fileID: 21300000, guid: b55782ec389516040a166dbaed007ea6, type: 3}
-  hasChoices: 0
+  textColor: {r: 1, g: 1, b: 1, a: 1}
   dialogueText: "\u201C\u8FD9\u4E00\u6B21\uFF0C\u6211\u6DF1\u77E5\u4E3A\u4F55\u800C\u6218\u3002\u201D"
 --- !u!114 &9042551290232078369
 MonoBehaviour:
@@ -1904,67 +2160,39 @@ MonoBehaviour:
   m_Name: Dialogue
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 2952, y: -120}
+  position: {x: 2776, y: -104}
   ports:
     keys:
-    - answers
+    - output
     - input
-    - answers 0
-    - answers 1
     values:
-    - _fieldName: answers
+    - _fieldName: output
       _node: {fileID: 9042551290232078369}
-      _typeQualifiedName: System.Collections.Generic.List`1[[BaseNode+Connection,
-        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
-        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      connections: []
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: input
+        node: {fileID: -3966357010635798686}
+        reroutePoints: []
       _direction: 1
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: input
       _node: {fileID: 9042551290232078369}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
       connections:
-      - fieldName: answers 0
+      - fieldName: output
         node: {fileID: -5262854678712664387}
         reroutePoints: []
       _direction: 0
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
-    - _fieldName: answers 0
-      _node: {fileID: 9042551290232078369}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: input
-        node: {fileID: 949167604955295497}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 1
-    - _fieldName: answers 1
-      _node: {fileID: 9042551290232078369}
-      _typeQualifiedName: BaseNode+Connection, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-      connections:
-      - fieldName: input
-        node: {fileID: 691348643357225978}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 1
-      _typeConstraint: 0
-      _dynamic: 1
-  answers: []
-  answer:
-  - {fileID: 21300000, guid: cf0a5c76803da0240b1922f7a4636192, type: 3}
-  - {fileID: 21300000, guid: c4c8ab0324374fb45bb3567b0a9e794b, type: 3}
   characterName: "\u96F6"
   characterIcon: {fileID: 21300000, guid: 265520833bac1914e9f295f69864b7c6, type: 3}
   dialougeIcon: {fileID: 21300000, guid: b3e3c7501349c2347aa47dba348e6cf1, type: 3}
   dialougeSkip: {fileID: 21300000, guid: 1be0a8d677ee50a4abe23afe54c2f43e, type: 3}
-  hasChoices: 1
+  textColor: {r: 1, g: 1, b: 1, a: 1}
   dialogueText: "\"\u4F46\u6211\u4EEC\u7684\u773C\u775B\u5DF2\u7ECF\u770B\u5230\u4E86\u771F\u76F8\u3002\""

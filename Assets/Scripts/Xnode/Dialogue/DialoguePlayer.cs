@@ -209,6 +209,8 @@ public class DialoguePlayer : MonoBehaviour
     /// </summary>
     private void ExecuteFade(FadeScreenNode node)
     {
+        skipButton.gameObject.SetActive(false);
+        nextButton.gameObject.SetActive(false);
         ScreenFader.Instance.StartFade(
             node.fadeDuration,
             node.holdDuration,

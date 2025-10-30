@@ -22,7 +22,7 @@ public class GameOverState : GameStateBase
         ShowGameOverUI();
         
         // 停止游戏时间
-        Time.timeScale = 0f;
+        //Time.timeScale = 0f;
         
         //GameManager.Instance.PlayerCompletedLevel(1);
         
