@@ -10,7 +10,17 @@ namespace Sound
         [SerializeField] private AudioSource sfxPlayer;
         
         public static SoundManager Instance { get; private set; }
+
+        void Awake()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
         
+            Instance = this;
+        }
         private void Start()
         {
             bgmPlayer.Play();
