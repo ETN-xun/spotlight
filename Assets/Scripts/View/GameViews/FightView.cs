@@ -26,6 +26,9 @@ namespace View.GameViews
 
         [SerializeField] private GameObject popupSettingsView;
         
+        // 阶段文本组件
+        private TextMeshProUGUI stageText;
+        
         protected override void InitView()
         {
             base.InitView();
@@ -49,6 +52,9 @@ namespace View.GameViews
             
             MessageCenter.Subscribe(Defines.PlayerTurnStartEvent, OnPlayerTurnStart);
             MessageCenter.Subscribe(Defines.PlayerTurnEndEvent, OnPlayerTurnEnd);
+            MessageCenter.Subscribe(Defines.EnemyTurnStartEvent, OnEnemyTurnStart);
+            MessageCenter.Subscribe(Defines.EnemyTurnEndEvent, OnEnemyTurnEnd);
+            MessageCenter.Subscribe(Defines.DeploymentStateEndedEvent, OnDeploymentStateEnded);
         }
         
 
@@ -67,6 +73,10 @@ namespace View.GameViews
             popupSettingsView.SetActive(false);
             
             Find<Button>("Background/EndTurn_Btn").interactable = false;
+            
+            // 初始化阶段文本组件
+            stageText = Find<TextMeshProUGUI>("Background/StageText");
+            UpdateStageText(GameManager.Instance.CurrentGameState);
             
             // InitializeOverloadModeButton();
         }
@@ -253,16 +263,68 @@ namespace View.GameViews
         {
             MessageCenter.Unsubscribe(Defines.PlayerTurnStartEvent, OnPlayerTurnStart);
             MessageCenter.Unsubscribe(Defines.PlayerTurnEndEvent, OnPlayerTurnEnd);
+            MessageCenter.Unsubscribe(Defines.EnemyTurnStartEvent, OnEnemyTurnStart);
+            MessageCenter.Unsubscribe(Defines.EnemyTurnEndEvent, OnEnemyTurnEnd);
+            MessageCenter.Unsubscribe(Defines.DeploymentStateEndedEvent, OnDeploymentStateEnded);
         }
 
         private void OnPlayerTurnStart(object[] args)
         {
             Find<Button>("Background/EndTurn_Btn").interactable = true;
+            UpdateStageText(GameState.PlayerTurn);
         }
 
         private void OnPlayerTurnEnd(object[] args)
         {
             Find<Button>("Background/EndTurn_Btn").interactable = false;
+        }
+        
+        private void OnEnemyTurnStart(object[] args)
+        {
+            UpdateStageText(GameState.EnemyTurn);
+        }
+        
+        private void OnEnemyTurnEnd(object[] args)
+        {
+            // 敌人回合结束，准备进入玩家回合
+        }
+        
+        private void OnDeploymentStateEnded(object[] args)
+        {
+            // 部署阶段结束，准备进入敌人回合
+        }
+        
+        /// <summary>
+        /// 更新阶段文本显示
+        /// </summary>
+        /// <param name="gameState">当前游戏状态</param>
+        private void UpdateStageText(GameState gameState)
+        {
+            if (stageText == null) return;
+            
+            switch (gameState)
+            {
+                case GameState.Deployment:
+                    stageText.text = "部署阶段";
+                    stageText.color = Color.white;
+                    break;
+                case GameState.EnemyTurn:
+                    stageText.text = "敌人回合";
+                    stageText.color = Color.red;
+                    break;
+                case GameState.PlayerTurn:
+                    stageText.text = "玩家回合";
+                    stageText.color = Color.white;
+                    break;
+                case GameState.GameOver:
+                    stageText.text = "游戏结束";
+                    stageText.color = Color.white;
+                    break;
+                default:
+                    stageText.text = "未知阶段";
+                    stageText.color = Color.white;
+                    break;
+            }
         }
     }
 }

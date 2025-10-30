@@ -29,7 +29,8 @@ public class DeploymentState : GameStateBase
         ShowDeploymentGrid();
         _allyUnits = LevelManager.Instance.GetCurrentLevel().allyUnits;
         ViewManager.Instance.OpenView(ViewType.DeploymentView);
-        ViewManager.Instance.GetView<UnitDeploymentView>(ViewType.UnitDeploymentView, _unitData.unitID).EnableViewClick();
+        // 移除有问题的代码行，因为_unitData在这个时候还是null
+        // ViewManager.Instance.GetView<UnitDeploymentView>(ViewType.UnitDeploymentView, _unitData.unitID).EnableViewClick();
     }
 
 
@@ -83,6 +84,8 @@ public class DeploymentState : GameStateBase
         if (obj[0] is not UnitDataSO unitData) return;
         _unitData = unitData;
         _isClickDeployUnit = true;
+        // 在设置_unitData后启用视图点击
+        ViewManager.Instance.GetView<UnitDeploymentView>(ViewType.UnitDeploymentView, _unitData.unitID)?.EnableViewClick();
     }
     
     private Unit GetUnitById(string unitId)

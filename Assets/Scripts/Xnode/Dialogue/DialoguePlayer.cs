@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using XNode;
 using Xnode.Dialogue.Nodes;
+using View;
 
 public class DialoguePlayer : MonoBehaviour
 {
@@ -81,6 +82,18 @@ public class DialoguePlayer : MonoBehaviour
         {
             dialoguePanel.SetActive(true);
             skipButton.gameObject.SetActive(true);
+            
+            // 在播放剧情时隐藏FightView
+            if (ViewManager.Instance != null && ViewManager.Instance.IsOpen(ViewType.FightView))
+            {
+                var fightView = ViewManager.Instance.GetView(ViewType.FightView);
+                if (fightView != null)
+                {
+                    fightView.SetVisible(false);
+                    Debug.Log("[DialoguePlayer] 剧情开始，隐藏FightView");
+                }
+            }
+            
             // 从StartNode开始，直接前进到第一个实际的节点
             AdvanceToNextNode();
         }
@@ -322,6 +335,17 @@ public class DialoguePlayer : MonoBehaviour
         ClearChoices();
         currentGraph = null;
         currentNode = null;
+
+        // 剧情结束时重新显示FightView
+        if (ViewManager.Instance != null && ViewManager.Instance.IsOpen(ViewType.FightView))
+        {
+            var fightView = ViewManager.Instance.GetView(ViewType.FightView);
+            if (fightView != null)
+            {
+                fightView.SetVisible(true);
+                Debug.Log("[DialoguePlayer] 剧情结束，重新显示FightView");
+            }
+        }
 
         if (triggerSectionEnd) OnSectionEnd?.Invoke(eventName);
 
