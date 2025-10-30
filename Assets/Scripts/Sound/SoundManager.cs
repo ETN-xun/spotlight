@@ -5,18 +5,21 @@ namespace Sound
     public class SoundManager : MonoBehaviour
     {
         [SerializeField] private AudioClip[] sounds;
-        private AudioSource _audioSource;
-        // Start is called before the first frame update
-        void Start()
+        
+        [SerializeField] private AudioSource bgmPlayer;
+        [SerializeField] private AudioSource sfxPlayer;
+        
+        public static SoundManager Instance { get; private set; }
+        
+        private void Start()
         {
-            _audioSource = GetComponent<AudioSource>();
-            _audioSource.Play();
+            bgmPlayer.Play();
         }
 
-        // Update is called once per frame
-        void Update()
+        public void PlaySFX(int index)
         {
-        
+            if (index < 0 || index >= sounds.Length) return;
+            sfxPlayer.PlayOneShot(sounds[index]);
         }
     }
 }
