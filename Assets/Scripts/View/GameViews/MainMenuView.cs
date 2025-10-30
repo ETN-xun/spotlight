@@ -1,5 +1,6 @@
 using System;
 using Scene;
+using Sound;
 using UnityEngine;
 using View.Base;
 
@@ -13,7 +14,7 @@ namespace View.GameViews
             Find<UnityEngine.UI.Button>("Background/Buttons/Continue").onClick.AddListener(OnContinueGameBtnClick);
             Find<UnityEngine.UI.Button>("Background/Buttons/NewGame").onClick.AddListener(OnNewGameBtnClick);
             Find<UnityEngine.UI.Button>("Background/Buttons/ExitGame").onClick.AddListener(OnExitGameBtnClick);
-            Find<UnityEngine.UI.Button>("Background/Buttons/CreativeStaff").onClick.AddListener(OnContinueGameBtnClick);
+            // Find<UnityEngine.UI.Button>("Background/Buttons/CreativeStaff").onClick.AddListener(OnContinueGameBtnClick);
             Find<UnityEngine.UI.Button>("Background/Settings").onClick.AddListener(OnSettingsBtnClick);
         }
         public override void Destroy()      
@@ -21,7 +22,7 @@ namespace View.GameViews
             Find<UnityEngine.UI.Button>("Background/Buttons/Continue").onClick.RemoveListener(OnContinueGameBtnClick);
             Find<UnityEngine.UI.Button>("Background/Buttons/NewGame").onClick.RemoveListener(OnNewGameBtnClick);
             Find<UnityEngine.UI.Button>("Background/Buttons/ExitGame").onClick.RemoveListener(OnExitGameBtnClick);
-            Find<UnityEngine.UI.Button>("Background/Buttons/CreativeStaff").onClick.RemoveListener(OnCreativeStaffBtnClick);
+            // Find<UnityEngine.UI.Button>("Background/Buttons/CreativeStaff").onClick.RemoveListener(OnCreativeStaffBtnClick);
             Find<UnityEngine.UI.Button>("Background/Settings").onClick.RemoveListener(OnSettingsBtnClick);
             base.Destroy();
         }
@@ -29,11 +30,13 @@ namespace View.GameViews
         private void OnNewGameBtnClick()
         {
             SceneLoadManager.Instance.LoadScene(SceneType.LevelSelect);
+            SoundManager.Instance.PlaySFX(0);
         }
 
         private void OnExitGameBtnClick()
         {
             GameAppManager.ExitGame();
+            SoundManager.Instance.PlaySFX(0);
         }
 
         private void OnContinueGameBtnClick()

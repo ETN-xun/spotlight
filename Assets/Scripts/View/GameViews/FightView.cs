@@ -8,7 +8,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using View.Base;
 using Enemy;
-using Scene; // for EnemyManager
+using Scene;
+using Sound; // for EnemyManager
 
 namespace View.GameViews
 {
@@ -173,6 +174,7 @@ namespace View.GameViews
         private void OnClickEndTurnButton()
         {
             GameManager.Instance.ChangeGameState(GameState.EnemyTurn);
+            SoundManager.Instance.PlaySFX(0);
         }
         
         private void InitializeOverloadModeButton()
