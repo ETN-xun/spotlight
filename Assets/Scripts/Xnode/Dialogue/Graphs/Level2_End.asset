@@ -468,6 +468,10 @@ MonoBehaviour:
   - {fileID: 3725280338598632089}
   - {fileID: 6575680984130191221}
   - {fileID: -2257268532090247554}
+  - {fileID: 9183894533894559656}
+  - {fileID: 1479309946506952295}
+  - {fileID: 8701373040959428401}
+  - {fileID: 7535007789230426648}
 --- !u!114 &158963807634232068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -610,6 +614,55 @@ MonoBehaviour:
   dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
   textColor: {r: 1, g: 1, b: 1, a: 1}
   dialogueText: "\u6570\u636E\u6838\u5FC3\u5DF2\u56DE\u6536\u3002\u68C0\u6D4B\u5230\u8C03\u8BD5\u8005\u8BA4\u77E5\u6CE2\u52A8\uFF01\u7ACB\u5373\u524D\u5F80\u6E90\u70B9\u5C71\u8109\uFF0C\u6267\u884C\u6700\u7EC8\u51C0\u5316\u534F\u8BAE\uFF0C\u683C\u5F0F\u5316\u8BD7\u4EBA\uFF01\u3011"
+--- !u!114 &1479309946506952295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5eecfaa5ac8e342aa5b4df2bd723c6, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 2408, y: -152}
+  ports:
+    keys:
+    - output
+    - input
+    values:
+    - _fieldName: output
+      _node: {fileID: 1479309946506952295}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: input
+        node: {fileID: 8701373040959428401}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: input
+      _node: {fileID: 1479309946506952295}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: output
+        node: {fileID: 9183894533894559656}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  characterName: 
+  characterIcon: {fileID: 0}
+  dialougeIcon: {fileID: 21300000, guid: 7a35cf4b45c5c02479d081b4e984ec03, type: 3}
+  dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  dialogueText: "\u201C\u2026\u2026\u5C24\u5A1C\u7684\u73A9\u5177\u2026\u2026\u90A3\u4E2A\u88AB\u9057\u5FD8\u7684\u6D4B\u8BD5\u534F\u8BAE\u2026\u2026\u662F\u5979\u53D1\u73B0\u4E86\u5B83\u2026\u2026\u201D"
 --- !u!114 &1818340183516151609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -745,7 +798,7 @@ MonoBehaviour:
         PublicKeyToken=null
       connections:
       - fieldName: input
-        node: {fileID: 7061687044977116809}
+        node: {fileID: 9183894533894559656}
         reroutePoints: []
       _direction: 1
       _connectionType: 1
@@ -971,7 +1024,7 @@ MonoBehaviour:
   m_Name: Checkpoint
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 3018.2617, y: -77.80774}
+  position: {x: 3160, y: -104}
   ports:
     keys:
     - output
@@ -995,12 +1048,61 @@ MonoBehaviour:
         PublicKeyToken=null
       connections:
       - fieldName: output
-        node: {fileID: 3559112680824171754}
+        node: {fileID: 7535007789230426648}
         reroutePoints: []
       _direction: 0
       _connectionType: 1
       _typeConstraint: 0
       _dynamic: 0
+--- !u!114 &7535007789230426648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5eecfaa5ac8e342aa5b4df2bd723c6, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 2920, y: -152}
+  ports:
+    keys:
+    - output
+    - input
+    values:
+    - _fieldName: output
+      _node: {fileID: 7535007789230426648}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: input
+        node: {fileID: 7061687044977116809}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: input
+      _node: {fileID: 7535007789230426648}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: output
+        node: {fileID: 8701373040959428401}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  characterName: 
+  characterIcon: {fileID: 0}
+  dialougeIcon: {fileID: 21300000, guid: 7a35cf4b45c5c02479d081b4e984ec03, type: 3}
+  dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
+  textColor: {r: 1, g: 0, b: 0, a: 1}
+  dialogueText: "**\uFF08\u4E71\u7801\u82B1\u5C4F\uFF0C\u51FA\u73B0\u5F3A\u70C8\u6570\u636E\u5E72\u6270\uFF09**"
 --- !u!114 &7614574170985754728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1162,3 +1264,101 @@ MonoBehaviour:
   dialougeSkip: {fileID: 21300000, guid: b55782ec389516040a166dbaed007ea6, type: 3}
   textColor: {r: 1, g: 1, b: 1, a: 1}
   dialogueText: "\"\u7CFB\u7EDF\u7684\u53CD\u5E94\u2026\u2026\u8FC7\u4E8E\u6FC0\u70C8\u4E86\u3002\""
+--- !u!114 &8701373040959428401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5eecfaa5ac8e342aa5b4df2bd723c6, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 2648, y: -152}
+  ports:
+    keys:
+    - output
+    - input
+    values:
+    - _fieldName: output
+      _node: {fileID: 8701373040959428401}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: input
+        node: {fileID: 7535007789230426648}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: input
+      _node: {fileID: 8701373040959428401}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: output
+        node: {fileID: 1479309946506952295}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  characterName: 
+  characterIcon: {fileID: 0}
+  dialougeIcon: {fileID: 21300000, guid: 7a35cf4b45c5c02479d081b4e984ec03, type: 3}
+  dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  dialogueText: "\u903B\u8F91\u7684\u679D\u6860\uFF0C\u7EC8\u5C06\u7ED3\u51FA\u611F\u6027\u7684\u82B1\u2026\u2026\u201D"
+--- !u!114 &9183894533894559656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5eecfaa5ac8e342aa5b4df2bd723c6, type: 3}
+  m_Name: Dialogue
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 2184, y: -184}
+  ports:
+    keys:
+    - output
+    - input
+    values:
+    - _fieldName: output
+      _node: {fileID: 9183894533894559656}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: input
+        node: {fileID: 1479309946506952295}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: input
+      _node: {fileID: 9183894533894559656}
+      _typeQualifiedName: Connection, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: output
+        node: {fileID: 3559112680824171754}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 1
+      _typeConstraint: 0
+      _dynamic: 0
+  characterName: 
+  characterIcon: {fileID: 0}
+  dialougeIcon: {fileID: 21300000, guid: 7a35cf4b45c5c02479d081b4e984ec03, type: 3}
+  dialougeSkip: {fileID: 21300000, guid: 6c8a4ddea219f0445a81079ba2cf31ec, type: 3}
+  textColor: {r: 1, g: 0, b: 0, a: 1}
+  dialogueText: "\u7A81\u7136\uFF0C\u5F3A\u70C8\u7684\u8BB0\u5FC6\u6570\u636E\u6D41\u6D8C\u5165"
