@@ -29,6 +29,7 @@ public class DeploymentState : GameStateBase
         ShowDeploymentGrid();
         _allyUnits = LevelManager.Instance.GetCurrentLevel().allyUnits;
         ViewManager.Instance.OpenView(ViewType.DeploymentView);
+        ViewManager.Instance.GetView<UnitDeploymentView>(ViewType.UnitDeploymentView, _unitData.unitID).EnableViewClick();
     }
 
 

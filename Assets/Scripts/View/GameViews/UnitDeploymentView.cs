@@ -32,5 +32,12 @@ namespace View.GameViews
             image.color = Color.gray;
             image.raycastTarget = false;
         }
+
+        public void EnableViewClick()
+        {
+            var image =  GetComponent<Image>();
+            image.color = Color.white;
+            image.raycastTarget = true;
+        }
     }
 }
