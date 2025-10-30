@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Action;
 using Common;
@@ -28,6 +29,11 @@ namespace View.GameViews
         
         // 阶段文本组件
         private TextMeshProUGUI stageText;
+        
+        // 淡入淡出效果相关
+        private Coroutine stageTextFadeCoroutine;
+        private const float fadeInDuration = 0.3f;
+        private const float fadeOutDuration = 0.2f;
         
         protected override void InitView()
         {
@@ -295,36 +301,91 @@ namespace View.GameViews
         }
         
         /// <summary>
-        /// 更新阶段文本显示
+        /// 更新阶段文本显示（带淡入淡出效果）
         /// </summary>
         /// <param name="gameState">当前游戏状态</param>
         private void UpdateStageText(GameState gameState)
         {
             if (stageText == null) return;
             
+            // 如果已有淡入淡出协程在运行，先停止它
+            if (stageTextFadeCoroutine != null)
+            {
+                StopCoroutine(stageTextFadeCoroutine);
+            }
+            
+            // 启动新的淡入淡出效果
+            stageTextFadeCoroutine = StartCoroutine(FadeStageText(gameState));
+        }
+        
+        /// <summary>
+        /// 阶段文本淡入淡出效果协程
+        /// </summary>
+        /// <param name="gameState">目标游戏状态</param>
+        /// <returns></returns>
+        private IEnumerator FadeStageText(GameState gameState)
+        {
+            // 获取目标文本和颜色
+            string targetText;
+            Color targetColor;
+            
             switch (gameState)
             {
                 case GameState.Deployment:
-                    stageText.text = "部署阶段";
-                    stageText.color = Color.white;
+                    targetText = "部署阶段";
+                    targetColor = Color.white;
                     break;
                 case GameState.EnemyTurn:
-                    stageText.text = "敌人回合";
-                    stageText.color = Color.red;
+                    targetText = "敌人回合";
+                    targetColor = Color.red;
                     break;
                 case GameState.PlayerTurn:
-                    stageText.text = "玩家回合";
-                    stageText.color = Color.white;
+                    targetText = "玩家回合";
+                    targetColor = Color.white;
                     break;
                 case GameState.GameOver:
-                    stageText.text = "游戏结束";
-                    stageText.color = Color.white;
+                    targetText = "游戏结束";
+                    targetColor = Color.white;
                     break;
                 default:
-                    stageText.text = "未知阶段";
-                    stageText.color = Color.white;
+                    targetText = "未知阶段";
+                    targetColor = Color.white;
                     break;
             }
+            
+            // 淡出效果
+            Color currentColor = stageText.color;
+            float elapsedTime = 0f;
+            
+            while (elapsedTime < fadeOutDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                float alpha = Mathf.Lerp(currentColor.a, 0f, elapsedTime / fadeOutDuration);
+                stageText.color = new Color(currentColor.r, currentColor.g, currentColor.b, alpha);
+                yield return null;
+            }
+            
+            // 确保完全透明
+            stageText.color = new Color(currentColor.r, currentColor.g, currentColor.b, 0f);
+            
+            // 更新文本内容
+            stageText.text = targetText;
+            
+            // 淡入效果
+            elapsedTime = 0f;
+            while (elapsedTime < fadeInDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                float alpha = Mathf.Lerp(0f, targetColor.a, elapsedTime / fadeInDuration);
+                stageText.color = new Color(targetColor.r, targetColor.g, targetColor.b, alpha);
+                yield return null;
+            }
+            
+            // 确保最终颜色正确
+            stageText.color = targetColor;
+            
+            // 清除协程引用
+            stageTextFadeCoroutine = null;
         }
     }
 }
