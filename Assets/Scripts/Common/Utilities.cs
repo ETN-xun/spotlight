@@ -10,7 +10,7 @@ namespace Common
                 case "断点斩杀":
                     return "Attack";
                 case "堆栈护盾":
-                    return "Shield";
+                    return "Attack";
                 case "强制迁移":
                     return "Attack";
                 case "闪回位移":
