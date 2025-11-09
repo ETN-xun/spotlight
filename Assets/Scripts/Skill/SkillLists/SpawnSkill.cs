@@ -11,45 +11,40 @@ public class SpawnSkill : Skill
 
     public override void Execute(GridCell targetCell, GridManager gridManager)
     {
-        // 验证目标位置是否有效
+        // 验证目标位置是否有效（允许任意格子，只要在攻击范围内由外层系统保证）
         if (!IsValidSpawnTarget(targetCell))
         {
             Debug.Log("无法在此位置使用地形投放技能：位置无效");
             return;
         }
-        
-        // 如果目标位置有对象，先清除它们
-        if (targetCell.DestructibleObject != null || targetCell.CurrentUnit != null)
+
+        // 若方格上有敌方角色，则对其造成1点伤害
+        if (targetCell.CurrentUnit != null)
         {
-            if (targetCell.DestructibleObject != null)
+            var targetUnit = targetCell.CurrentUnit;
+            bool isEnemyToCaster = targetUnit.data.isEnemy != caster.data.isEnemy;
+            if (isEnemyToCaster)
             {
-                targetCell.DestructibleObject.TakeHits();
-                Debug.Log($"{caster.data.unitName} 摧毁了可摧毁对象");
+                targetUnit.TakeDamage(1);
+                Debug.Log($"{caster.data.unitName} 对 {targetUnit.data.unitName} 造成了1点伤害");
+                return;
             }
-            else if (targetCell.CurrentUnit != null)
+            else
             {
-                targetCell.CurrentUnit.TakeDamage(1);
-                Debug.Log($"{caster.data.unitName} 对 {targetCell.CurrentUnit.data.unitName} 造成了1点伤害");
+                // 有友方单位占用，不召唤虚影
+                Debug.Log("目标格子被友方单位占用，无法召唤虚影");
                 return;
             }
         }
 
-        // 生成新的地形对象
-        if (gridManager.objectTilemap != null && data.spawnTile != null)
+        // 若方格上没有敌方角色（且无单位占用），则召唤一个自身的虚影（与“闪回位移”相同）
+        var phantom = PhantomHelper.CreatePhantom(caster, targetCell, gridManager, 0.5f, 2);
+        if (phantom == null)
         {
-            Vector3Int tilePos = new Vector3Int(targetCell.Coordinate.x, targetCell.Coordinate.y, 0);
-            gridManager.objectTilemap.SetTile(tilePos, data.spawnTile);
-
-            // 建筑逻辑数据
-            DestructibleObject destructible = new DestructibleObject( 
-                hits: data.spawnHits,
-                name: data.skillName,
-                coord: targetCell.Coordinate
-            );
-            targetCell.DestructibleObject = destructible;
-            
-            Debug.Log($"{caster.data.unitName} 在 ({targetCell.Coordinate.x}, {targetCell.Coordinate.y}) 投放了地形");
+            Debug.LogError("虚影召唤失败");
+            return;
         }
+        Debug.Log($"{caster.data.unitName} 在 ({targetCell.Coordinate.x}, {targetCell.Coordinate.y}) 召唤了自身的虚影");
     }
     
     /// <summary>

@@ -77,15 +77,19 @@ public class SkillSystem : MonoBehaviour
         if (currentCaster == null || currentSkillData == null || targetCell == null)
             return false;
             
-        // 检查目标是否在施法者的攻击范围（曼哈顿距离）内
+        // 检查目标是否在技能的有效范围（曼哈顿距离）内
         Vector2Int casterPos = currentCaster.CurrentCell.Coordinate;
         Vector2Int targetPos = targetCell.Coordinate;
         int manhattanDistance = Mathf.Abs(casterPos.x - targetPos.x) + Mathf.Abs(casterPos.y - targetPos.y);
-        bool inRange = manhattanDistance <= currentCaster.data.attackRange;
+        // 使用技能自身的 range；若未配置（<=0）则回退到单位的攻击距离
+        int allowedRange = (currentSkillData != null && currentSkillData.range > 0)
+            ? currentSkillData.range
+            : currentCaster.data.attackRange;
+        bool inRange = manhattanDistance <= allowedRange;
         
         if (!inRange)
         {
-            Debug.Log("目标不在技能范围内");
+            Debug.Log($"目标不在技能范围内（距离 {manhattanDistance}，允许 {allowedRange}）");
             return false;
         }
         

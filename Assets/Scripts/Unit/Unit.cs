@@ -339,7 +339,8 @@ public class Unit : MonoBehaviour
     public List<GridCell> GetSkillTargetRange(GridCell centerCell, SkillDataSO skillData)
     {
         List<GridCell> result = new List<GridCell>();
-        int range = data.attackRange;
+        // 使用技能自带的范围（如有），否则回退到单位的攻击范围
+        int range = skillData != null && skillData.range > 0 ? skillData.range : data.attackRange;
         var center = centerCell.Coordinate;
 
         for (int dx = -range; dx <= range; dx++)
@@ -351,7 +352,28 @@ public class Unit : MonoBehaviour
 
                 var pos = center + new Vector2Int(dx, dy);
                 var cell = GridManager.Instance.GetCell(pos);
-                if (cell == null || cell.CurrentUnit == null) continue;
+                if (cell == null) continue;
+
+                // 生成类技能（如地形投放）：允许选择空格子，或选择敌方单位所在格子
+                if (skillData != null && skillData.skillType == SkillType.Spawn)
+                {
+                    if (cell.CurrentUnit == null)
+                    {
+                        result.Add(cell);
+                        continue;
+                    }
+
+                    bool isTargetEnemySpawn = cell.CurrentUnit.data.isEnemy;
+                    bool isCasterEnemySpawn = data.isEnemy;
+                    if (isTargetEnemySpawn != isCasterEnemySpawn)
+                    {
+                        result.Add(cell);
+                    }
+                    continue;
+                }
+
+                // 非生成技能：仅允许选择符合敌我设定的单位格子
+                if (cell.CurrentUnit == null) continue;
 
                 bool isTargetEnemy = cell.CurrentUnit.data.isEnemy;
                 bool isCasterEnemy = data.isEnemy;

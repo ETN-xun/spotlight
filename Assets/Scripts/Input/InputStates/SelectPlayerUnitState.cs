@@ -179,7 +179,45 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
     {
         if (_isPreparingSkill)
         {
-            // 判断技能范围
+            // 在技能准备中，支持对空格子的技能（如生成类技能）
+            if (LastSelectedUnit is null)
+            {
+                Debug.Log("No unit selected to use the skill.");
+                _isPreparingSkill = false;
+                stateMachine.ChangeState(InputState.IdleState);
+                return;
+            }
+
+            var targetRange = LastSelectedUnit.GetSkillTargetRange(LastSelectedCell, _pendingSkill);
+            if (targetRange.Count == 0)
+            {
+                Debug.Log("No valid targets in range for the skill.");
+                _isPreparingSkill = false;
+                stateMachine.ChangeState(InputState.IdleState);
+                return;
+            }
+
+            if (targetRange.Contains(CurrentSelectedCell))
+            {
+                if (!ActionManager.EnergySystem.TrySpendEnergy(_pendingSkill.energyCost))
+                {
+                    Debug.Log("Not enough energy to use the skill.");
+                    _isPreparingSkill = false;
+                    stateMachine.ChangeState(InputState.IdleState);
+                    return;
+                }
+                SkillSystem.Instance.StartSkill(LastSelectedUnit, _pendingSkill);
+                SkillSystem.Instance.SelectTarget(CurrentSelectedCell);
+                var animationName = Utilities.SkillNameToAnimationName(_pendingSkill.skillName);
+                LastSelectedUnit.PlayAnimation(animationName, false);
+            }
+            else
+            {
+                Debug.Log("Target out of range for the skill.");
+            }
+
+            _isPreparingSkill = false;
+            stateMachine.ChangeState(InputState.IdleState);
         }
         else
         {

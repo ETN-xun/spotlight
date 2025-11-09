@@ -136,7 +136,7 @@ public class FlashbackDisplacementSkill : Skill
     /// </summary>
     /// <param name="flashbackData">闪回数据</param>
     /// <param name="gridManager">网格管理器</param>
-    private void ExecuteFlashback(FlashbackData flashbackData, GridManager gridManager)
+private void ExecuteFlashback(FlashbackData flashbackData, GridManager gridManager)
     {
         GridCell currentCell = caster.CurrentCell;
         GridCell targetCell = flashbackData.previousCell;
@@ -148,8 +148,8 @@ public class FlashbackDisplacementSkill : Skill
             return;
         }
         
-        // 在当前位置留下残影
-        CreateUnitCopy(currentCell, gridManager);
+        // 在当前位置留下残影（复用工具类）
+        PhantomHelper.CreatePhantom(caster, currentCell, gridManager, 0.5f, 2);
         
         // 移动单位到闪回位置 - 修复位置更新问题
         // 先清理当前位置
