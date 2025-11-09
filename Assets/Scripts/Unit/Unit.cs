@@ -11,7 +11,8 @@ public class Unit : MonoBehaviour
 {
     public GameObject bloodBar;
     public List<Sprite> bloodSprites;
-    public UnitDataSO data; // 静态数据
+    public UnitDataSO data_ori; // 静态数据
+    public UnitDataSO data;
     public int currentHP { get; private set; }
     
     [HideInInspector]
@@ -44,6 +45,7 @@ public class Unit : MonoBehaviour
 
     private void Start()
     {
+        data=Instantiate(data_ori);
         InitFromData();
         InitStatusEffectManager();
         GetComponentInChildren<SkeletonAnimation>().state.SetAnimation(0, "idle", true);

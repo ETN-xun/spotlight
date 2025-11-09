@@ -52,6 +52,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 2a97239cf8a8ed24fae60185c77e0596, type: 3}
   - {fileID: 21300000, guid: 79367dcd2a7f4e1458d1e00536e9ad07, type: 3}
   - {fileID: 21300000, guid: 005dee2d159853d46a3065f3210b816c, type: 3}
+  data_ori: {fileID: 11400000, guid: d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8, type: 2}
   data: {fileID: 11400000, guid: d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8, type: 2}
   currentTurnActionCount: 0
   ttIsApplied: 0
