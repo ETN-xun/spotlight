@@ -3,7 +3,7 @@ using UnityEngine;
 
 /// <summary>
 /// 强制迁移技能
-/// 指针操控者-零的特殊技能：将目标向自身牵引一格
+/// 选择一个在施法者攻击范围内的敌方单位：施法者先向远离目标的方向后退一格，然后将该敌方单位移动到施法者的原位置。
 /// </summary>
 public class ForcedMigrationSkill : Skill
 {
@@ -11,25 +11,71 @@ public class ForcedMigrationSkill : Skill
 
     public override void Execute(GridCell targetCell, GridManager gridManager)
     {
-        // 获取影响范围内的所有格子
-        List<GridCell> affectedCells = GetAffectedCells(targetCell, gridManager);
-        
-        foreach (var cell in affectedCells)
+        if (targetCell == null || caster == null || caster.CurrentCell == null)
         {
-            if (cell.CurrentUnit != null)
-            {
-                Unit target = cell.CurrentUnit;
-                
-                // 检查是否可以对该目标使用
-                if (CanTargetUnit(target))
-                {
-                    // 执行强制迁移
-                    ExecuteForcedMigration(target, gridManager);
-                }
-            }
+            Debug.LogWarning("强制迁移技能：目标格子或施法者无效");
+            return;
         }
-        
-        Debug.Log($"{caster.data.unitName} 使用了强制迁移技能");
+
+        Unit target = targetCell.CurrentUnit;
+        if (target == null)
+        {
+            Debug.LogWarning("强制迁移技能：目标位置没有单位");
+            return;
+        }
+
+        // 验证目标是否为敌方（输入流程已做范围校验，这里做类型校验）
+        if (!CanTargetUnit(target))
+        {
+            Debug.LogWarning("强制迁移技能：目标不合法（非敌方或不可选）");
+            return;
+        }
+
+        Vector2Int casterPos = caster.CurrentCell.Coordinate;
+        Vector2Int targetPos = targetCell.Coordinate;
+
+        // 记录施法者原位置
+        GridCell originalCasterCell = caster.CurrentCell;
+
+        // 计算施法者后退方向（远离目标）
+        Vector2Int awayDir = NormalizeDirection(casterPos - targetPos);
+        Vector2Int backPos = casterPos + awayDir;
+
+        // 检查后退位置有效且可进入
+        if (!gridManager.IsValidPosition(backPos))
+        {
+            Debug.Log("强制迁移技能：后退失败，目标位置越界");
+            return;
+        }
+        GridCell backCell = gridManager.GetCell(backPos);
+        if (backCell == null || backCell.CurrentUnit != null || backCell.DestructibleObject != null)
+        {
+            Debug.Log("强制迁移技能：后退失败，目标格被占用或有建筑");
+            return;
+        }
+
+        // 施法者后退一格
+        caster.MoveTo(backCell);
+
+        // 将敌方单位移动到施法者原位置
+        if (originalCasterCell != null && originalCasterCell.CurrentUnit == null)
+        {
+            var oldTargetCell = target.CurrentCell;
+            target.MoveTo(originalCasterCell);
+            PlayForcedMigrationEffect(oldTargetCell, originalCasterCell);
+            Debug.Log($"{caster.data.unitName} 后退到 ({backPos.x}, {backPos.y})，{target.data.unitName} 被迁移到施法者原位置 ({originalCasterCell.Coordinate.x}, {originalCasterCell.Coordinate.y})");
+        }
+        else
+        {
+            Debug.LogWarning("强制迁移技能：施法者原位置不可用，迁移失败");
+        }
+
+        // 如果技能配置中有额外伤害，造成伤害
+        if (data.baseDamage > 0)
+        {
+            target.TakeDamage(data.baseDamage);
+            Debug.Log($"强制迁移对 {target.data.unitName} 造成 {data.baseDamage} 点伤害");
+        }
     }
 
     /// <summary>
