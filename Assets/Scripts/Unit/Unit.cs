@@ -82,6 +82,11 @@ public class Unit : MonoBehaviour
         {
             Debug.Log("Playing animation: " + animationName);
             skeletonAnimation.state.SetAnimation(0, animationName, loop);
+            if (!loop)
+            {
+                // 非循环动画播放完毕后回到idle
+                skeletonAnimation.state.AddAnimation(0, "idle", true, 0);
+            }
         }
     }
 

@@ -98,7 +98,6 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
                 SkillSystem.Instance.SelectTarget(CurrentSelectedCell);
                 var animationName = Utilities.SkillNameToAnimationName(_pendingSkill.skillName);
                 LastSelectedUnit.PlayAnimation(animationName, false);
-                LastSelectedUnit.PlayAnimation("idle",true);
             }
             else
             {
@@ -197,7 +196,6 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
         // 播放动画
         var animationName = Utilities.SkillNameToAnimationName(skill.skillName);
         CurrentSelectedUnit.PlayAnimation(animationName, false);
-        CurrentSelectedUnit.PlayAnimation("idle", true);
         
         // 技能执行完毕，返回空闲状态
         stateMachine.ChangeState(InputState.IdleState);

@@ -47,7 +47,9 @@ namespace Action
             _actorUnit = actor;
             skill.Execute(targetCell, GridManager.Instance);
             Debug.Log("execute skill action");
-            // play animation here
+            // 播放技能对应动画
+            var animationName = Utilities.SkillNameToAnimationName(skill.data.skillName);
+            actor.PlayAnimation(animationName, false);
             DetectActionEnd();
         }
         
