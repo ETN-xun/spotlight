@@ -334,6 +334,41 @@ public class Unit : MonoBehaviour
 
         return result;
     }
+
+    // 根据技能的目标设置（友方/敌方）与单位的 AttackRange 计算可选目标
+    public List<GridCell> GetSkillTargetRange(GridCell centerCell, SkillDataSO skillData)
+    {
+        List<GridCell> result = new List<GridCell>();
+        int range = data.attackRange;
+        var center = centerCell.Coordinate;
+
+        for (int dx = -range; dx <= range; dx++)
+        {
+            for (int dy = -range; dy <= range; dy++)
+            {
+                int dist = Mathf.Abs(dx) + Mathf.Abs(dy);
+                if (dist > range) continue;
+
+                var pos = center + new Vector2Int(dx, dy);
+                var cell = GridManager.Instance.GetCell(pos);
+                if (cell == null || cell.CurrentUnit == null) continue;
+
+                bool isTargetEnemy = cell.CurrentUnit.data.isEnemy;
+                bool isCasterEnemy = data.isEnemy;
+
+                bool canTarget = false;
+                if (skillData.canTargetEnemies && isTargetEnemy != isCasterEnemy)
+                    canTarget = true;
+                if (skillData.canTargetAllies && isTargetEnemy == isCasterEnemy)
+                    canTarget = true;
+
+                if (canTarget)
+                    result.Add(cell);
+            }
+        }
+
+        return result;
+    }
     
     
     public void ApplyTTEffect_temp()

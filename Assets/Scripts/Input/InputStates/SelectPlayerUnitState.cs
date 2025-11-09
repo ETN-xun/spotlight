@@ -65,6 +65,45 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
                 {
                     HandleClickUnitForPositionSwap();
                 }
+                else if (_isPreparingSkill)
+                {
+                    // 技能准备中：支持对友方单位施放（如堆栈护盾）
+                    if (LastSelectedUnit is null)
+                    {
+                        Debug.Log("No unit selected to use the skill.");
+                        return;
+                    }
+
+                    var targetRange = LastSelectedUnit.GetSkillTargetRange(LastSelectedCell, _pendingSkill);
+                    if (targetRange.Count == 0)
+                    {
+                        Debug.Log("No valid targets in range for the skill.");
+                        _isPreparingSkill = false;
+                        stateMachine.ChangeState(InputState.IdleState);
+                        return;
+                    }
+
+                    if (targetRange.Contains(CurrentSelectedCell))
+                    {
+                        if (!ActionManager.EnergySystem.TrySpendEnergy(_pendingSkill.energyCost))
+                        {
+                            Debug.Log("Not enough energy to use the skill.");
+                            _isPreparingSkill = false;
+                            stateMachine.ChangeState(InputState.IdleState);
+                            return;
+                        }
+                        SkillSystem.Instance.StartSkill(LastSelectedUnit, _pendingSkill);
+                        SkillSystem.Instance.SelectTarget(CurrentSelectedCell);
+                        var animationName = Utilities.SkillNameToAnimationName(_pendingSkill.skillName);
+                        LastSelectedUnit.PlayAnimation(animationName, false);
+                    }
+                    else
+                    {
+                        Debug.Log("Target out of range for the skill.");
+                    }
+                    _isPreparingSkill = false;
+                    stateMachine.ChangeState(InputState.IdleState);
+                }
                 else
                 {
                     stateMachine.ChangeState(InputState.SelectPlayerUnitState);
@@ -105,13 +144,13 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
                 Debug.Log("No unit selected to use the skill.");
                 return;
             }
-            var attackRange = LastSelectedUnit.GetAttackRange(LastSelectedCell);
-            if (attackRange.Count == 0)
+            var targetRange = LastSelectedUnit.GetSkillTargetRange(LastSelectedCell, _pendingSkill);
+            if (targetRange.Count == 0)
             {
                 Debug.Log("No valid targets in range for the skill.");
                 return;
             }
-            if (attackRange.Contains(CurrentSelectedCell))
+            if (targetRange.Contains(CurrentSelectedCell))
             {
                 // ActionManager.Instance.ExecuteSkillAction(LastSelectedUnit, _pendingSkill, CurrentSelectedCell);
                 if (!ActionManager.EnergySystem.TrySpendEnergy(_pendingSkill.energyCost))
@@ -185,8 +224,8 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
         Debug.Log("Preparing to use skill: " + skill.skillName);
         // 显示技能范围高亮
         GridManager.Instance.ClearAllHighlights();
-        var attackRange = CurrentSelectedUnit.GetAttackRange(CurrentSelectedCell);
-        foreach (var cell in attackRange)
+        var targetRange = CurrentSelectedUnit.GetSkillTargetRange(CurrentSelectedCell, skill);
+        foreach (var cell in targetRange)
         {
             GridManager.Instance.Highlight(true, cell.Coordinate);
         }

@@ -103,13 +103,15 @@ public void StartDialogue(DialogueGraph dialogueGraph)
             }
         }
         
-        // 从StartNode开始，直接前进到第一个实际的节点
-        AdvanceToNextNode();
-
-        // 如果处于“跳过所有剧情”模式，立即跳到下一个断点/段落结束/结束
+        // 如果处于“跳过所有剧情”模式，直接跳到下一个断点/段落结束/结束，避免执行任何首帧淡入等效果
         if (autoSkipAll)
         {
             SkipToNextCheckpoint();
+        }
+        else
+        {
+            // 从StartNode开始，前进到第一个实际的节点
+            AdvanceToNextNode();
         }
     }
     else
@@ -237,6 +239,12 @@ public void StartDialogue(DialogueGraph dialogueGraph)
     /// </summary>
     private void ExecuteFade(FadeScreenNode node)
     {
+        // 在全局跳过模式下，直接跳过淡入淡出效果
+        if (autoSkipAll)
+        {
+            ProcessNode(GetNextNode(node));
+            return;
+        }
         skipButton.gameObject.SetActive(false);
         nextButton.gameObject.SetActive(false);
         ScreenFader.Instance.StartFade(

@@ -31,8 +31,8 @@ MonoBehaviour:
   canDestroy: 0
   collisionDamage: 1
   skills:
-  - {fileID: 11400000, guid: b1e2f3a4c5d6e7f8a9b0c1d2e3f4a5b6, type: 2}
-  - {fileID: 11400000, guid: ed9efa266dd63384c972eebd664294f0, type: 2}
+  - {fileID: 11400000, guid: 87fa0a906c9f76844b16f23b61e4e309, type: 2}
+  - {fileID: 11400000, guid: ce9c0221c795e714db7fcce8280a37f7, type: 2}
   aiPriority: 1
   buildingTargetPriority: 2
   unitTargetPriority: 1
