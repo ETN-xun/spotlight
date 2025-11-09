@@ -11,6 +11,9 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
     private GridCell LastSelectedCell { get; set; }
     
     private bool _isPreparingSkill;
+    // 移形换影：双目标选择流程状态
+    private bool _isPreparingPositionSwap;
+    private GridCell _firstSwapCell;
     
     private SkillDataSO _pendingSkill;
     
@@ -22,6 +25,8 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
     {
         MessageCenter.Subscribe(Defines.ClickSkillViewEvent, OnClickSkillView);
         _isPreparingSkill = false;
+        _isPreparingPositionSwap = false;
+        _firstSwapCell = null;
         if (CurrentSelectedUnit is null) return;
         LastSelectedUnit = CurrentSelectedUnit;
         GridManager.Instance.Highlight(true, CurrentSelectedUnit.CurrentCell.Coordinate);
@@ -56,15 +61,36 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
             case InputType.NoClick:
                 break;
             case InputType.ClickPlayerUnit:
-                stateMachine.ChangeState(InputState.SelectPlayerUnitState);
+                if (_isPreparingPositionSwap)
+                {
+                    HandleClickUnitForPositionSwap();
+                }
+                else
+                {
+                    stateMachine.ChangeState(InputState.SelectPlayerUnitState);
+                }
                 break;
             case InputType.ClickEnemyUnit:
-                HandleClickEnemyUnit();
+                if (_isPreparingPositionSwap)
+                {
+                    HandleClickUnitForPositionSwap();
+                }
+                else
+                {
+                    HandleClickEnemyUnit();
+                }
                 break;
             case InputType.ClickNoUnit:
                 HandleNoUnitClick();
                 break;
             case InputType.CancelClick:
+                // 取消双选流程
+                if (_isPreparingPositionSwap)
+                {
+                    GridManager.Instance.ClearAllHighlights();
+                    _isPreparingPositionSwap = false;
+                    _firstSwapCell = null;
+                }
                 stateMachine.ChangeState(InputState.IdleState);
                 break;
         }
@@ -148,6 +174,13 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
             return;
         }
         
+        // 检查是否为移形换影技能（双目标选择：先攻距内单位，再任意单位）
+        if (skill.skillID == "position_swap_01" || skill.skillName.Contains("移形换影") || skill.skillName.Contains("PositionSwap"))
+        {
+            PreparePositionSwap(skill);
+            return;
+        }
+        
         _isPreparingSkill = true;
         Debug.Log("Preparing to use skill: " + skill.skillName);
         // 显示技能范围高亮
@@ -159,6 +192,127 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
         }
         LastSelectedUnit = CurrentSelectedUnit;
         LastSelectedCell = CurrentSelectedCell;
+    }
+
+    /// <summary>
+    /// 进入移形换影的第一阶段：选择攻距内的第一个单位
+    /// </summary>
+    private void PreparePositionSwap(SkillDataSO skill)
+    {
+        _isPreparingPositionSwap = true;
+        _firstSwapCell = null;
+        Debug.Log("准备使用移形换影技能（双目标选择）");
+
+        GridManager.Instance.ClearAllHighlights();
+        LastSelectedUnit = CurrentSelectedUnit;
+        LastSelectedCell = CurrentSelectedCell;
+
+        // 高亮：施法者AttackRange范围内所有“有单位”的格子（友敌皆可）
+        var cellsInRange = GetCellsWithUnitInAttackRange(LastSelectedUnit, LastSelectedCell);
+        foreach (var cell in cellsInRange)
+        {
+            GridManager.Instance.Highlight(true, cell.Coordinate);
+        }
+    }
+
+    /// <summary>
+    /// 在移形换影流程中处理单位点击（两次选择）
+    /// </summary>
+    private void HandleClickUnitForPositionSwap()
+    {
+        var clickedCell = CurrentSelectedCell;
+        if (clickedCell == null || clickedCell.CurrentUnit == null)
+        {
+            Debug.Log("请选择一个有单位的格子");
+            return;
+        }
+
+        // 第一次选择：必须在施法者攻击范围内（曼哈顿距离）
+        if (_firstSwapCell == null)
+        {
+            int range = LastSelectedUnit.data.attackRange;
+            var dist = Mathf.Abs(clickedCell.Coordinate.x - LastSelectedCell.Coordinate.x) +
+                       Mathf.Abs(clickedCell.Coordinate.y - LastSelectedCell.Coordinate.y);
+            if (dist > range)
+            {
+                Debug.Log("第一个目标超出施法者攻击范围");
+                return;
+            }
+
+            // 记录第一个目标并进入第二次选择
+            _firstSwapCell = clickedCell;
+            GridManager.Instance.ClearAllHighlights();
+
+            // 高亮所有可作为第二目标的单位（距离不限，排除第一个目标）
+            foreach (var kvp in GridManager.Instance._gridDict)
+            {
+                var cell = kvp.Value;
+                if (cell.CurrentUnit != null && cell != _firstSwapCell)
+                {
+                    GridManager.Instance.Highlight(true, cell.Coordinate);
+                }
+            }
+
+            Debug.Log("已选择第一个目标，请选择第二个任意单位");
+            return;
+        }
+
+        // 第二次选择：任意单位，且与第一个不同
+        if (clickedCell == _firstSwapCell)
+        {
+            Debug.Log("第二个目标不能与第一个相同");
+            return;
+        }
+
+        // 能量检测
+        if (!ActionManager.EnergySystem.TrySpendEnergy(_pendingSkill.energyCost))
+        {
+            Debug.Log("能量不足，无法使用移形换影");
+            _isPreparingPositionSwap = false;
+            _firstSwapCell = null;
+            GridManager.Instance.ClearAllHighlights();
+            stateMachine.ChangeState(InputState.IdleState);
+            return;
+        }
+
+        // 执行位置互换
+        var swapSkill = new PositionSwapSkill(_pendingSkill, LastSelectedUnit);
+        swapSkill.ExecuteSwap(_firstSwapCell, clickedCell, GridManager.Instance);
+
+        // 播放施法者动画
+        var animationName = Utilities.SkillNameToAnimationName(_pendingSkill.skillName);
+        LastSelectedUnit.PlayAnimation(animationName, false);
+
+        // 清理状态并返回空闲
+        _isPreparingPositionSwap = false;
+        _firstSwapCell = null;
+        GridManager.Instance.ClearAllHighlights();
+        stateMachine.ChangeState(InputState.IdleState);
+    }
+
+    /// <summary>
+    /// 计算施法者AttackRange范围内所有“有单位”的格子（友敌皆可）
+    /// </summary>
+    private System.Collections.Generic.List<GridCell> GetCellsWithUnitInAttackRange(Unit unit, GridCell center)
+    {
+        var result = new System.Collections.Generic.List<GridCell>();
+        int range = unit.data.attackRange;
+        var centerCoord = center.Coordinate;
+        for (int dx = -range; dx <= range; dx++)
+        {
+            for (int dy = -range; dy <= range; dy++)
+            {
+                int dist = Mathf.Abs(dx) + Mathf.Abs(dy);
+                if (dist > range) continue;
+                var pos = centerCoord + new Vector2Int(dx, dy);
+                var cell = GridManager.Instance.GetCell(pos);
+                if (cell != null && cell.CurrentUnit != null)
+                {
+                    result.Add(cell);
+                }
+            }
+        }
+        return result;
     }
     
     /// <summary>

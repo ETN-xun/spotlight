@@ -3,7 +3,8 @@ using UnityEngine;
 
 /// <summary>
 /// 移形换影技能
-/// 交换自己周围1格范围内的单位与任意单位的位置
+/// 选择一个距离在施法者 AttackRange 内的单位（可友可敌），
+/// 再选择任意一个单位（可友可敌，距离不限），使两者位置互换。
 /// </summary>
 public class PositionSwapSkill : Skill
 {
@@ -11,43 +12,8 @@ public class PositionSwapSkill : Skill
 
     public override void Execute(GridCell targetCell, GridManager gridManager)
     {
-        if (targetCell == null || caster == null || caster.CurrentCell == null)
-        {
-            Debug.LogWarning("移形换影技能：目标格子或施法者无效");
-            return;
-        }
-
-        Unit targetUnit = targetCell.CurrentUnit;
-        if (targetUnit == null)
-        {
-            Debug.LogWarning("移形换影技能：目标位置没有单位");
-            return;
-        }
-
-        // 检查目标单位是否在施法者周围1格范围内
-        Vector2Int casterPos = caster.CurrentCell.Coordinate;
-        Vector2Int targetPos = targetCell.Coordinate;
-        
-        if (!IsWithinRange(casterPos, targetPos, 1))
-        {
-            Debug.LogWarning("移形换影技能：目标单位不在1格范围内");
-            return;
-        }
-
-        // 获取所有可以交换的单位（除了施法者和目标单位）
-        List<Unit> availableUnits = GetAvailableSwapTargets(targetUnit);
-        
-        if (availableUnits.Count == 0)
-        {
-            Debug.LogWarning("移形换影技能：没有可用的交换目标");
-            return;
-        }
-
-        // 让玩家选择要交换的单位（这里简化为随机选择）
-        Unit swapTarget = availableUnits[Random.Range(0, availableUnits.Count)];
-        
-        // 执行位置交换
-        ExecutePositionSwap(targetUnit, swapTarget, gridManager);
+        // 该技能需要两个明确的目标，请使用 ExecuteSwap(cellA, cellB, gridManager)
+        Debug.LogWarning("移形换影技能：当前实现需要两个目标，请改用 ExecuteSwap 方法");
     }
 
     /// <summary>
@@ -60,7 +26,7 @@ public class PositionSwapSkill : Skill
     }
 
     /// <summary>
-    /// 获取所有可用的交换目标
+    /// 获取所有可用的交换目标（不包含施法者和排除的单位）
     /// </summary>
     private List<Unit> GetAvailableSwapTargets(Unit excludeUnit)
     {
@@ -108,6 +74,28 @@ public class PositionSwapSkill : Skill
         
         // 播放交换效果
         PlaySwapEffect(cell1, cell2);
+    }
+
+    /// <summary>
+    /// 执行位置交换（公开方法，供两次选取后直接调用）
+    /// </summary>
+    public void ExecuteSwap(GridCell firstTargetCell, GridCell secondTargetCell, GridManager gridManager)
+    {
+        if (firstTargetCell == null || secondTargetCell == null)
+        {
+            Debug.LogWarning("移形换影技能：两个目标格子不能为空");
+            return;
+        }
+
+        var unit1 = firstTargetCell.CurrentUnit;
+        var unit2 = secondTargetCell.CurrentUnit;
+        if (unit1 == null || unit2 == null)
+        {
+            Debug.LogWarning("移形换影技能：请选择两个都有单位的格子");
+            return;
+        }
+
+        ExecutePositionSwap(unit1, unit2, gridManager);
     }
 
     /// <summary>
