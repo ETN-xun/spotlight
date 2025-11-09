@@ -173,25 +173,35 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
             return;
         }
         
-        // 检查能量是否足够
+        // 先进行完整校验：存在记录、未过期、目标格未被占用
+        if (!FlashbackDisplacementSkill.CanExecuteFlashback(CurrentSelectedUnit))
+        {
+            Debug.Log($"{CurrentSelectedUnit.data.unitName} 当前不可执行闪回（无记录/过期/目标被占用）");
+            return;
+        }
+
+        // 校验通过后再检测能量是否充足（不在失败时扣能量）
         if (!ActionManager.EnergySystem.TrySpendEnergy(skill.energyCost))
         {
             Debug.Log("能量不足，无法使用闪回位移技能");
             return;
         }
         
-        // 检查是否可以使用闪回位移
-        if (!FlashbackDisplacementSkill.CanUseFlashback(CurrentSelectedUnit))
-        {
-            Debug.Log($"{CurrentSelectedUnit.data.unitName} 没有可用的闪回记录");
-            return;
-        }
-        
         Debug.Log($"{CurrentSelectedUnit.data.unitName} 使用闪回位移技能");
         
+        var beforeCell = CurrentSelectedUnit.CurrentCell;
         // 直接创建并执行闪回位移技能（不需要通过SkillSystem的目标验证）
         FlashbackDisplacementSkill flashbackSkill = new FlashbackDisplacementSkill(skill, CurrentSelectedUnit);
         flashbackSkill.Execute(CurrentSelectedUnit.CurrentCell, GridManager.Instance);
+        
+        // 如果执行后位置未发生变化，视为失败，返还能量
+        if (CurrentSelectedUnit.CurrentCell == beforeCell)
+        {
+            ActionManager.EnergySystem.IncreaseEnergy(skill.energyCost);
+            Debug.Log("闪回位移失败，已返还能量");
+            stateMachine.ChangeState(InputState.IdleState);
+            return;
+        }
         
         // 播放动画
         var animationName = Utilities.SkillNameToAnimationName(skill.skillName);

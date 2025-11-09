@@ -290,6 +290,36 @@ public class FlashbackDisplacementSkill : Skill
     {
         return flashbackHistory.ContainsKey(unit);
     }
+
+    /// <summary>
+    /// 检查当前是否可以执行闪回（包含记录存在、未过期、目标格未被占用）
+    /// </summary>
+    /// <param name="unit">要检查的单位</param>
+    /// <returns>是否可以执行闪回</returns>
+    public static bool CanExecuteFlashback(Unit unit)
+    {
+        if (unit == null) return false;
+        if (!flashbackHistory.ContainsKey(unit)) return false;
+
+        var data = flashbackHistory[unit];
+        if (data == null || data.previousCell == null) return false;
+
+        int currentTurn = GameManager.Instance != null ? GameManager.Instance.CurrentTurn : 1;
+        // 过期不可用，同时清理记录
+        if ((currentTurn - data.turnUsed) > 1)
+        {
+            flashbackHistory.Remove(unit);
+            return false;
+        }
+
+        // 目标格被占用不可用
+        if (data.previousCell.CurrentUnit != null)
+        {
+            return false;
+        }
+
+        return true;
+    }
     
     /// <summary>
     /// 清理过期的闪回记录
