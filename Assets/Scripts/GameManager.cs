@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Common;
 using Enemy;
+using Action;
 using Scene;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -181,6 +182,8 @@ public class GameManager : MonoBehaviour
     {
         _currentGameState = GameState.Deployment;
         _currentTurn = 1;
+        // 重置能量系统，确保重新进入关卡时从初始能量开始
+        ActionManager.EnergySystem.ResetForNewLevel();
         
         // 初始化状态实例
         InitializeStates();
@@ -203,6 +206,8 @@ public class GameManager : MonoBehaviour
     
     private void StartGame()
     {
+        // 每次真正开始战斗前重置能量，防止继承上一局
+        ActionManager.EnergySystem.ResetForNewLevel();
         GridManager.Instance.InitGrid();
         EnemyManager.Instance.InitEnemies();
         ViewManager.Instance.OpenView(ViewType.FightView);

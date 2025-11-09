@@ -31,7 +31,9 @@ namespace System
             
             _maxEnergy = currentLevel.maxEnergy;
             _baseEnergy = currentLevel.baseEnergy;
-            _currentEnergy = _baseEnergy;
+            // 初始化为关卡配置的每回合能量（默认4），以满足“初始4点能量”的设计需求
+            _currentEnergy = currentLevel.energyPerTurn;
+            MessageCenter.Publish(Defines.EnergyChangedEvent, _currentEnergy);
         }
         
         private bool _isInitialized = false;
@@ -81,6 +83,15 @@ namespace System
             if (_currentEnergy < amount) return false;
             DecreaseEnergy(amount);
             return true;
+        }
+
+        /// <summary>
+        /// 重启关卡时重置能量系统，避免继承上一局的能量值。
+        /// </summary>
+        public void ResetForNewLevel()
+        {
+            _isInitialized = false;
+            _currentEnergy = 0;
         }
     }
 }

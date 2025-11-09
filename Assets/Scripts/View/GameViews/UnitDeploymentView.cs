@@ -18,6 +18,8 @@ namespace View.GameViews
             _unitData = unitData;
             Find<TextMeshProUGUI>("UnitName").text = _unitData.unitName;
             Find<Image>("UnitImage").sprite = _unitData.unitIcon;
+            // 重置交互状态，避免缓存的禁用状态在重进关卡时导致按钮不可点击
+            EnableViewClick();
         }
         
 
