@@ -38,7 +38,9 @@ public class DialoguePlayer : MonoBehaviour
     private Node currentNode;
     private bool isTyping;
     private Coroutine typingCoroutine;
-    public static DialoguePlayer Instance { get; private set; }
+    
+    private static bool autoSkipAll = false;
+public static DialoguePlayer Instance { get; private set; }
 
 
     private void Awake()
@@ -50,11 +52,18 @@ public class DialoguePlayer : MonoBehaviour
         dialoguePanel.SetActive(false);
     }
 
-    private void Start()
-    {
-        nextButton.onClick.AddListener(OnInteraction);
-        skipButton.onClick.AddListener(SkipToNextCheckpoint);
-    }
+private void Start()
+{
+    nextButton.onClick.AddListener(OnInteraction);
+    skipButton.onClick.AddListener(SkipAllDialogues);
+}
+
+private void SkipAllDialogues()
+{
+    autoSkipAll = true;
+    SkipToNextCheckpoint();
+}
+
 
     // 当一个剧情段落结束并需要游戏逻辑介入时触发
     public static event Action<string> OnSectionEnd;
@@ -65,43 +74,49 @@ public class DialoguePlayer : MonoBehaviour
     /// <summary>
     ///     开始一段剧情
     /// </summary>
-    public void StartDialogue(DialogueGraph dialogueGraph)
+public void StartDialogue(DialogueGraph dialogueGraph)
+{
+    if (dialogueGraph == null)
     {
-        if (dialogueGraph == null)
+        Debug.LogError("[DialoguePlayer] 尝试使用空的剧情图开始对话。");
+        return;
+    }
+
+    if (currentGraph != null) EndDialogue(false);
+
+    currentGraph = dialogueGraph;
+    currentNode = currentGraph.GetStartNode();
+
+    if (currentNode != null)
+    {
+        dialoguePanel.SetActive(true);
+        skipButton.gameObject.SetActive(true);
+        
+        // 在播放剧情时隐藏FightView
+        if (ViewManager.Instance != null && ViewManager.Instance.IsOpen(ViewType.FightView))
         {
-            Debug.LogError("[DialoguePlayer] 尝试使用空的剧情图开始对话。");
-            return;
-        }
-
-        if (currentGraph != null) EndDialogue(false);
-
-        currentGraph = dialogueGraph;
-        currentNode = currentGraph.GetStartNode();
-
-        if (currentNode != null)
-        {
-            dialoguePanel.SetActive(true);
-            skipButton.gameObject.SetActive(true);
-            
-            // 在播放剧情时隐藏FightView
-            if (ViewManager.Instance != null && ViewManager.Instance.IsOpen(ViewType.FightView))
+            var fightView = ViewManager.Instance.GetView(ViewType.FightView);
+            if (fightView != null)
             {
-                var fightView = ViewManager.Instance.GetView(ViewType.FightView);
-                if (fightView != null)
-                {
-                    fightView.SetVisible(false);
-                    Debug.Log("[DialoguePlayer] 剧情开始，隐藏FightView");
-                }
+                fightView.SetVisible(false);
+                Debug.Log("[DialoguePlayer] 剧情开始，隐藏FightView");
             }
-            
-            // 从StartNode开始，直接前进到第一个实际的节点
-            AdvanceToNextNode();
         }
-        else
+        
+        // 从StartNode开始，直接前进到第一个实际的节点
+        AdvanceToNextNode();
+
+        // 如果处于“跳过所有剧情”模式，立即跳到下一个断点/段落结束/结束
+        if (autoSkipAll)
         {
-            Debug.LogError($"[DialoguePlayer] 剧情图 '{currentGraph.name}' 中未找到 StartNode。", currentGraph);
+            SkipToNextCheckpoint();
         }
     }
+    else
+    {
+        Debug.LogError($"[DialoguePlayer] 剧情图 '{currentGraph.name}' 中未找到 StartNode。", currentGraph);
+    }
+}
 
     /// <summary>
     ///     获取当前节点的下一个节点
@@ -401,4 +416,10 @@ public class DialoguePlayer : MonoBehaviour
         // 文本显示完毕后，显示“下一步”按钮，等待玩家交互
         nextButton.gameObject.SetActive(true);
     }
+
+
+public static void ResetSkipAll()
+{
+    autoSkipAll = false;
+}
 }

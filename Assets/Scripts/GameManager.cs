@@ -141,38 +141,41 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void HandleSectionEndEvent(string eventName)
+private void HandleSectionEndEvent(string eventName)
+{
+    Debug.Log(eventName);
+    if (eventName.StartsWith("StartLevel"))
     {
-        Debug.Log(eventName);
-        if (eventName.StartsWith("StartLevel"))
+        dialogueChainQueue.Clear();
+        if (eventName == "StartLevel1")
         {
-            dialogueChainQueue.Clear();
-            if (eventName == "StartLevel1")
-            {
-                StartGame();
-            }
+            StartGame();
         }
-        else if (eventName == "ReturnToMenu")
-        {
-            
-            dialogueChainQueue.Clear(); 
-            // SceneManager.LoadScene("MainMenu");
-            if (sceneTransitionCover != null)
-            {
-                sceneTransitionCover.SetActive(true);
-            }
-            SceneLoadManager.Instance.LoadScene(SceneType.MainMenu);
-        }
-        /*else if (eventName == "EndGame")
-        {
-            PlayerCompletedLevel(1);
-        }*/
-        else 
-        {
-            Debug.Log(123456);
-            PlayNextInChain();
-        }
+        // 当剧情链切换到玩法，重置“跳过所有剧情”标志
+        DialoguePlayer.ResetSkipAll();
     }
+    else if (eventName == "ReturnToMenu")
+    {
+        dialogueChainQueue.Clear();
+        // SceneManager.LoadScene("MainMenu");
+        if (sceneTransitionCover != null)
+        {
+            sceneTransitionCover.SetActive(true);
+        }
+        SceneLoadManager.Instance.LoadScene(SceneType.MainMenu);
+        // 返回主菜单后，重置“跳过所有剧情”标志
+        DialoguePlayer.ResetSkipAll();
+    }
+    /*else if (eventName == "EndGame")
+    {
+        PlayerCompletedLevel(1);
+    }*/
+    else
+    {
+        Debug.Log(123456);
+        PlayNextInChain();
+    }
+}
 
 
     /// <summary>
