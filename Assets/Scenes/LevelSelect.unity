@@ -319,7 +319,7 @@ GameObject:
   - component: {fileID: 705658975}
   - component: {fileID: 705658974}
   m_Layer: 5
-  m_Name: Button (1)
+  m_Name: "\u7B2C\u4E8C\u5173 \u56DE\u8DEF\u5E73\u539F"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -453,7 +453,7 @@ GameObject:
   - component: {fileID: 757868665}
   - component: {fileID: 757868664}
   m_Layer: 5
-  m_Name: Button (2)
+  m_Name: "\u7B2C\u4E09\u5173 \u6E90\u70B9\u5C71\u8109"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1106,7 +1106,7 @@ GameObject:
   - component: {fileID: 1684856869}
   - component: {fileID: 1684856868}
   m_Layer: 5
-  m_Name: Button
+  m_Name: "\u7B2C\u4E00\u5173 \u534F\u8BAE\u68EE\u6797"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
