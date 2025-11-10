@@ -7,6 +7,8 @@ public class DestructibleObject
     public DestructibleObjectSO data;
     public Vector2Int coordinate;
     public bool isDestroyed = false;
+    // 占领该建筑的单位（用于缓存区能量加成与销毁回退）
+    public Unit occupant;
     
     public DestructibleObject(DestructibleObjectSO so, Vector2Int coord)
     {
@@ -42,6 +44,13 @@ public class DestructibleObject
     {
         if (isDestroyed) return;
         isDestroyed = true;
+
+        // 若为缓存区且有占领者，销毁时移除其每回合能量加成
+        if (data.Type == DestructibleObjectType.Register && occupant != null)
+        {
+            occupant.data.RecoverEnergy -= 2;
+            if (occupant.data.RecoverEnergy < 0) occupant.data.RecoverEnergy = 0;
+        }
 
         GridCell cell = GridManager.Instance.GetCell(coordinate);
         if (cell != null)

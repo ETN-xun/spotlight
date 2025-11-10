@@ -100,7 +100,16 @@ namespace Action
         private void OnPlayerTurnStarted(object[] args)
         {
             if (AllyManager.Instance.CurrentPlayerTurn == 1) return;
-            EnergySystem.IncreaseEnergy(recoverEnergyPerTurn);
+            int bonus = 0;
+            var allies = AllyManager.Instance.GetAliveAllies();
+            if (allies != null)
+            {
+                foreach (var ally in allies)
+                {
+                    bonus += ally.data.RecoverEnergy;
+                }
+            }
+            EnergySystem.IncreaseEnergy(recoverEnergyPerTurn + bonus);
         }
 
         private void OnPlayerTurnEnd(object[] args)

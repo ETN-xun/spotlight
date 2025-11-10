@@ -89,28 +89,8 @@ public class MovementSystem : MonoBehaviour
                 case TerrainType.BugTile:
                     //造成异常效果
                     StatusAbnormal(unit,nextCell);    
-                    //根据角色类型交换攻击力与生命
-                    if(unit.data.isEnemy)
-                    {
-                        unit.data.baseDamage = unit.data.baseDamage + unit.data.maxHP;
-                        unit.data.maxHP = unit.data.baseDamage - unit.data.maxHP;
-                        unit.data.baseDamage = unit.data.baseDamage - unit.data.maxHP;
-                    }
-                    else
-                    {
-                        switch (unit.data.unitName)
-                        { 
-                            case "Shadow"://角色为影
-                                Exchange(ref unit.data.maxHP,ref unit.data.skills.FirstOrDefault(skill => skill.skillName == "BreakpointExecutionSkill")!.baseDamage);//交换断点斩杀技能数值
-                                break;
-                            case "Rock"://角色为石
-                                Exchange(ref unit.data.maxHP,ref unit.data.skills.FirstOrDefault(skill => skill.skillName == "SpawnSkill")!.baseDamage);//交换地形投放技能数值
-                                break;
-                            case "Zero"://角色为零
-                                Exchange(ref unit.data.maxHP,ref unit.data.skills.FirstOrDefault(skill => skill.skillName == "ForcedMigrationSkill")!.baseDamage);//交换强制迁移技能
-                                break;
-                        }
-                    }
+                    //统一交换单位的生命与攻击
+                    Exchange(ref unit.data.maxHP, ref unit.data.baseDamage);
                     break;
             }
             
@@ -132,6 +112,8 @@ public class MovementSystem : MonoBehaviour
                         destructibleObject.data.Hits = 1;
                         destructibleObject.data.canDestroy = true;
                         destructibleObject.data.isActive = true;
+                        // 绑定占领者
+                        destructibleObject.occupant = unit;
                     }
                     break;
             }
@@ -221,33 +203,13 @@ public class MovementSystem : MonoBehaviour
                         //造成异常效果
                         StatusAbnormal(unit,nextCell);    
                         break;
-                    case TerrainType.BugTile:
-                        //造成异常效果
-                        StatusAbnormal(unit,nextCell);    
-                        //根据角色类型交换攻击力与生命
-                        if(unit.data.isEnemy)
-                        {
-                            unit.data.baseDamage = unit.data.baseDamage + unit.data.maxHP;
-                            unit.data.maxHP = unit.data.baseDamage - unit.data.maxHP;
-                            unit.data.baseDamage = unit.data.baseDamage - unit.data.maxHP;
-                        }
-                        else
-                        {
-                            switch (unit.data.unitName)
-                            { 
-                                case "Shadow"://角色为影
-                                    Exchange(ref unit.data.maxHP,ref unit.data.skills.FirstOrDefault(skill => skill.skillID== "breakpoint_execution_01")!.baseDamage);//交换断点斩杀技能数值
-                                    break;
-                                case "Rock"://角色为石
-                                    Exchange(ref unit.data.maxHP,ref unit.data.skills.FirstOrDefault(skill => skill.skillID == "terrain_deployment_01")!.baseDamage);//交换地形投放技能数值
-                                    break;
-                                case "Zero"://角色为零
-                                    Exchange(ref unit.data.maxHP,ref unit.data.skills.FirstOrDefault(skill => skill.skillID == "forced_migration_01")!.baseDamage);//交换强制迁移技能
-                                    break;
-                            }
-                        }
-                        break;
-                }
+                case TerrainType.BugTile:
+                    //造成异常效果
+                    StatusAbnormal(unit,nextCell);    
+                    //统一交换单位的生命与攻击
+                    Exchange(ref unit.data.maxHP, ref unit.data.baseDamage);
+                    break;
+            }
             
             }
 
@@ -430,6 +392,9 @@ public class MovementSystem : MonoBehaviour
                     //建筑激活，可以被攻击
                     DestructibleObject.data.Hits = 1;
                     DestructibleObject.data.canDestroy = true;
+                    DestructibleObject.data.isActive = true;
+                    // 绑定占领者
+                    DestructibleObject.occupant = unit;
                 }
             }
         }

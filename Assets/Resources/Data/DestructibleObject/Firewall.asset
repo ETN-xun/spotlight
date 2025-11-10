@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Firewall
   m_EditorClassIdentifier: 
   Name: 
-  canDestroy: 0
-  Hits: 0
-  Type: 0
+  canDestroy: 1
+  Hits: 2
+  Type: 1
   isActive: 0
   tileFullHP: {fileID: 0}
   tileDamaged: {fileID: 0}
