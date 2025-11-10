@@ -109,6 +109,19 @@ namespace Enemy.AI
             var targetUnit = intent.attackTargetCell.CurrentUnit;
             if (targetUnit != null)
             {
+                // 范围校验（曼哈顿距离），确保目标在敌人的攻击距离内
+                if (enemy.CurrentCell == null || targetUnit.CurrentCell == null)
+                {
+                    Debug.Log("Attack canceled: invalid cell state.");
+                    yield break;
+                }
+                int dist = GridManager.Instance.GetDistance(enemy.CurrentCell, targetUnit.CurrentCell);
+                if (dist > enemy.data.attackRange)
+                {
+                    Debug.Log($"攻击取消：目标超出攻击范围（距离 {dist}，允许 {enemy.data.attackRange}）");
+                    yield return new WaitForSeconds(0.3f);
+                    yield break;
+                }
                 enemy.PlayAnimation("Attack", false);
                 targetUnit.TakeDamage(enemy.data.baseDamage);
                 if (!enemy.attackedUnits.TryAdd(targetUnit, 2))

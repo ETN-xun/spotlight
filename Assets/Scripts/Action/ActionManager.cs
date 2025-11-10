@@ -75,9 +75,17 @@ namespace Action
         public void ExecuteEnemyAttackAction(Unit actor, GridCell targetCell)
         {
             if (actor is null || targetCell is null) return;
-            // play animation here
             var targetUnit = targetCell.CurrentUnit;
             if (targetUnit is null) return;
+            // 范围校验（曼哈顿距离），确保目标在敌人的攻击距离内
+            if (actor.CurrentCell == null || targetUnit.CurrentCell == null) return;
+            int dist = GridManager.Instance.GetDistance(actor.CurrentCell, targetUnit.CurrentCell);
+            if (dist > actor.data.attackRange)
+            {
+                Debug.Log($"敌人攻击取消：目标超出攻击范围（距离 {dist}，允许 {actor.data.attackRange}）");
+                return;
+            }
+            // play animation here
             targetUnit.TakeDamage(actor.data.baseDamage);
             Debug.Log($"{targetUnit.data.name} 收到伤害 {actor.data.baseDamage}");
             _actorUnit = actor;
