@@ -29,6 +29,10 @@ namespace View.GameViews
         
         // 阶段文本组件
         private TextMeshProUGUI stageText;
+        // 引导提示文本组件（阶段提示）
+        private TextMeshProUGUI hintText;
+        // 技能悬停提示文本组件
+        private TextMeshProUGUI skillText;
         
         // 淡入淡出效果相关
         private Coroutine stageTextFadeCoroutine;
@@ -69,6 +73,8 @@ namespace View.GameViews
             base.Open(args);
             MessageCenter.Subscribe(Defines.EnergyChangedEvent, OnEnergyChanged);
             MessageCenter.Subscribe(Defines.UnitTakeDamageEvent, OnUnitTakeDamage);
+            MessageCenter.Subscribe(Defines.SkillHoverEnterEvent, OnSkillHoverEnter);
+            MessageCenter.Subscribe(Defines.SkillHoverExitEvent, OnSkillHoverExit);
             Find<Button>("Background/Settings_Btn").onClick.AddListener(OnClickSettingsButton);
             Find<Button>("Background/EndTurn_Btn").onClick.AddListener(OnClickEndTurnButton);
             Find<Button>("Background/PopupSettings/ContineGame").onClick.AddListener(OnClickContinueGameButton);
@@ -83,6 +89,11 @@ namespace View.GameViews
             // 初始化阶段文本组件
             stageText = Find<TextMeshProUGUI>("Background/StageText");
             UpdateStageText(GameManager.Instance.CurrentGameState);
+
+            // 初始化提示文本组件
+            hintText = Find<TextMeshProUGUI>("Background/HintText");
+            skillText = Find<TextMeshProUGUI>("Background/SkillText");
+            UpdateHintText(GameManager.Instance.CurrentGameState);
             
             // InitializeOverloadModeButton();
         }
@@ -98,6 +109,8 @@ namespace View.GameViews
             Debug.Log("Close");
             MessageCenter.Unsubscribe(Defines.EnergyChangedEvent, OnEnergyChanged);
             MessageCenter.Unsubscribe(Defines.UnitTakeDamageEvent, OnUnitTakeDamage);
+            MessageCenter.Unsubscribe(Defines.SkillHoverEnterEvent, OnSkillHoverEnter);
+            MessageCenter.Unsubscribe(Defines.SkillHoverExitEvent, OnSkillHoverExit);
             Find<Button>("Background/Settings_Btn").onClick.RemoveListener(OnClickSettingsButton);
             Find<Button>("Background/EndTurn_Btn").onClick.RemoveListener(OnClickEndTurnButton);
             Find<Button>("Background/PopupSettings/ContineGame").onClick.RemoveListener(OnClickContinueGameButton);
@@ -272,12 +285,15 @@ namespace View.GameViews
             MessageCenter.Unsubscribe(Defines.EnemyTurnStartEvent, OnEnemyTurnStart);
             MessageCenter.Unsubscribe(Defines.EnemyTurnEndEvent, OnEnemyTurnEnd);
             MessageCenter.Unsubscribe(Defines.DeploymentStateEndedEvent, OnDeploymentStateEnded);
+            MessageCenter.Unsubscribe(Defines.SkillHoverEnterEvent, OnSkillHoverEnter);
+            MessageCenter.Unsubscribe(Defines.SkillHoverExitEvent, OnSkillHoverExit);
         }
 
         private void OnPlayerTurnStart(object[] args)
         {
             Find<Button>("Background/EndTurn_Btn").interactable = true;
             UpdateStageText(GameState.PlayerTurn);
+            UpdateHintText(GameState.PlayerTurn);
         }
 
         private void OnPlayerTurnEnd(object[] args)
@@ -288,6 +304,7 @@ namespace View.GameViews
         private void OnEnemyTurnStart(object[] args)
         {
             UpdateStageText(GameState.EnemyTurn);
+            UpdateHintText(GameState.EnemyTurn);
         }
         
         private void OnEnemyTurnEnd(object[] args)
@@ -298,6 +315,7 @@ namespace View.GameViews
         private void OnDeploymentStateEnded(object[] args)
         {
             // 部署阶段结束，准备进入敌人回合
+            UpdateHintText(GameState.EnemyTurn);
         }
         
         /// <summary>
@@ -386,6 +404,89 @@ namespace View.GameViews
             
             // 清除协程引用
             stageTextFadeCoroutine = null;
+        }
+
+        /// <summary>
+        /// 更新引导提示文本（HintText），根据不同阶段显示不同内容
+        /// </summary>
+        /// <param name="gameState">当前游戏阶段</param>
+        private void UpdateHintText(GameState gameState)
+        {
+            if (hintText == null) return;
+
+            switch (gameState)
+            {
+                case GameState.Deployment:
+                    hintText.text = "点击下方的角色卡片，然后点击场上的一个绿色格子进行部署";
+                    break;
+                case GameState.EnemyTurn:
+                    hintText.text = "敌人行动中……";
+                    break;
+                case GameState.PlayerTurn:
+                    hintText.text = "点击一个我方角色，点击一个绿色格子进行移动，或者选择左下角的两个技能之一进行释放";
+                    break;
+                default:
+                    hintText.text = string.Empty;
+                    break;
+            }
+        }
+
+        private void OnSkillHoverEnter(object[] args)
+        {
+            if (skillText == null) return;
+            if (args == null || args.Length == 0) { skillText.text = string.Empty; return; }
+            if (args[0] is SkillDataSO skill)
+            {
+                skillText.text = GetSkillHoverText(skill);
+            }
+            else
+            {
+                skillText.text = string.Empty;
+            }
+        }
+
+        private void OnSkillHoverExit(object[] args)
+        {
+            if (skillText == null) return;
+            skillText.text = string.Empty;
+        }
+
+        private string GetSkillHoverText(SkillDataSO skill)
+        {
+            if (skill == null) return string.Empty;
+
+            // 优先根据技能ID匹配，其次回退到技能名称包含关键字
+            switch (skill.skillID)
+            {
+                case "breakpoint_execution_01":
+                    return "断点斩杀：“选择一个距离为1的敌人，对其造成2点伤害”";
+                case "flashback_displacement_01":
+                    return "闪回位移：“瞬移到上次移动前的位置，留下虚影抵挡伤害”";
+                case "stack_shield_01":
+                    return "堆栈护盾：“为一个我方角色提供护盾，吸收一次伤害”";
+                case "terrain_deployment_01":
+                    return "地形投放：“创建一个自己的虚影抵挡伤害”";
+                case "forced_migration_01":
+                    return "强制迁移：“将一个敌方角色移动到自身位置并对其造成1点伤害，自身后退一步”";
+                case "position_swap_01":
+                    return "移形换影：“选择两个角色，交换其位置”";
+            }
+
+            var name = skill.skillName ?? string.Empty;
+            if (name.Contains("断点"))
+                return "断点斩杀：“选择一个距离为1的敌人，对其造成2点伤害”";
+            if (name.Contains("闪回") || name.Contains("Flashback"))
+                return "闪回位移：“瞬移到上次移动前的位置，留下虚影抵挡伤害”";
+            if (name.Contains("堆栈") || name.Contains("护盾"))
+                return "堆栈护盾：“为一个我方角色提供护盾，吸收一次伤害”";
+            if (name.Contains("地形") || name.Contains("投放"))
+                return "地形投放：“创建一个自己的虚影抵挡伤害”";
+            if (name.Contains("强制") || name.Contains("迁移") || name.Contains("位移"))
+                return "强制迁移：“将一个敌方角色移动到自身位置并对其造成1点伤害，自身后退一步”";
+            if (name.Contains("移形换影") || name.Contains("交换") || name.Contains("PositionSwap"))
+                return "移形换影：“选择两个角色，交换其位置”";
+
+            return string.Empty;
         }
     }
 }

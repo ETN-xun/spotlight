@@ -2,10 +2,11 @@ using Common;
 using TMPro;
 using UnityEngine.EventSystems;
 using View.Base;
+using Common;
 
 namespace View.GameViews
 {
-    public class SkillView : BaseView, IPointerClickHandler
+    public class SkillView : BaseView, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
         private SkillDataSO _skillData;
         public override void Open(params object[] args)
@@ -19,6 +20,19 @@ namespace View.GameViews
         public void OnPointerClick(PointerEventData eventData)
         {
             MessageCenter.Publish(Defines.ClickSkillViewEvent, _skillData);
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            if (_skillData != null)
+            {
+                MessageCenter.Publish(Defines.SkillHoverEnterEvent, _skillData);
+            }
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            MessageCenter.Publish(Defines.SkillHoverExitEvent);
         }
     }
 }

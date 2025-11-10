@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using Common;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using UnityEngine.Events;
 using View.Base;
 
 namespace View.GameViews
@@ -53,6 +55,10 @@ namespace View.GameViews
             
             Find<Button>("SkillView").onClick.AddListener(OnClickSkillView);
             Find<Button>("SkillView (1)").onClick.AddListener(OnClickSkillView1);
+
+            // 绑定悬停提示事件（进入/离开）
+            AttachHoverEvents("SkillView", _skillsData[0]);
+            AttachHoverEvents("SkillView (1)", _skillsData[1]);
         }
 
         private void OnClickSkillView()
@@ -63,6 +69,44 @@ namespace View.GameViews
         private void OnClickSkillView1()
         {
             MessageCenter.Publish(Defines.ClickSkillViewEvent, _skillsData[1]);
+        }
+
+        private void AttachHoverEvents(string path, SkillDataSO data)
+        {
+            var button = Find<Button>(path);
+            if (button == null || data == null) return;
+
+            var trigger = Find<EventTrigger>(path);
+            if (trigger == null)
+            {
+                trigger = button.gameObject.AddComponent<EventTrigger>();
+            }
+            // 清理旧条目，避免重复添加
+            if (trigger.triggers == null)
+            {
+                trigger.triggers = new System.Collections.Generic.List<EventTrigger.Entry>();
+            }
+            else
+            {
+                trigger.triggers.Clear();
+            }
+
+            AddEntry(trigger, EventTriggerType.PointerEnter, (e) =>
+            {
+                MessageCenter.Publish(Defines.SkillHoverEnterEvent, data);
+            });
+
+            AddEntry(trigger, EventTriggerType.PointerExit, (e) =>
+            {
+                MessageCenter.Publish(Defines.SkillHoverExitEvent);
+            });
+        }
+
+        private void AddEntry(EventTrigger trigger, EventTriggerType type, UnityAction<BaseEventData> callback)
+        {
+            var entry = new EventTrigger.Entry { eventID = type, callback = new EventTrigger.TriggerEvent() };
+            entry.callback.AddListener(callback);
+            trigger.triggers.Add(entry);
         }
     }
 }

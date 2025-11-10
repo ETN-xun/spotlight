@@ -8,6 +8,8 @@ namespace Common
         public const string EnergyChangedEvent = "EnergyChangedEvent";
         
         public const string ClickSkillViewEvent = "ClickSkillViewEvent";
+        public const string SkillHoverEnterEvent = "SkillHoverEnterEvent";
+        public const string SkillHoverExitEvent = "SkillHoverExitEvent";
         
         public const string DeploymentStateEndedEvent = "DeploymentStateEndedEvent";
         public const string PlayerTurnStartEvent = "PlayerTurnStartEvent";
