@@ -170,6 +170,25 @@ public class StatusEffectManager : MonoBehaviour
         
         return Mathf.RoundToInt(modifiedDamage);
     }
+
+    /// <summary>
+    /// 计算受到的伤害修正值（考虑“受到的伤害+1”等效果）
+    /// </summary>
+    /// <param name="incomingDamage">原始受到伤害</param>
+    /// <returns>修正后的受到伤害</returns>
+    public int GetModifiedIncomingDamage(int incomingDamage)
+    {
+        int modified = incomingDamage;
+
+        // 状态异常：受到的伤害+1（强度可作为增加值）
+        StatusEffect damageTakenIncrease = GetStatusEffect(StatusAbnormalType.DamageTakenIncrease);
+        if (damageTakenIncrease != null)
+        {
+            modified += Mathf.RoundToInt(damageTakenIncrease.intensity);
+        }
+
+        return Mathf.Max(0, modified);
+    }
     
     /// <summary>
     /// 检查是否受到数据损坏影响

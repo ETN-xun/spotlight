@@ -137,7 +137,8 @@ public class StatusAbnormalSkill : Skill
             if (effectType == EffectType.StatusAbnormal)
             {
                 // 使用技能配置中的状态异常参数
-                StatusAbnormalType statusType = data.statusAbnormalType;
+                // 将“状态异常效果”统一重做为：受到的伤害+1
+                StatusAbnormalType statusType = StatusAbnormalType.DamageTakenIncrease;
                 int duration = data.statusDuration;
                 float intensity = data.statusIntensity;
                 

@@ -156,6 +156,11 @@ public enum StatusAbnormalType
     /// </summary>
     CacheCorruption,
     
+    /// <summary>
+    /// 状态异常：受到的伤害+1
+    /// </summary>
+    DamageTakenIncrease,
+    
     // 过载模式状态效果
     /// <summary>
     /// 过载攻击增强 - 代码刺客专用，攻击力增加

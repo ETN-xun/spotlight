@@ -188,7 +188,12 @@ public class Unit : MonoBehaviour
             }
         }
 
-        int remainingDamage = damage;
+        int incomingDamage = damage;
+        if (StatusEffectManager != null)
+        {
+            incomingDamage = StatusEffectManager.GetModifiedIncomingDamage(incomingDamage);
+        }
+        int remainingDamage = incomingDamage;
         
         // 先消耗护盾
         if (data.Hits > 0)

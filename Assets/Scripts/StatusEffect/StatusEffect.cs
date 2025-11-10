@@ -89,6 +89,12 @@ public class StatusEffect
                 description = "攻击力降低";
                 canStack = true;
                 break;
+
+            case StatusAbnormalType.DamageTakenIncrease:
+                statusName = "状态异常";
+                description = "受到的伤害+1";
+                canStack = false;
+                break;
                 
             case StatusAbnormalType.OverloadDamageBonus:
                 statusName = "过载攻击增强";
