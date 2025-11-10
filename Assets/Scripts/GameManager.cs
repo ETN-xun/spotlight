@@ -104,22 +104,11 @@ public class GameManager : MonoBehaviour
         switch (levelIndex)
         {
             case 1:
-                // 第一关结束：播放关卡一结尾，然后进入关卡二开场
                 StartDialogueChain(
                     level1EndTrigger,
-                    level2StartTrigger
-                );
-                break;
-            case 2:
-                // 第二关结束：播放关卡二结尾，然后进入关卡三开场
-                StartDialogueChain(
+                    level2StartTrigger,
                     level2EndTrigger,
-                    level3StartTrigger
-                );
-                break;
-            case 3:
-                // 第三关结束：播放关卡三结尾，返回主菜单
-                StartDialogueChain(
+                    level3StartTrigger,
                     level3EndTrigger
                 );
                 break;
@@ -160,26 +149,6 @@ private void HandleSectionEndEvent(string eventName)
         dialogueChainQueue.Clear();
         if (eventName == "StartLevel1")
         {
-            // 确保设置当前关卡为Level_01
-            var level01 = DataManager.Instance.GetLevelData("level_01");
-            if (level01 != null)
-                Level.LevelManager.Instance.SetCurrentLevel(level01);
-            StartGame();
-        }
-        else if (eventName == "StartLevel2")
-        {
-            // 设置当前关卡为Level_02并开始游戏
-            var level02 = DataManager.Instance.GetLevelData("level_02");
-            if (level02 != null)
-                Level.LevelManager.Instance.SetCurrentLevel(level02);
-            StartGame();
-        }
-        else if (eventName == "StartLevel3")
-        {
-            // 设置当前关卡为Level_03并开始游戏
-            var level03 = DataManager.Instance.GetLevelData("level_03");
-            if (level03 != null)
-                Level.LevelManager.Instance.SetCurrentLevel(level03);
             StartGame();
         }
         // 当剧情链切换到玩法，重置“跳过所有剧情”标志
@@ -279,28 +248,10 @@ private void HandleSectionEndEvent(string eventName)
         // 进入新状态
         if (_currentGameState == GameState.GameOver)
         {
-            // 根据当前关卡ID决定播放哪一段关卡完成剧情链
-            PlayerCompletedLevel(GetCurrentLevelIndex());
+            PlayerCompletedLevel(1);
         }
         _currentStateInstance?.Enter();
         
-    }
-
-    /// <summary>
-    /// 获取当前关卡的索引（1/2/3）
-    /// </summary>
-    private int GetCurrentLevelIndex()
-    {
-        var level = Level.LevelManager.Instance.GetCurrentLevel();
-        if (level == null || string.IsNullOrEmpty(level.levelId)) return 1;
-        var id = level.levelId.ToLowerInvariant();
-        if (id.EndsWith("01")) return 1;
-        if (id.EndsWith("02")) return 2;
-        if (id.EndsWith("03")) return 3;
-        // 尝试从形如 level_XX 提取数字
-        var parts = id.Split('_');
-        if (parts.Length > 1 && int.TryParse(parts[^1], out var num)) return num;
-        return 1;
     }
     
 
