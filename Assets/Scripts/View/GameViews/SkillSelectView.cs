@@ -16,6 +16,7 @@ namespace View.GameViews
         [SerializeField] private Sprite 堆栈护盾Icon;
         [SerializeField] private Sprite 断点斩杀Icon;
         [SerializeField] private Sprite 地形投放Icon;
+        [SerializeField] private Sprite 闪回位移Icon;
         private readonly List<SkillDataSO> _skillsData = new();
         protected override void InitView()
         {
@@ -35,18 +36,18 @@ namespace View.GameViews
             { 
                 case UnitType.Shadow:
                     gameObject.GetComponent<Image>().sprite = 影Icon;
-                    Find<Image>("SkillView/SkillSprite").sprite = _skillsData[0].skillIcon;
-                    Find<Image>("SkillView (1)/SkillSprite").sprite = _skillsData[1].skillIcon;
+                    Find<Image>("SkillView/SkillSprite").sprite = 断点斩杀Icon;
+                    Find<Image>("SkillView (1)/SkillSprite").sprite = 闪回位移Icon;
                     break;
                 case UnitType.Stone:
                     gameObject.GetComponent<Image>().sprite = 石Icon;
-                    Find<Image>("SkillView/SkillSprite").sprite = _skillsData[0].skillIcon;
-                    Find<Image>("SkillView (1)/SkillSprite").sprite = _skillsData[1].skillIcon;
+                    Find<Image>("SkillView/SkillSprite").sprite = 堆栈护盾Icon;
+                    Find<Image>("SkillView (1)/SkillSprite").sprite = 地形投放Icon;
                     break;
                 case UnitType.Zero:
                     gameObject.GetComponent<Image>().sprite = 零Icon;
-                    Find<Image>("SkillView/SkillSprite").sprite = _skillsData[0].skillIcon;
-                    Find<Image>("SkillView (1)/SkillSprite").sprite = _skillsData[1].skillIcon;
+                    Find<Image>("SkillView/SkillSprite").sprite = 强制位移Icon;
+                    Find<Image>("SkillView (1)/SkillSprite").sprite = 移形换影Icon;
                     break;
             }
             
