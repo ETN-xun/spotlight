@@ -1,4 +1,6 @@
 using UnityEngine;
+using Enemy;
+using Ally;
 
 /// <summary>
 /// 游戏结束状态 - 胜利或失败的阶段
@@ -15,8 +17,25 @@ public class GameOverState : GameStateBase
     {
         base.Enter();
         
-        // 判断胜负
-        // isVictory = gameManager.AllEnemiesDefeated && !gameManager.IsCoreDestroyed;
+        // 判断胜负：敌人全部死亡且我方仍有存活则判定胜利
+        int aliveEnemies = EnemyManager.Instance != null ? EnemyManager.Instance.GetAliveEnemies().Count : 0;
+        int aliveAllies = AllyManager.Instance != null ? AllyManager.Instance.GetAliveAllies().Count : 0;
+        isVictory = aliveEnemies == 0 && aliveAllies > 0;
+        
+        // 将结果汇报给 GameManager，用于后续剧情与解锁逻辑
+        gameManager.ReportGameResult(isVictory);
+        
+        // 若胜利则触发收束剧情（用于解锁下一关与返回选关）
+        if (isVictory)
+        {
+            int levelIndex = 1;
+            var currentLevel = Level.LevelManager.Instance != null ? Level.LevelManager.Instance.GetCurrentLevel() : null;
+            if (currentLevel != null)
+            {
+                int.TryParse(currentLevel.levelId, out levelIndex);
+            }
+            gameManager.PlayerCompletedLevel(levelIndex);
+        }
         
         // 显示游戏结束UI
         ShowGameOverUI();

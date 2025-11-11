@@ -62,6 +62,8 @@ public class GameManager : MonoBehaviour
     // 内部状态变量
     private Queue<DialogueTrigger> dialogueChainQueue = new Queue<DialogueTrigger>();
     private bool isChainedPlaybackActive = false; // 标记是否处于“剧情链自动播放”模式
+    private int _pendingUnlockLevel = 0; // 当播放关卡收束剧情结束后需要解锁的关卡索引（无则为0）
+    private bool _lastGameWasVictory = false; // 记录最近一次游戏结束是否为胜利
     
     
     private void Awake()
@@ -112,16 +114,20 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         DialoguePlayer.OnSectionEnd += HandleSectionEndEvent;
+        DialoguePlayer.OnDialogueEnded += HandleDialogueEnded;
     }
 
     private void OnDisable()
     {
         DialoguePlayer.OnSectionEnd -= HandleSectionEndEvent;
+        DialoguePlayer.OnDialogueEnded -= HandleDialogueEnded;
     }
     
     public void PlayerCompletedLevel(int levelIndex)
     {
         // 完成关卡后，仅播放该关卡的收束剧情；解锁与返回由剧情事件驱动
+        // 同时记录在收束剧情播放完毕后需要解锁的下一关（如果存在）
+        _pendingUnlockLevel = levelIndex < 3 ? levelIndex + 1 : 0;
         switch (levelIndex)
         {
             case 1:
@@ -180,6 +186,8 @@ private void HandleSectionEndEvent(string eventName)
     else if (eventName == "ReturnToMenu")
     {
         dialogueChainQueue.Clear();
+        // 若存在待解锁关卡，优先解锁，避免切场导致 OnDialogueEnded 未触发
+        UnlockPendingIfAny();
         if (sceneTransitionCover != null)
         {
             sceneTransitionCover.SetActive(true);
@@ -190,6 +198,10 @@ private void HandleSectionEndEvent(string eventName)
     else if (eventName == "ReturnToLevelSelect" || eventName == "GoToLevelSelect" || eventName == "BackToLevelSelect")
     {
         dialogueChainQueue.Clear();
+        // 若存在待解锁关卡，优先解锁，避免切场导致 OnDialogueEnded 未触发
+        UnlockPendingIfAny();
+        // 保险：基于当前关卡直接计算下一关并写入解锁，避免事件顺序导致未解锁
+        TryUnlockNextLevelByCurrent();
         SceneLoadManager.Instance.LoadScene(SceneType.LevelSelect);
         DialoguePlayer.ResetSkipAll();
     }
@@ -221,6 +233,89 @@ private void HandleSectionEndEvent(string eventName)
         PlayNextInChain();
     }
 }
+
+    /// <summary>
+    /// 若存在待解锁关卡，则立即写入解锁并清空标记。
+    /// </summary>
+    private void UnlockPendingIfAny()
+    {
+        if (_pendingUnlockLevel > 0)
+        {
+            int current = PlayerPrefs.GetInt("UnlockedLevels", 1);
+            if (_pendingUnlockLevel > current)
+            {
+                PlayerPrefs.SetInt("UnlockedLevels", _pendingUnlockLevel);
+                PlayerPrefs.Save();
+            }
+            _pendingUnlockLevel = 0;
+        }
+    }
+
+    /// <summary>
+    /// 基于当前关卡尝试解锁下一关（与待解锁标记互不冲突，取更大值）。
+    /// </summary>
+    private void TryUnlockNextLevelByCurrent()
+    {
+        // 仅在胜利的情况下才进行兜底解锁，避免失败时误解锁
+        if (!_lastGameWasVictory)
+        {
+            return;
+        }
+        int currentLevelIndex = 1;
+        var currentLevel = Level.LevelManager.Instance != null ? Level.LevelManager.Instance.GetCurrentLevel() : null;
+        if (currentLevel != null)
+        {
+            int.TryParse(currentLevel.levelId, out currentLevelIndex);
+        }
+
+        // 仅当存在下一关时才尝试解锁
+        if (currentLevelIndex < 3)
+        {
+            int next = currentLevelIndex + 1;
+            int unlocked = PlayerPrefs.GetInt("UnlockedLevels", 1);
+            if (next > unlocked)
+            {
+                PlayerPrefs.SetInt("UnlockedLevels", next);
+                PlayerPrefs.Save();
+            }
+        }
+    }
+
+    /// <summary>
+    /// 由 GameOverState 汇报本局胜负结果，用于后续剧情与解锁逻辑。
+    /// </summary>
+    public void ReportGameResult(bool victory)
+    {
+        _lastGameWasVictory = victory;
+    }
+
+    /// <summary>
+    /// 当某段剧情播放完全结束时的处理（不依赖 SectionEnd 节点）。
+    /// 用于关卡收束剧情结束后自动解锁下一关并返回选关界面。
+    /// </summary>
+    private void HandleDialogueEnded()
+    {
+        // 若仍有后续剧情链，则继续播放
+        if (dialogueChainQueue.Count > 0)
+        {
+            PlayNextInChain();
+            return;
+        }
+
+        // 若标记了需要解锁的下一关，则在收束剧情完整结束时执行解锁并返回选关
+        if (_pendingUnlockLevel > 0)
+        {
+            int current = PlayerPrefs.GetInt("UnlockedLevels", 1);
+            if (_pendingUnlockLevel > current)
+            {
+                PlayerPrefs.SetInt("UnlockedLevels", _pendingUnlockLevel);
+                PlayerPrefs.Save();
+            }
+            SceneLoadManager.Instance.LoadScene(SceneType.LevelSelect);
+            _pendingUnlockLevel = 0;
+            DialoguePlayer.ResetSkipAll();
+        }
+    }
 
 
     /// <summary>
@@ -290,17 +385,7 @@ private void HandleSectionEndEvent(string eventName)
         
         Debug.Log($"GameManager: 状态转换 {oldState} -> {newState}");
         
-        // 进入新状态
-        if (_currentGameState == GameState.GameOver)
-        {
-            int levelIndex = 1;
-            var currentLevel = Level.LevelManager.Instance != null ? Level.LevelManager.Instance.GetCurrentLevel() : null;
-            if (currentLevel != null)
-            {
-                int.TryParse(currentLevel.levelId, out levelIndex);
-            }
-            PlayerCompletedLevel(levelIndex);
-        }
+        // 进入新状态（关卡收束剧情仅在 GameOverState 内部根据胜负判定触发）
         _currentStateInstance?.Enter();
         
     }

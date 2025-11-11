@@ -151,9 +151,18 @@ namespace View
         /// </summary>
         public void CloseAllViews()
         {
-            foreach (var view in _openViews.Values)
+            // 使用快照避免在遍历过程中字典被修改导致的异常
+            var snapshot = new List<IBaseView>(_openViews.Values);
+            foreach (var view in snapshot)
             {
-                view.Close();
+                try
+                {
+                    view.Close();
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"ViewManager.CloseAllViews: 关闭视图时发生异常: {e.Message}\n{e.StackTrace}");
+                }
             }
             _openViews.Clear();
         }

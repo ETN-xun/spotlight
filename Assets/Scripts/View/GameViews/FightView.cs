@@ -100,7 +100,18 @@ namespace View.GameViews
 
         private void OnClickSkipFightButton()
         {
-            GameManager.Instance.ChangeGameState(GameState.GameOver);
+            // 跳过战斗：隐藏战斗/部署相关 UI，直接触发当前关卡的收束剧情，并标记为胜利
+            // 先关闭部署与战斗视图，避免在剧情期间 UI 残留
+            ViewManager.Instance.CloseView(ViewType.DeploymentView);
+            ViewManager.Instance.CloseView(ViewType.FightView);
+            int levelIndex = 1;
+            var currentLevel = LevelManager.Instance != null ? LevelManager.Instance.GetCurrentLevel() : null;
+            if (currentLevel != null)
+            {
+                int.TryParse(currentLevel.levelId, out levelIndex);
+            }
+            GameManager.Instance.ReportGameResult(true);
+            GameManager.Instance.PlayerCompletedLevel(levelIndex);
         }
 
         public override void Close(params object[] args)
