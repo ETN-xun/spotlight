@@ -459,8 +459,19 @@ namespace AmplifyShaderEditor
 				while( www.isDone == false )
 					yield return null;
 
-				if( success != null )
+#if UNITY_2020_2_OR_NEWER
+				bool ok = www.result == UnityWebRequest.Result.Success;
+#else
+				bool ok = !www.isNetworkError && !www.isHttpError;
+#endif
+				if( !ok )
+				{
+					Debug.LogWarning( $"ASE Start Screen: request to {url} failed: {www.error}" );
+				}
+				else if( success != null )
+				{
 					success();
+				}
 			}
 		}
 
@@ -500,7 +511,17 @@ namespace AmplifyShaderEditor
 
 		public static ChangeLogInfo CreateFromJSON( string jsonString )
 		{
-			return JsonUtility.FromJson<ChangeLogInfo>( jsonString );
+			if( string.IsNullOrEmpty( jsonString ) )
+				return null;
+			try
+			{
+				return JsonUtility.FromJson<ChangeLogInfo>( jsonString );
+			}
+			catch( Exception e )
+			{
+				Debug.LogWarning( $"ASE Start Screen: invalid changelog JSON. {e.Message}" );
+				return null;
+			}
 		}
 
 		public ChangeLogInfo( int version, string lastUpdate )
