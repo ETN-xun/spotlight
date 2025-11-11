@@ -59,21 +59,13 @@ public class PositionSwapSkill : Skill
             return;
         }
 
-        GridCell cell1 = unit1.CurrentCell;
-        GridCell cell2 = unit2.CurrentCell;
-        
-        // 临时清除单位引用
-        cell1.CurrentUnit = null;
-        cell2.CurrentUnit = null;
-        
-        // 交换位置
-        unit1.PlaceAt(cell2);
-        unit2.PlaceAt(cell1);
+        // 使用安全交换，避免顺序 PlaceAt 导致占用被清空
+        Unit.SwapPositions(unit1, unit2);
         
         Debug.Log($"移形换影技能：{unit1.data.unitName} 与 {unit2.data.unitName} 交换了位置");
         
         // 播放交换效果
-        PlaySwapEffect(cell1, cell2);
+        PlaySwapEffect(unit2.CurrentCell, unit1.CurrentCell);
     }
 
     /// <summary>
@@ -92,6 +84,13 @@ public class PositionSwapSkill : Skill
         if (unit1 == null || unit2 == null)
         {
             Debug.LogWarning("移形换影技能：请选择两个都有单位的格子");
+            return;
+        }
+
+        // 强制排除施法者本人
+        if (unit1 == caster || unit2 == caster)
+        {
+            Debug.LogWarning("移形换影技能：不能选择施法者本人作为目标");
             return;
         }
 

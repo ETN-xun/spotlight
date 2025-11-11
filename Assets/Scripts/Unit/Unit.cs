@@ -178,6 +178,34 @@ public class Unit : MonoBehaviour
     }
 
     /// <summary>
+    /// 安全交换两个单位的位置：同时更新两者的 CurrentCell 与各自格子的 CurrentUnit，
+    /// 并移动 Transform 到对应的世界坐标，避免顺序调用 PlaceAt 导致占用被清空。
+    /// </summary>
+    public static void SwapPositions(Unit unit1, Unit unit2)
+    {
+        if (unit1 == null || unit2 == null) return;
+        if (unit1 == unit2) return;
+
+        var cell1 = unit1.CurrentCell;
+        var cell2 = unit2.CurrentCell;
+        if (cell1 == null || cell2 == null) return;
+
+        // 更新格子占用与单位当前格子（原子性地交换，不通过 PlaceAt 的序列化清空逻辑）
+        cell1.CurrentUnit = unit2;
+        cell2.CurrentUnit = unit1;
+
+        unit1.CurrentCell = cell2;
+        unit2.CurrentCell = cell1;
+
+        // 同步位置到世界坐标
+        var pos2 = GridManager.Instance.CellToWorld(cell2.Coordinate);
+        unit1.transform.position = new Vector3(pos2.x, pos2.y, pos2.y);
+
+        var pos1 = GridManager.Instance.CellToWorld(cell1.Coordinate);
+        unit2.transform.position = new Vector3(pos1.x, pos1.y, pos1.y);
+    }
+
+    /// <summary>
     /// 单位承受伤害
     /// </summary>
     /// <param name="damage">伤害数值</param>
@@ -324,7 +352,16 @@ public class Unit : MonoBehaviour
     public List<GridCell> GetMoveRange()
     {
         List<GridCell> result = new List<GridCell>();
-        int range = data.moveRange;
+        int range;
+        // 第二关：将零的移动范围锁定为 1
+        if (data != null && data.unitType == UnitType.Zero && Level.LevelManager.Instance != null && Level.LevelManager.Instance.GetCurrentLevelIndex() == 2)
+        {
+            range = 1;
+        }
+        else
+        {
+            range = data.moveRange;
+        }
 
         for (int dx = -range; dx <= range; dx++)
         {

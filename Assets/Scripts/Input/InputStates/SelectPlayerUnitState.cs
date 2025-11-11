@@ -286,6 +286,8 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
 
         // 高亮：施法者AttackRange范围内所有“有单位”的格子（友敌皆可）
         var cellsInRange = GetCellsWithUnitInAttackRange(LastSelectedUnit, LastSelectedCell);
+        // 禁止选择施法者本人
+        cellsInRange.RemoveAll(cell => cell == LastSelectedUnit.CurrentCell);
         foreach (var cell in cellsInRange)
         {
             GridManager.Instance.Highlight(true, cell.Coordinate);
@@ -316,6 +318,13 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
                 return;
             }
 
+            // 禁止选择施法者本人
+            if (clickedCell.CurrentUnit == LastSelectedUnit)
+            {
+                Debug.Log("不能选择施法者本人作为第一个目标");
+                return;
+            }
+
             // 记录第一个目标并进入第二次选择
             _firstSwapCell = clickedCell;
             GridManager.Instance.ClearAllHighlights();
@@ -324,7 +333,7 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
             foreach (var kvp in GridManager.Instance._gridDict)
             {
                 var cell = kvp.Value;
-                if (cell.CurrentUnit != null && cell != _firstSwapCell)
+                if (cell.CurrentUnit != null && cell != _firstSwapCell && cell != LastSelectedUnit.CurrentCell)
                 {
                     GridManager.Instance.Highlight(true, cell.Coordinate);
                 }
@@ -338,6 +347,13 @@ public class SelectPlayerUnitState : BaseInputState     // TODO：逻辑还得�
         if (clickedCell == _firstSwapCell)
         {
             Debug.Log("第二个目标不能与第一个相同");
+            return;
+        }
+
+        // 禁止施法者作为第二个目标
+        if (clickedCell.CurrentUnit == LastSelectedUnit)
+        {
+            Debug.Log("不能选择施法者本人作为第二个目标");
             return;
         }
 

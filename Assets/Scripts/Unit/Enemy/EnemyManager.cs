@@ -266,7 +266,22 @@ namespace Enemy
 
             if (_aliveEnemies.Count == 0)
             {
-                GameManager.Instance.ChangeGameState(GameState.GameOver);
+                // 第二关：敌人全部被消灭时不结算，改为立即刷新一波敌人
+                int levelIndex = LevelManager.Instance != null ? LevelManager.Instance.GetCurrentLevelIndex() : 1;
+                if (levelIndex == 2)
+                {
+                    RespawnWaveLevel2();
+                    // 刷新后重建意图，避免旧意图残留
+                    _intentPlanner.ClearIntents();
+                    foreach (var enemy in _aliveEnemies)
+                    {
+                        _intentPlanner.BuildIntent(enemy);
+                    }
+                }
+                else
+                {
+                    GameManager.Instance.ChangeGameState(GameState.GameOver);
+                }
             }
         }
 
@@ -274,6 +289,69 @@ namespace Enemy
         {
             foreach (var enemy in _aliveEnemies)
                 _intentPlanner.BuildIntent(enemy);
+        }
+
+        /// <summary>
+        /// 第二关刷新一波敌人：当场上敌人全部被击败时，按关卡配置重新生成一波。
+        /// </summary>
+        private void RespawnWaveLevel2()
+        {
+            _currentLevelData ??= LevelManager.Instance.GetCurrentLevel();
+            var levelData = _currentLevelData;
+            if (levelData == null) return;
+
+            Debug.Log("[第二关] 敌人清空，刷新一波敌人。");
+
+            // 乱码爬虫
+            if (levelData.初始乱码爬虫数量 != 0)
+            {
+                var prefab = Resources.Load<Unit>("Prefab/Unit/乱码爬虫");
+                foreach (var pos in levelData.乱码爬虫位置)
+                {
+                    var coord = pos;
+                    Utils.Coordinate.Transform(ref coord);
+                    GridManager.Instance.PlaceUnit(coord, prefab);
+                }
+            }
+
+            // 死机亡灵
+            if (levelData.初始死机亡灵数量 != 0)
+            {
+                var prefab = Resources.Load<Unit>("Prefab/Unit/死机亡灵");
+                foreach (var pos in levelData.死机亡灵位置)
+                {
+                    var coord = pos;
+                    Utils.Coordinate.Transform(ref coord);
+                    GridManager.Instance.PlaceUnit(coord, prefab);
+                }
+            }
+
+            // 空指针
+            if (levelData.初始空指针数量 != 0)
+            {
+                var prefab = Resources.Load<Unit>("Prefab/Unit/空指针");
+                foreach (var pos in levelData.空指针位置)
+                {
+                    var coord = pos;
+                    Utils.Coordinate.Transform(ref coord);
+                    GridManager.Instance.PlaceUnit(coord, prefab);
+                }
+            }
+
+            // Boss：递归幻影（若该关卡配置了，不重复刷 Boss，这里保持与关卡初始一致）
+            if (levelData.初始递归幻影数量 != 0)
+            {
+                var prefab = Resources.Load<Unit>("Prefab/Unit/递归幻影");
+                if (prefab != null)
+                {
+                    foreach (var pos in levelData.递归幻影位置)
+                    {
+                        var coord = pos;
+                        Utils.Coordinate.Transform(ref coord);
+                        GridManager.Instance.PlaceUnit(coord, prefab);
+                    }
+                }
+            }
         }
     }
 }

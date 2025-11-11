@@ -17,10 +17,34 @@ public class GameOverState : GameStateBase
     {
         base.Enter();
         
-        // 判断胜负：敌人全部死亡且我方仍有存活则判定胜利
+        // 判断胜负
         int aliveEnemies = EnemyManager.Instance != null ? EnemyManager.Instance.GetAliveEnemies().Count : 0;
         int aliveAllies = AllyManager.Instance != null ? AllyManager.Instance.GetAliveAllies().Count : 0;
-        isVictory = aliveEnemies == 0 && aliveAllies > 0;
+
+        // 第二关特殊胜利条件：零到达最顶行即胜利；其它关卡沿用原逻辑
+        int currentLevelIndex = Level.LevelManager.Instance != null
+            ? Level.LevelManager.Instance.GetCurrentLevelIndex()
+            : -1;
+
+        if (currentLevelIndex == 2)
+        {
+            bool zeroAtTop = false;
+            var allies = AllyManager.Instance != null ? AllyManager.Instance.GetAliveAllies() : null;
+            if (allies != null)
+            {
+                var zero = allies.Find(a => a.data.unitType == UnitType.Zero);
+                if (zero != null && zero.CurrentCell != null && GridManager.Instance != null)
+                {
+                    int topRowY = GridManager.Instance.rows - 1;
+                    zeroAtTop = zero.CurrentCell.Coordinate.y >= topRowY;
+                }
+            }
+            isVictory = zeroAtTop;
+        }
+        else
+        {
+            isVictory = aliveEnemies == 0 && aliveAllies > 0;
+        }
         
         // 将结果汇报给 GameManager，用于后续剧情与解锁逻辑
         gameManager.ReportGameResult(isVictory);

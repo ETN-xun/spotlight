@@ -27,6 +27,8 @@ public class MovementSystem : MonoBehaviour
         if (unit == null) return false;
         if (!CanEnterCell(targetCell)) return false;
         unit.MoveTo(targetCell);
+        // 第二关：零移动到最顶行则立即胜利
+        CheckVictoryAfterMove(unit);
         return true;
     }
 
@@ -131,6 +133,8 @@ public class MovementSystem : MonoBehaviour
         }
         
         unit.MoveTo(nextCell);      // TODO: 需要更改的移动方式
+        // 第二关：零移动到最顶行则立即胜利
+        CheckVictoryAfterMove(unit);
     }
 
     private void StatusAbnormal(Unit unit, GridCell nowCell)
@@ -245,6 +249,8 @@ public class MovementSystem : MonoBehaviour
             
             unit.MoveTo(nextCell);
             currentCell = nextCell;
+            // 第二关：零移动到最顶行则立即胜利
+            CheckVictoryAfterMove(unit);
 
             yield return new WaitForSeconds(0.05f);
         }
@@ -265,6 +271,30 @@ public class MovementSystem : MonoBehaviour
         Num1 = Num1 + Num2;
         Num2 = Num1 - Num2;
         Num1 = Num1 - Num2;
+    }
+    
+    /// <summary>
+    /// 第二关胜利触发：当零移动到最顶行时，直接判定胜利并切换到 GameOver 状态。
+    /// </summary>
+    private void CheckVictoryAfterMove(Unit unit)
+    {
+        if (unit == null) return;
+        // 只对我方的零生效
+        if (unit.data.isEnemy) return;
+        if (unit.data.unitType != UnitType.Zero) return;
+        // 仅第二关
+        int levelIndex = Level.LevelManager.Instance != null ? Level.LevelManager.Instance.GetCurrentLevelIndex() : -1;
+        if (levelIndex != 2) return;
+        // 当前格子必须有效
+        if (unit.CurrentCell == null || GridManager.Instance == null) return;
+        int topRowY = GridManager.Instance.rows - 1;
+        if (unit.CurrentCell.Coordinate.y >= topRowY)
+        {
+            if (GameManager.Instance != null && GameManager.Instance.CurrentGameState != GameState.GameOver)
+            {
+                GameManager.Instance.ChangeGameState(GameState.GameOver);
+            }
+        }
     }
     /// <summary>
     /// 基于A*算法查找路径
