@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelId: level_03
   previewSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  levelTarget: "\u51FB\u8D25\u201C\u8BD7\u4EBA\u201D"
+  levelTarget: "\u51FB\u8D25\u201C\u8BD7\u4EBA\u201D\uFF08\u6709\u5C0F\u602A\u5B58\u6D3B\u65F6\uFF0CBoss\u65E0\u654C\uFF09"
   maxEnergy: 10
   baseEnergy: 6
   energyPerTurn: 4
