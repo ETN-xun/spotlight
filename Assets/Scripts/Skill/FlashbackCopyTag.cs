@@ -44,8 +44,7 @@ public class FlashbackCopyTag : MonoBehaviour
     /// </summary>
     public void OnTurnEnd(object[] args)
     {
-        DestroyCopy();
-        /*
+        // 正确的生命周期：在敌人回合结束时递减剩余回合，降至0后销毁
         remainingTurns--;
         Debug.Log($"闪回复制 {gameObject.name} 剩余回合: {remainingTurns}");
         
@@ -53,7 +52,6 @@ public class FlashbackCopyTag : MonoBehaviour
         {
             DestroyCopy();
         }
-        */
     }
     
     /// <summary>

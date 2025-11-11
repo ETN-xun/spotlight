@@ -126,6 +126,17 @@ public class GameManager : MonoBehaviour
         // 完成关卡后，仅播放该关卡的收束剧情；解锁与返回由剧情事件驱动
         // 同时记录在收束剧情播放完毕后需要解锁的下一关（如果存在）
         _pendingUnlockLevel = levelIndex < 3 ? levelIndex + 1 : 0;
+
+        // 立即落盘解锁进度，避免因对话事件/状态切换遗漏导致解锁失败
+        if (_pendingUnlockLevel > 0)
+        {
+            int currentlyUnlocked = UnlockProgressStorage.LoadUnlockedLevels();
+            if (_pendingUnlockLevel > currentlyUnlocked)
+            {
+                UnlockProgressStorage.SaveUnlockedLevels(_pendingUnlockLevel);
+            }
+        }
+
         switch (levelIndex)
         {
             case 1:
@@ -216,13 +227,12 @@ private void HandleSectionEndEvent(string eventName)
         }
         if (target > 0)
         {
-            int current = PlayerPrefs.GetInt("UnlockedLevels", 1);
-            if (target > current)
-            {
-                PlayerPrefs.SetInt("UnlockedLevels", target);
-                PlayerPrefs.Save();
-            }
+        int current = UnlockProgressStorage.LoadUnlockedLevels();
+        if (target > current)
+        {
+            UnlockProgressStorage.SaveUnlockedLevels(target);
         }
+    }
         SceneLoadManager.Instance.LoadScene(SceneType.LevelSelect);
         DialoguePlayer.ResetSkipAll();
     }
@@ -239,11 +249,10 @@ private void HandleSectionEndEvent(string eventName)
     {
         if (_pendingUnlockLevel > 0)
         {
-            int current = PlayerPrefs.GetInt("UnlockedLevels", 1);
+            int current = UnlockProgressStorage.LoadUnlockedLevels();
             if (_pendingUnlockLevel > current)
             {
-                PlayerPrefs.SetInt("UnlockedLevels", _pendingUnlockLevel);
-                PlayerPrefs.Save();
+                UnlockProgressStorage.SaveUnlockedLevels(_pendingUnlockLevel);
             }
             _pendingUnlockLevel = 0;
         }
@@ -267,11 +276,10 @@ private void HandleSectionEndEvent(string eventName)
         if (currentLevelIndex < 3)
         {
             int next = currentLevelIndex + 1;
-            int unlocked = PlayerPrefs.GetInt("UnlockedLevels", 1);
+            int unlocked = UnlockProgressStorage.LoadUnlockedLevels();
             if (next > unlocked)
             {
-                PlayerPrefs.SetInt("UnlockedLevels", next);
-                PlayerPrefs.Save();
+                UnlockProgressStorage.SaveUnlockedLevels(next);
             }
         }
     }
@@ -300,11 +308,10 @@ private void HandleSectionEndEvent(string eventName)
         // 若标记了需要解锁的下一关，则在收束剧情完整结束时执行解锁并返回选关
         if (_pendingUnlockLevel > 0)
         {
-            int current = PlayerPrefs.GetInt("UnlockedLevels", 1);
+            int current = UnlockProgressStorage.LoadUnlockedLevels();
             if (_pendingUnlockLevel > current)
             {
-                PlayerPrefs.SetInt("UnlockedLevels", _pendingUnlockLevel);
-                PlayerPrefs.Save();
+                UnlockProgressStorage.SaveUnlockedLevels(_pendingUnlockLevel);
             }
             SceneLoadManager.Instance.LoadScene(SceneType.LevelSelect);
             _pendingUnlockLevel = 0;

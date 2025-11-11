@@ -13,12 +13,8 @@ public class SelectController : MonoBehaviour
 
     private void Start()
     {
-        // 初始化解锁状态（默认仅解锁第一关）
-        if (!PlayerPrefs.HasKey("UnlockedLevels"))
-        {
-            PlayerPrefs.SetInt("UnlockedLevels", 1);
-            PlayerPrefs.Save();
-        }
+        // 初始化 AppData 解锁存档（默认仅解锁第一关，且从旧 PlayerPrefs 迁移一次）
+        UnlockProgressStorage.Initialize();
 
         // 收集并按层级顺序记录关卡按钮（假设顺序为1/2/3）
         var buttonsRoot = GameObject.Find("Buttons");
@@ -32,7 +28,7 @@ public class SelectController : MonoBehaviour
 
     private void ApplyUnlockStateToButtons()
     {
-        int unlocked = PlayerPrefs.GetInt("UnlockedLevels", 1);
+        int unlocked = UnlockProgressStorage.LoadUnlockedLevels();
         for (int i = 0; i < _levelButtons.Count; i++)
         {
             // 第 i+1 关是否解锁

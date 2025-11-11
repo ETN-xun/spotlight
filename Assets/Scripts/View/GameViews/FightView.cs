@@ -36,6 +36,7 @@ namespace View.GameViews
         
         // 淡入淡出效果相关
         private Coroutine stageTextFadeCoroutine;
+        private Coroutine hintTextFadeCoroutine;
         private const float fadeInDuration = 0.3f;
         private const float fadeOutDuration = 0.2f;
         
@@ -422,21 +423,75 @@ namespace View.GameViews
         {
             if (hintText == null) return;
 
+            // 若已有淡入淡出协程，先停止
+            if (hintTextFadeCoroutine != null)
+            {
+                StopCoroutine(hintTextFadeCoroutine);
+            }
+
+            // 启动淡入淡出效果
+            hintTextFadeCoroutine = StartCoroutine(FadeHintText(gameState));
+        }
+
+        /// <summary>
+        /// 引导提示文本淡入淡出效果协程
+        /// </summary>
+        /// <param name="gameState">当前游戏阶段</param>
+        /// <returns></returns>
+        private IEnumerator FadeHintText(GameState gameState)
+        {
+            // 目标文本与颜色
+            string targetText;
+            Color targetColor;
+
             switch (gameState)
             {
                 case GameState.Deployment:
-                    hintText.text = "点击下方的角色卡片，然后点击场上的一个绿色格子进行部署";
+                    targetText = "点击下方的角色卡片，然后点击场上的一个绿色格子进行部署";
+                    targetColor = Color.white;
                     break;
                 case GameState.EnemyTurn:
-                    hintText.text = "敌人行动中……";
+                    targetText = "敌人行动中……";
+                    targetColor = Color.red; // 与阶段文本一致，突出敌人回合
                     break;
                 case GameState.PlayerTurn:
-                    hintText.text = "点击一个我方角色，点击一个绿色格子进行移动，或者选择左下角的两个技能之一进行释放";
+                    targetText = "点击一个我方角色，点击一个绿色格子进行移动，或者选择左下角的两个技能之一进行释放";
+                    targetColor = Color.white;
                     break;
                 default:
-                    hintText.text = string.Empty;
+                    targetText = string.Empty;
+                    targetColor = Color.white;
                     break;
             }
+
+            // 先淡出当前文本
+            Color currentColor = hintText.color;
+            float elapsed = 0f;
+            while (elapsed < fadeOutDuration)
+            {
+                elapsed += Time.deltaTime;
+                float alpha = Mathf.Lerp(currentColor.a, 0f, elapsed / fadeOutDuration);
+                hintText.color = new Color(currentColor.r, currentColor.g, currentColor.b, alpha);
+                yield return null;
+            }
+
+            // 清零并更新文本
+            hintText.color = new Color(currentColor.r, currentColor.g, currentColor.b, 0f);
+            hintText.text = targetText;
+
+            // 再淡入到目标颜色
+            elapsed = 0f;
+            while (elapsed < fadeInDuration)
+            {
+                elapsed += Time.deltaTime;
+                float alpha = Mathf.Lerp(0f, targetColor.a, elapsed / fadeInDuration);
+                hintText.color = new Color(targetColor.r, targetColor.g, targetColor.b, alpha);
+                yield return null;
+            }
+
+            // 最终颜色校准
+            hintText.color = targetColor;
+            hintTextFadeCoroutine = null;
         }
 
         private void OnSkillHoverEnter(object[] args)

@@ -147,16 +147,11 @@ private void ExecuteFlashback(FlashbackData flashbackData, GridManager gridManag
             Debug.Log($"闪回失败：目标位置 ({targetCell.Coordinate.x}, {targetCell.Coordinate.y}) 被占用");
             return;
         }
-        
-        // 在当前位置留下残影（复用工具类）
-        PhantomHelper.CreatePhantom(caster, currentCell, gridManager, 0.5f, 2);
-        
-        // 移动单位到闪回位置 - 修复位置更新问题
-        // 先清理当前位置
-        currentCell.CurrentUnit = null;
-        
-        // 使用PlaceAt方法正确更新单位的逻辑和视觉位置
+        // 先移动施法者到闪回目标位置（PlaceAt会自动清理原格子占用）
         caster.PlaceAt(targetCell);
+
+        // 再在原位置创建虚影，确保原格子已空闲可被占用
+        PhantomHelper.CreatePhantom(caster, currentCell, gridManager, 0.5f, 2);
         
         // 播放闪回效果
         PlayFlashbackEffect(currentCell, targetCell);

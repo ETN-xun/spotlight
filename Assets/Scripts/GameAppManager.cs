@@ -29,8 +29,8 @@ public class GameAppManager : MonoBehaviour
             return;
         }
         DontDestroyOnLoad(gameObject);
-        
-        
+        // 进入游戏时初始化 AppData 存档：若不存在则创建（只解锁第一关），并进行一次迁移
+        UnlockProgressStorage.Initialize();
     }
 
     private void Start()
