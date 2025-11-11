@@ -346,9 +346,9 @@ private void HandleSectionEndEvent(string eventName)
     {
         // 每次真正开始战斗前重置能量，防止继承上一局
         ActionManager.EnergySystem.ResetForNewLevel();
-        // 根据当前关卡选择对应的地图（第二关使用 Grid2，其余默认 Grid）
+        // 根据当前关卡选择对应的地图（第二关使用 Grid2，第三关使用 Grid3）
         int idx = Level.LevelManager.Instance != null ? Level.LevelManager.Instance.GetCurrentLevelIndex() : 1;
-        string gridName = idx == 2 ? "Grid2" : "Grid";
+        string gridName = idx == 3 ? "Grid3" : (idx == 2 ? "Grid2" : "Grid");
         if (GridManager.Instance != null)
         {
             bool assigned = GridManager.Instance.TryAssignTilemapsByGridName(gridName);
@@ -366,11 +366,16 @@ private void HandleSectionEndEvent(string eventName)
             }
             if (assigned)
             {
-                // 仅激活选中的地图，避免两张地图同时可见（支持禁用对象）
-                var targetGO = FindGameObjectIncludingInactive(gridName);
-                if (targetGO != null) targetGO.SetActive(true);
-                var otherGO = FindGameObjectIncludingInactive(gridName == "Grid2" ? "Grid" : "Grid2");
-                if (otherGO != null) otherGO.SetActive(false);
+                // 仅激活选中的地图，避免多张地图同时可见（支持禁用对象）
+                string[] candidates = { "Grid", "Grid2", "Grid3" };
+                foreach (var name in candidates)
+                {
+                    var go = FindGameObjectIncludingInactive(name);
+                    if (go != null)
+                    {
+                        go.SetActive(name == gridName);
+                    }
+                }
             }
         }
         GridManager.Instance.InitGrid();
@@ -396,17 +401,19 @@ private void HandleSectionEndEvent(string eventName)
         return null;
     }
 
-    // 确保目标网格对象存在：若找不到 targetName，则克隆备用网格并重命名
+    // 确保目标网格对象存在：若找不到 targetName，则克隆任意现有网格并重命名
     private bool EnsureGridObjectExists(string targetName)
     {
         var target = FindGameObjectIncludingInactive(targetName);
         if (target != null) return true;
 
-        string fallbackName = targetName == "Grid2" ? "Grid" : "Grid2";
-        var source = FindGameObjectIncludingInactive(fallbackName);
+        // 优先使用 Grid、Grid2，其次 Grid3 作为克隆模板
+        var source = FindGameObjectIncludingInactive("Grid")
+                     ?? FindGameObjectIncludingInactive("Grid2")
+                     ?? FindGameObjectIncludingInactive("Grid3");
         if (source == null)
         {
-            Debug.LogWarning($"EnsureGridObjectExists: 未找到备用网格 {fallbackName}，无法克隆为 {targetName}");
+            Debug.LogWarning($"EnsureGridObjectExists: 未找到可用的网格模板，无法克隆为 {targetName}");
             return false;
         }
 
@@ -414,7 +421,7 @@ private void HandleSectionEndEvent(string eventName)
         clone.name = targetName;
         // 默认保持禁用，待 StartGame 激活目标并禁用另一张
         clone.SetActive(false);
-        Debug.Log($"EnsureGridObjectExists: 通过克隆 {fallbackName} 创建了 {targetName}");
+        Debug.Log($"EnsureGridObjectExists: 通过克隆 {source.name} 创建了 {targetName}");
         return true;
     }
 
