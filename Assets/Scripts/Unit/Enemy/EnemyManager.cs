@@ -63,6 +63,7 @@ namespace Enemy
             _乱码爬虫数量 = _currentLevelData.初始乱码爬虫数量;
             _死机亡灵数量 = _currentLevelData.初始死机亡灵数量;
             _空指针数量 = _currentLevelData.初始空指针数量;
+            var _递归幻影数量 = _currentLevelData.初始递归幻影数量;
 
             _aliveEnemies.Clear();
 
@@ -96,6 +97,25 @@ namespace Enemy
                     var coord = pos;
                     Utils.Coordinate.Transform(ref coord);
                     GridManager.Instance.PlaceUnit(coord, prefab);
+                }
+            }
+
+            // Boss：递归幻影
+            if (_递归幻影数量 != 0)
+            {
+                var prefab = Resources.Load<Unit>("Prefab/Unit/递归幻影");
+                if (prefab == null)
+                {
+                    Debug.LogError("未找到递归幻影预制：Resources/Prefab/Unit/递归幻影");
+                }
+                else
+                {
+                    foreach (var pos in _currentLevelData.递归幻影位置)
+                    {
+                        var coord = pos;
+                        Utils.Coordinate.Transform(ref coord);
+                        GridManager.Instance.PlaceUnit(coord, prefab);
+                    }
                 }
             }
         }

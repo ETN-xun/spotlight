@@ -33,5 +33,10 @@ namespace Level
         public List<Vector2Int> 乱码爬虫位置 = new ();
         public List<Vector2Int> 死机亡灵位置 = new ();
         public List<Vector2Int> 空指针位置 = new ();
+
+        // Boss：递归幻影
+        public int 初始递归幻影数量;
+        public int 最大递归幻影数量;
+        public List<Vector2Int> 递归幻影位置 = new ();
     }
 }
