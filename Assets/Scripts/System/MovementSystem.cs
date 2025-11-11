@@ -274,7 +274,7 @@ public class MovementSystem : MonoBehaviour
     }
     
     /// <summary>
-    /// 第二关胜利触发：当零移动到最顶行时，直接判定胜利并切换到 GameOver 状态。
+    /// 第二关胜利触发：当零移动到左上角（x最小，y最大）时，直接判定胜利并切换到 GameOver 状态。
     /// </summary>
     private void CheckVictoryAfterMove(Unit unit)
     {
@@ -287,8 +287,10 @@ public class MovementSystem : MonoBehaviour
         if (levelIndex != 2) return;
         // 当前格子必须有效
         if (unit.CurrentCell == null || GridManager.Instance == null) return;
-        int topRowY = GridManager.Instance.rows - 1;
-        if (unit.CurrentCell.Coordinate.y >= topRowY)
+        int targetX = GridManager.Instance.GetMinX();
+        int targetY = GridManager.Instance.GetMaxY();
+        var coord = unit.CurrentCell.Coordinate;
+        if (coord.x == targetX && coord.y == targetY)
         {
             if (GameManager.Instance != null && GameManager.Instance.CurrentGameState != GameState.GameOver)
             {

@@ -21,25 +21,27 @@ public class GameOverState : GameStateBase
         int aliveEnemies = EnemyManager.Instance != null ? EnemyManager.Instance.GetAliveEnemies().Count : 0;
         int aliveAllies = AllyManager.Instance != null ? AllyManager.Instance.GetAliveAllies().Count : 0;
 
-        // 第二关特殊胜利条件：零到达最顶行即胜利；其它关卡沿用原逻辑
+        // 第二关特殊胜利条件：零到达左上角（x最小，y最大）即胜利；其它关卡沿用原逻辑
         int currentLevelIndex = Level.LevelManager.Instance != null
             ? Level.LevelManager.Instance.GetCurrentLevelIndex()
             : -1;
 
         if (currentLevelIndex == 2)
         {
-            bool zeroAtTop = false;
+            bool zeroAtTopLeft = false;
             var allies = AllyManager.Instance != null ? AllyManager.Instance.GetAliveAllies() : null;
             if (allies != null)
             {
                 var zero = allies.Find(a => a.data.unitType == UnitType.Zero);
                 if (zero != null && zero.CurrentCell != null && GridManager.Instance != null)
                 {
-                    int topRowY = GridManager.Instance.rows - 1;
-                    zeroAtTop = zero.CurrentCell.Coordinate.y >= topRowY;
+                    int targetX = GridManager.Instance.GetMinX();
+                    int targetY = GridManager.Instance.GetMaxY();
+                    var coord = zero.CurrentCell.Coordinate;
+                    zeroAtTopLeft = coord.x == targetX && coord.y == targetY;
                 }
             }
-            isVictory = zeroAtTop;
+            isVictory = zeroAtTopLeft;
         }
         else
         {

@@ -360,6 +360,36 @@ public class GridManager : MonoBehaviour
         return Mathf.Abs(a.Coordinate.x - b.Coordinate.x) +
                Mathf.Abs(a.Coordinate.y - b.Coordinate.y);
     }
+
+    /// <summary>
+    /// 获取当前网格的最小 X（最左列）。当网格为空时返回 0。
+    /// </summary>
+    public int GetMinX()
+    {
+        if (_gridDict == null || _gridDict.Count == 0) return 0;
+        int minX = int.MaxValue;
+        foreach (var kvp in _gridDict)
+        {
+            var x = kvp.Key.x;
+            if (x < minX) minX = x;
+        }
+        return minX == int.MaxValue ? 0 : minX;
+    }
+
+    /// <summary>
+    /// 获取当前网格的最大 Y（最顶行）。当网格为空时返回 rows-1。
+    /// </summary>
+    public int GetMaxY()
+    {
+        if (_gridDict == null || _gridDict.Count == 0) return rows - 1;
+        int maxY = int.MinValue;
+        foreach (var kvp in _gridDict)
+        {
+            var y = kvp.Key.y;
+            if (y > maxY) maxY = y;
+        }
+        return maxY == int.MinValue ? rows - 1 : maxY;
+    }
     
     /// <summary>
     /// 手动生成随机地图
