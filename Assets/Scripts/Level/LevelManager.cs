@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 namespace Level
@@ -70,8 +71,8 @@ namespace Level
                 }
             }
             // 兜底：尝试从字符串 ID 解析
-            int parsed;
-            if (int.TryParse(_currentLevel.levelId, out parsed) && parsed > 0)
+            int parsed = ExtractLevelNumber(_currentLevel.levelId);
+            if (parsed > 0)
             {
                 return parsed;
             }
@@ -92,6 +93,20 @@ namespace Level
                 return null;
             }
             return _levels[index - 1];
+        }
+
+        /// <summary>
+        /// 提取关卡 ID 中的数字部分，例如 "level_02" -> 2。
+        /// </summary>
+        private int ExtractLevelNumber(string levelId)
+        {
+            if (string.IsNullOrEmpty(levelId)) return 0;
+            var m = Regex.Match(levelId, "\\d+");
+            if (m.Success && int.TryParse(m.Value, out var num))
+            {
+                return num;
+            }
+            return 0;
         }
     }
 }

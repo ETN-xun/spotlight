@@ -6,6 +6,7 @@ using Action;
 using Scene;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.SceneManagement;
 using View;
 
 public class GameManager : MonoBehaviour
@@ -345,11 +346,76 @@ private void HandleSectionEndEvent(string eventName)
     {
         // 每次真正开始战斗前重置能量，防止继承上一局
         ActionManager.EnergySystem.ResetForNewLevel();
+        // 根据当前关卡选择对应的地图（第二关使用 Grid2，其余默认 Grid）
+        int idx = Level.LevelManager.Instance != null ? Level.LevelManager.Instance.GetCurrentLevelIndex() : 1;
+        string gridName = idx == 2 ? "Grid2" : "Grid";
+        if (GridManager.Instance != null)
+        {
+            bool assigned = GridManager.Instance.TryAssignTilemapsByGridName(gridName);
+            if (!assigned)
+            {
+                // 若指定网格不存在，尝试克隆备用网格并重试绑定
+                if (EnsureGridObjectExists(gridName))
+                {
+                    assigned = GridManager.Instance.TryAssignTilemapsByGridName(gridName);
+                }
+                if (!assigned)
+                {
+                    Debug.LogWarning($"未能按关卡绑定地图 {gridName}，将使用现有 Tilemap 引用");
+                }
+            }
+            if (assigned)
+            {
+                // 仅激活选中的地图，避免两张地图同时可见（支持禁用对象）
+                var targetGO = FindGameObjectIncludingInactive(gridName);
+                if (targetGO != null) targetGO.SetActive(true);
+                var otherGO = FindGameObjectIncludingInactive(gridName == "Grid2" ? "Grid" : "Grid2");
+                if (otherGO != null) otherGO.SetActive(false);
+            }
+        }
         GridManager.Instance.InitGrid();
         EnemyManager.Instance.InitEnemies();
         ViewManager.Instance.OpenView(ViewType.FightView);
         _currentStateInstance?.Enter();
         Debug.Log("000000Game Started");
+    }
+
+    private GameObject FindGameObjectIncludingInactive(string name)
+    {
+        var scene = SceneManager.GetActiveScene();
+        var roots = scene.GetRootGameObjects();
+        foreach (var go in roots)
+        {
+            if (go.name == name) return go;
+            var tList = go.GetComponentsInChildren<Transform>(true);
+            foreach (var t in tList)
+            {
+                if (t.name == name) return t.gameObject;
+            }
+        }
+        return null;
+    }
+
+    // 确保目标网格对象存在：若找不到 targetName，则克隆备用网格并重命名
+    private bool EnsureGridObjectExists(string targetName)
+    {
+        var target = FindGameObjectIncludingInactive(targetName);
+        if (target != null) return true;
+
+        string fallbackName = targetName == "Grid2" ? "Grid" : "Grid2";
+        var source = FindGameObjectIncludingInactive(fallbackName);
+        if (source == null)
+        {
+            Debug.LogWarning($"EnsureGridObjectExists: 未找到备用网格 {fallbackName}，无法克隆为 {targetName}");
+            return false;
+        }
+
+        var clone = Instantiate(source, source.transform.parent);
+        clone.name = targetName;
+        // 默认保持禁用，待 StartGame 激活目标并禁用另一张
+        clone.SetActive(false);
+        Debug.Log($"EnsureGridObjectExists: 通过克隆 {fallbackName} 创建了 {targetName}");
+        return true;
     }
 
 

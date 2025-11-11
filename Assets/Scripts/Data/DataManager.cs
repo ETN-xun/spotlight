@@ -111,12 +111,11 @@ public class DataManager : MonoBehaviour
         // 加载关卡数据
         LevelDataSO[] levelDataArray = Resources.LoadAll<LevelDataSO>(levelDataPath);
         allLevelData = new List<LevelDataSO>(levelDataArray);
-        // 为了保证选关显示与解锁逻辑的一致性，按 levelId 的数字序排序
+        // 为了保证选关显示与解锁逻辑的一致性，按 levelId 的数字序排序（支持如 "level_02"）
         allLevelData.Sort((a, b) =>
         {
-            int ai = 0, bi = 0;
-            int.TryParse(a != null ? a.levelId : "0", out ai);
-            int.TryParse(b != null ? b.levelId : "0", out bi);
+            int ai = ExtractLevelNumber(a != null ? a.levelId : "0");
+            int bi = ExtractLevelNumber(b != null ? b.levelId : "0");
             return ai.CompareTo(bi);
         });
     }
@@ -366,6 +365,20 @@ public class DataManager : MonoBehaviour
             Debug.LogWarning($"未找到ID为 {levelId} 的关卡数据");
         }
         return levelDataSo;
+    }
+    
+    /// <summary>
+    /// 提取关卡 ID 中的数字部分，例如 "level_02" -> 2。
+    /// </summary>
+    private int ExtractLevelNumber(string levelId)
+    {
+        if (string.IsNullOrEmpty(levelId)) return 0;
+        var m = System.Text.RegularExpressions.Regex.Match(levelId, "\\d+");
+        if (m.Success && int.TryParse(m.Value, out var num))
+        {
+            return num;
+        }
+        return 0;
     }
     
 

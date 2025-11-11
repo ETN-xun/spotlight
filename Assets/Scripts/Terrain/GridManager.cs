@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using Ally;
 using Enemy;
 using UnityEngine;
@@ -65,6 +66,107 @@ public class GridManager : MonoBehaviour
             BuildGridFromTilemap();
         else
             GenerateGrid(); 
+    }
+
+    /// <summary>
+    /// 尝试根据场景中指定名称的父对象查找并绑定 Tilemap（例如 "Grid" 或 "Grid2"）。
+    /// </summary>
+    /// <param name="gridRootName">父对象名称</param>
+    /// <returns>是否绑定成功</returns>
+    public bool TryAssignTilemapsByGridName(string gridRootName)
+    {
+        // 支持查找禁用对象：遍历场景根物体与全部子级（包含 inactive）
+        Transform target = null;
+        var scene = SceneManager.GetActiveScene();
+        var roots = scene.GetRootGameObjects();
+        foreach (var go in roots)
+        {
+            if (go.name == gridRootName)
+            {
+                target = go.transform;
+                break;
+            }
+            var t = go.GetComponentsInChildren<Transform>(true);
+            foreach (var child in t)
+            {
+                if (child.name == gridRootName)
+                {
+                    target = child;
+                    break;
+                }
+            }
+            if (target != null) break;
+        }
+
+        if (target == null)
+        {
+            Debug.LogWarning($"未找到名为 {gridRootName} 的网格父对象（包含禁用对象）");
+            return false;
+        }
+        return AssignTilemapsUnder(target);
+    }
+
+    /// <summary>
+    /// 从给定父对象的子层级中自动选择并绑定地形、障碍物、部署区 Tilemap。
+    /// 命名约定：包含 Terrain/Ground/Map 视为地形；包含 Object/Obstacle 视为障碍；包含 Deploy/Deployment 视为部署区。
+    /// 若未匹配到命名，则按出现顺序：第一个作为地形、第二个作为障碍。
+    /// </summary>
+    /// <param name="parent">父对象</param>
+    /// <returns>是否至少绑定了地形 Tilemap</returns>
+    public bool AssignTilemapsUnder(Transform parent)
+    {
+        if (parent == null) return false;
+        var tilemaps = parent.GetComponentsInChildren<Tilemap>(true);
+        if (tilemaps == null || tilemaps.Length == 0)
+        {
+            Debug.LogWarning($"在 {parent.name} 下未找到任何 Tilemap 组件");
+            return false;
+        }
+
+        Tilemap terrain = null;
+        Tilemap objects = null;
+        Tilemap deploy = null;
+
+        foreach (var tm in tilemaps)
+        {
+            var n = tm.name.ToLower();
+            if (terrain == null && (n.Contains("terrain") || n.Contains("ground") || n.Contains("map") || n.Contains("地形") || n.Contains("地图")))
+            {
+                terrain = tm;
+                continue;
+            }
+            if (objects == null && (n.Contains("object") || n.Contains("obstacle") || n.Contains("building") || n.Contains("buildings") || n.Contains("建筑") || n.Contains("障碍")))
+            {
+                objects = tm;
+                continue;
+            }
+            if (deploy == null && (n.Contains("deploy") || n.Contains("deployment") || n.Contains("deployzone") || n.Contains("deploymentzone") || n.Contains("zone") || n.Contains("area") || n.Contains("部署") || n.Contains("可部署")))
+            {
+                deploy = tm;
+                continue;
+            }
+        }
+
+        // Fallback：按出现顺序绑定
+        if (terrain == null)
+        {
+            terrain = tilemaps[0];
+        }
+        if (objects == null && tilemaps.Length > 1)
+        {
+            objects = tilemaps[1];
+        }
+        if (deploy == null && tilemaps.Length > 2)
+        {
+            deploy = tilemaps[2];
+        }
+
+        terrainTilemap = terrain;
+        objectTilemap = objects;
+        deploymentZoneTilemap = deploy;
+
+        Debug.Log($"GridManager: 绑定 Tilemap 成功。Terrain={terrainTilemap?.name}, Objects={objectTilemap?.name}, Deploy={deploymentZoneTilemap?.name}");
+        return terrainTilemap != null;
     }
     
     /// <summary>
