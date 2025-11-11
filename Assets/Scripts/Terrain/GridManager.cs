@@ -390,6 +390,36 @@ public class GridManager : MonoBehaviour
         }
         return maxY == int.MinValue ? rows - 1 : maxY;
     }
+
+    /// <summary>
+    /// 获取当前网格的最大 X（最右列）。当网格为空时返回 cols-1。
+    /// </summary>
+    public int GetMaxX()
+    {
+        if (_gridDict == null || _gridDict.Count == 0) return cols - 1;
+        int maxX = int.MinValue;
+        foreach (var kvp in _gridDict)
+        {
+            var x = kvp.Key.x;
+            if (x > maxX) maxX = x;
+        }
+        return maxX == int.MinValue ? cols - 1 : maxX;
+    }
+
+    /// <summary>
+    /// 获取当前网格的最小 Y（最底行）。当网格为空时返回 0。
+    /// </summary>
+    public int GetMinY()
+    {
+        if (_gridDict == null || _gridDict.Count == 0) return 0;
+        int minY = int.MaxValue;
+        foreach (var kvp in _gridDict)
+        {
+            var y = kvp.Key.y;
+            if (y < minY) minY = y;
+        }
+        return minY == int.MaxValue ? 0 : minY;
+    }
     
     /// <summary>
     /// 手动生成随机地图
