@@ -86,8 +86,28 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
-        // 开始播放剧情
-        StartDialogueChain(demoStartTrigger, level1StartTrigger);
+        // 根据选中的关卡启动对应的开场剧情
+        int levelIndex = 1;
+        var currentLevel = Level.LevelManager.Instance != null ? Level.LevelManager.Instance.GetCurrentLevel() : null;
+        if (currentLevel != null)
+        {
+            int.TryParse(currentLevel.levelId, out levelIndex);
+        }
+        switch (levelIndex)
+        {
+            case 1:
+                StartDialogueChain(demoStartTrigger, level1StartTrigger);
+                break;
+            case 2:
+                StartDialogueChain(level2StartTrigger);
+                break;
+            case 3:
+                StartDialogueChain(level3StartTrigger);
+                break;
+            default:
+                StartDialogueChain(demoStartTrigger, level1StartTrigger);
+                break;
+        }
     }
     private void OnEnable()
     {
@@ -101,16 +121,20 @@ public class GameManager : MonoBehaviour
     
     public void PlayerCompletedLevel(int levelIndex)
     {
+        // 完成关卡后，仅播放该关卡的收束剧情；解锁与返回由剧情事件驱动
         switch (levelIndex)
         {
             case 1:
-                StartDialogueChain(
-                    level1EndTrigger,
-                    level2StartTrigger,
-                    level2EndTrigger,
-                    level3StartTrigger,
-                    level3EndTrigger
-                );
+                StartDialogueChain(level1EndTrigger);
+                break;
+            case 2:
+                StartDialogueChain(level2EndTrigger);
+                break;
+            case 3:
+                StartDialogueChain(level3EndTrigger);
+                break;
+            default:
+                StartDialogueChain(level1EndTrigger);
                 break;
         }
     }
@@ -147,32 +171,53 @@ private void HandleSectionEndEvent(string eventName)
     if (eventName.StartsWith("StartLevel"))
     {
         dialogueChainQueue.Clear();
-        if (eventName == "StartLevel1")
+        if (eventName == "StartLevel1" || eventName == "StartLevel2" || eventName == "StartLevel3")
         {
             StartGame();
         }
-        // 当剧情链切换到玩法，重置“跳过所有剧情”标志
         DialoguePlayer.ResetSkipAll();
     }
     else if (eventName == "ReturnToMenu")
     {
         dialogueChainQueue.Clear();
-        // SceneManager.LoadScene("MainMenu");
         if (sceneTransitionCover != null)
         {
             sceneTransitionCover.SetActive(true);
         }
         SceneLoadManager.Instance.LoadScene(SceneType.MainMenu);
-        // 返回主菜单后，重置“跳过所有剧情”标志
         DialoguePlayer.ResetSkipAll();
     }
-    /*else if (eventName == "EndGame")
+    else if (eventName == "ReturnToLevelSelect" || eventName == "GoToLevelSelect" || eventName == "BackToLevelSelect")
     {
-        PlayerCompletedLevel(1);
-    }*/
+        dialogueChainQueue.Clear();
+        SceneLoadManager.Instance.LoadScene(SceneType.LevelSelect);
+        DialoguePlayer.ResetSkipAll();
+    }
+    else if (eventName.StartsWith("UnlockLevel"))
+    {
+        int target = 0;
+        for (int i = 0; i < eventName.Length; i++)
+        {
+            if (char.IsDigit(eventName[i]))
+            {
+                target = eventName[i] - '0';
+                break;
+            }
+        }
+        if (target > 0)
+        {
+            int current = PlayerPrefs.GetInt("UnlockedLevels", 1);
+            if (target > current)
+            {
+                PlayerPrefs.SetInt("UnlockedLevels", target);
+                PlayerPrefs.Save();
+            }
+        }
+        SceneLoadManager.Instance.LoadScene(SceneType.LevelSelect);
+        DialoguePlayer.ResetSkipAll();
+    }
     else
     {
-        Debug.Log(123456);
         PlayNextInChain();
     }
 }
@@ -248,7 +293,13 @@ private void HandleSectionEndEvent(string eventName)
         // 进入新状态
         if (_currentGameState == GameState.GameOver)
         {
-            PlayerCompletedLevel(1);
+            int levelIndex = 1;
+            var currentLevel = Level.LevelManager.Instance != null ? Level.LevelManager.Instance.GetCurrentLevel() : null;
+            if (currentLevel != null)
+            {
+                int.TryParse(currentLevel.levelId, out levelIndex);
+            }
+            PlayerCompletedLevel(levelIndex);
         }
         _currentStateInstance?.Enter();
         
