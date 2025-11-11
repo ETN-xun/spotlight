@@ -89,12 +89,9 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         // 根据选中的关卡启动对应的开场剧情
-        int levelIndex = 1;
-        var currentLevel = Level.LevelManager.Instance != null ? Level.LevelManager.Instance.GetCurrentLevel() : null;
-        if (currentLevel != null)
-        {
-            int.TryParse(currentLevel.levelId, out levelIndex);
-        }
+        int levelIndex = Level.LevelManager.Instance != null
+            ? Level.LevelManager.Instance.GetCurrentLevelIndex()
+            : 1;
         switch (levelIndex)
         {
             case 1:
@@ -261,12 +258,9 @@ private void HandleSectionEndEvent(string eventName)
         {
             return;
         }
-        int currentLevelIndex = 1;
-        var currentLevel = Level.LevelManager.Instance != null ? Level.LevelManager.Instance.GetCurrentLevel() : null;
-        if (currentLevel != null)
-        {
-            int.TryParse(currentLevel.levelId, out currentLevelIndex);
-        }
+        int currentLevelIndex = Level.LevelManager.Instance != null
+            ? Level.LevelManager.Instance.GetCurrentLevelIndex()
+            : 1;
 
         // 仅当存在下一关时才尝试解锁
         if (currentLevelIndex < 3)

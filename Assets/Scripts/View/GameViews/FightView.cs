@@ -104,12 +104,9 @@ namespace View.GameViews
             // 先关闭部署与战斗视图，避免在剧情期间 UI 残留
             ViewManager.Instance.CloseView(ViewType.DeploymentView);
             ViewManager.Instance.CloseView(ViewType.FightView);
-            int levelIndex = 1;
-            var currentLevel = LevelManager.Instance != null ? LevelManager.Instance.GetCurrentLevel() : null;
-            if (currentLevel != null)
-            {
-                int.TryParse(currentLevel.levelId, out levelIndex);
-            }
+            int levelIndex = LevelManager.Instance != null
+                ? LevelManager.Instance.GetCurrentLevelIndex()
+                : 1;
             GameManager.Instance.ReportGameResult(true);
             GameManager.Instance.PlayerCompletedLevel(levelIndex);
         }

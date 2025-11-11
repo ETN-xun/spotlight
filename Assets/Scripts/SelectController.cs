@@ -52,9 +52,10 @@ public class SelectController : MonoBehaviour
             levelIndex = selected.transform.GetSiblingIndex() + 1;
         }
 
-        // 设置当前关卡数据（依赖 LevelManager/DataManager 单例）
-        var levelId = levelIndex.ToString();
-        var levelData = DataManager.Instance.GetLevelData(levelId);
+        // 设置当前关卡数据（通过列表索引获取）
+        var levelData = Level.LevelManager.Instance != null
+            ? Level.LevelManager.Instance.GetLevelDataByIndex(levelIndex)
+            : null;
         if (levelData != null)
         {
             LevelManager.Instance.SetCurrentLevel(levelData);

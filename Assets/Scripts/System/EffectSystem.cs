@@ -21,6 +21,11 @@ namespace System
                 return;
             }
             Instance = this;
+            // 确保设置为根对象再标记为常驻，避免因父对象卸载导致失效
+            if (transform.parent != null)
+            {
+                transform.SetParent(null);
+            }
             DontDestroyOnLoad(gameObject);
             RegisterConfigs(effectConfigs);
         }

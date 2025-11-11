@@ -111,6 +111,14 @@ public class DataManager : MonoBehaviour
         // 加载关卡数据
         LevelDataSO[] levelDataArray = Resources.LoadAll<LevelDataSO>(levelDataPath);
         allLevelData = new List<LevelDataSO>(levelDataArray);
+        // 为了保证选关显示与解锁逻辑的一致性，按 levelId 的数字序排序
+        allLevelData.Sort((a, b) =>
+        {
+            int ai = 0, bi = 0;
+            int.TryParse(a != null ? a.levelId : "0", out ai);
+            int.TryParse(b != null ? b.levelId : "0", out bi);
+            return ai.CompareTo(bi);
+        });
     }
 
     /// <summary>
@@ -348,14 +356,14 @@ public class DataManager : MonoBehaviour
     {
         if (string.IsNullOrEmpty(levelId))
         {
-            Debug.LogWarning("尝试获取地形数据时传入了空的ID");
+            Debug.LogWarning("尝试获取关卡数据时传入了空的ID");
             return null;
         }
 
         levelDataDict.TryGetValue(levelId, out LevelDataSO levelDataSo);
         if (levelDataSo == null)
         {
-            Debug.LogWarning($"未找到ID为 {levelId} 的地形数据");
+            Debug.LogWarning($"未找到ID为 {levelId} 的关卡数据");
         }
         return levelDataSo;
     }

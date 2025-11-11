@@ -17,13 +17,10 @@ namespace View.GameViews
             GetComponent<Image>().sprite = levelData.previewSprite;
             Find<TextMeshProUGUI>("LevelName").text = $"Level_{levelData.levelId}";
 
-            // 解锁 gating：根据 PlayerPrefs 中的解锁数量决定是否可点击
-            bool isUnlocked = true;
+            // 解锁 gating：根据 PlayerPrefs 中的解锁数量和关卡在列表中的索引决定是否可点击
             int unlocked = PlayerPrefs.GetInt("UnlockedLevels", 1);
-            if (int.TryParse(levelData.levelId, out int idx))
-            {
-                isUnlocked = idx <= unlocked;
-            }
+            int idx = DataManager.Instance.allLevelData.IndexOf(levelData) + 1;
+            bool isUnlocked = idx > 0 && idx <= unlocked;
             var btn = GetComponent<Button>();
             btn.interactable = isUnlocked;
             GetComponent<Button>().onClick.AddListener (() =>
@@ -42,7 +39,8 @@ namespace View.GameViews
         {
             // 保险：若未解锁则不响应
             int unlocked = PlayerPrefs.GetInt("UnlockedLevels", 1);
-            if (int.TryParse(levelData.levelId, out int idx) && idx > unlocked)
+            int idx = DataManager.Instance.allLevelData.IndexOf(levelData) + 1;
+            if (idx > unlocked)
             {
                 return;
             }

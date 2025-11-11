@@ -28,12 +28,9 @@ public class GameOverState : GameStateBase
         // 若胜利则触发收束剧情（用于解锁下一关与返回选关）
         if (isVictory)
         {
-            int levelIndex = 1;
-            var currentLevel = Level.LevelManager.Instance != null ? Level.LevelManager.Instance.GetCurrentLevel() : null;
-            if (currentLevel != null)
-            {
-                int.TryParse(currentLevel.levelId, out levelIndex);
-            }
+            int levelIndex = Level.LevelManager.Instance != null
+                ? Level.LevelManager.Instance.GetCurrentLevelIndex()
+                : 1;
             gameManager.PlayerCompletedLevel(levelIndex);
         }
         

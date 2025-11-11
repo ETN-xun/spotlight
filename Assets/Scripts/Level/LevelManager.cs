@@ -29,6 +29,8 @@ namespace Level
                 return;
             }
             Instance = this;
+            // 缓存所有关卡数据，便于索引查找
+            LoadAllLevelData();
         }
 
         public void SetCurrentLevel(LevelDataSO levelData)
@@ -44,6 +46,52 @@ namespace Level
         private void LoadAllLevelData()
         {
             _levels = DataManager.Instance.allLevelData;
+        }
+
+        /// <summary>
+        /// 获取当前关卡在关卡列表中的 1 基索引（找不到时返回 1）。
+        /// </summary>
+        public int GetCurrentLevelIndex()
+        {
+            if (_currentLevel == null)
+            {
+                return 1;
+            }
+            if (_levels == null || _levels.Count == 0)
+            {
+                LoadAllLevelData();
+            }
+            if (_levels != null && _levels.Count > 0)
+            {
+                int idx = _levels.IndexOf(_currentLevel);
+                if (idx >= 0)
+                {
+                    return idx + 1;
+                }
+            }
+            // 兜底：尝试从字符串 ID 解析
+            int parsed;
+            if (int.TryParse(_currentLevel.levelId, out parsed) && parsed > 0)
+            {
+                return parsed;
+            }
+            return 1;
+        }
+
+        /// <summary>
+        /// 通过 1 基索引获取关卡数据（越界返回 null）。
+        /// </summary>
+        public LevelDataSO GetLevelDataByIndex(int index)
+        {
+            if (_levels == null || _levels.Count == 0)
+            {
+                LoadAllLevelData();
+            }
+            if (index <= 0 || _levels == null || index > _levels.Count)
+            {
+                return null;
+            }
+            return _levels[index - 1];
         }
     }
 }
