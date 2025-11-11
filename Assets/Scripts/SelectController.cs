@@ -10,17 +10,22 @@ using UnityEngine.UI;
 public class SelectController : MonoBehaviour
 {
     private List<Button> _levelButtons = new List<Button>();
+    private readonly List<GraphicRaycaster> _raycasters = new List<GraphicRaycaster>();
 
     private void Start()
     {
-        // 初始化 AppData 解锁存档（默认仅解锁第一关，且从旧 PlayerPrefs 迁移一次）
         UnlockProgressStorage.Initialize();
 
-        // 收集并按层级顺序记录关卡按钮（假设顺序为1/2/3）
         var buttonsRoot = GameObject.Find("Buttons");
         if (buttonsRoot != null)
         {
             _levelButtons.AddRange(buttonsRoot.GetComponentsInChildren<Button>(true));
+        }
+
+        var raycastersInScene = FindObjectsOfType<GraphicRaycaster>();
+        if (raycastersInScene != null && raycastersInScene.Length > 0)
+        {
+            _raycasters.AddRange(raycastersInScene);
         }
 
         ApplyUnlockStateToButtons();
@@ -31,7 +36,6 @@ public class SelectController : MonoBehaviour
         int unlocked = UnlockProgressStorage.LoadUnlockedLevels();
         for (int i = 0; i < _levelButtons.Count; i++)
         {
-            // 第 i+1 关是否解锁
             bool isUnlocked = (i + 1) <= unlocked;
             _levelButtons[i].interactable = isUnlocked;
         }
@@ -39,16 +43,8 @@ public class SelectController : MonoBehaviour
 
     public void ChangeScene()
     {
-        // 根据当前点击的按钮确定关卡索引（1/2/3）
-        int levelIndex = 1;
-        var selected = EventSystem.current != null ? EventSystem.current.currentSelectedGameObject : null;
-        if (selected != null)
-        {
-            // 通过同级序号推断关卡序号（Buttons容器内的顺序与关卡顺序一致）
-            levelIndex = selected.transform.GetSiblingIndex() + 1;
-        }
+        int levelIndex = ResolveClickedLevelIndex();
 
-        // 设置当前关卡数据（通过列表索引获取）
         var levelData = Level.LevelManager.Instance != null
             ? Level.LevelManager.Instance.GetLevelDataByIndex(levelIndex)
             : null;
@@ -57,7 +53,65 @@ public class SelectController : MonoBehaviour
             LevelManager.Instance.SetCurrentLevel(levelData);
         }
 
-        // 进入 Demo 场景，在该场景的 GameManager 中按选择的关卡启动剧情
         SceneLoadManager.Instance.LoadScene(SceneType.Demo);
+    }
+
+    private int ResolveClickedLevelIndex()
+    {
+        GameObject selected = EventSystem.current != null ? EventSystem.current.currentSelectedGameObject : null;
+        Button clickedButton = null;
+        if (selected != null)
+        {
+            clickedButton = selected.GetComponent<Button>() ?? selected.GetComponentInParent<Button>();
+        }
+
+        if (clickedButton == null && EventSystem.current != null)
+        {
+            Vector2 pos;
+            if (Input.touchCount > 0)
+            {
+                pos = Input.GetTouch(0).position;
+            }
+            else
+            {
+                pos = Input.mousePosition;
+            }
+
+            var eventData = new PointerEventData(EventSystem.current)
+            {
+                position = pos
+            };
+
+            var results = new List<RaycastResult>();
+            foreach (var gr in _raycasters)
+            {
+                results.Clear();
+                gr.Raycast(eventData, results);
+                if (results.Count > 0)
+                {
+                    foreach (var r in results)
+                    {
+                        clickedButton = r.gameObject.GetComponent<Button>() ?? r.gameObject.GetComponentInParent<Button>();
+                        if (clickedButton != null)
+                        {
+                            break;
+                        }
+                    }
+                }
+                if (clickedButton != null) break;
+            }
+        }
+
+        if (clickedButton != null)
+        {
+            int idx = _levelButtons.IndexOf(clickedButton);
+            if (idx >= 0)
+            {
+                return idx + 1;
+            }
+            return clickedButton.transform.GetSiblingIndex() + 1;
+        }
+
+        return 1;
     }
 }
