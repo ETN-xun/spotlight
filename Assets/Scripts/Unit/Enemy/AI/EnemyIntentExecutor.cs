@@ -12,13 +12,6 @@ namespace Enemy.AI
             if (intent is not { type: EnemyIntentType.Move }) 
                 yield break;
             
-            if (enemy.data.unitType == UnitType.NullPointer)        // Special case for NullPointer: only highlight target cell
-            {
-                GridManager.Instance.Highlight(true, intent.moveTargetCell.Coordinate);
-                yield return new WaitForSeconds(0.5f);
-                yield break;
-            }
-            
             if (intent.movePath is null || intent.movePath.Count == 0)
                 yield break;
 
@@ -84,12 +77,6 @@ namespace Enemy.AI
             if (intent is not { type: EnemyIntentType.Move }) 
                 yield break;
             
-            if (enemy.data.unitType == UnitType.NullPointer)
-            {
-                MovementSystem.Instance.TryMoveToCell(enemy, intent.moveTargetCell);
-                yield break;
-            }
-            
             if (intent.movePath == null || intent.movePath.Count == 0)
                 yield break;
 
@@ -146,14 +133,15 @@ namespace Enemy.AI
                     yield break;
 
                 case EnemyIntentType.Move:
-                    if (enemy.data.unitType == UnitType.NullPointer)
+                    if (intent.movePath != null && intent.movePath.Count > 0)
+                    {
+                        foreach (var pathCell in intent.movePath)
+                            GridManager.Instance.Highlight(true, pathCell.Coordinate);
+                    }
+                    else if (intent.moveTargetCell != null)
                     {
                         GridManager.Instance.Highlight(true, intent.moveTargetCell.Coordinate);
-                        yield return new WaitForSeconds(0.5f);
-                        break;
                     }
-                    foreach (var pathCell in intent.movePath)
-                        GridManager.Instance.Highlight(true, pathCell.Coordinate);
 
                     yield return new WaitForSeconds(0.5f);
                     break;

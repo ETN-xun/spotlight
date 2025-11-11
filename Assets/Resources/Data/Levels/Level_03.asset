@@ -16,8 +16,8 @@ MonoBehaviour:
   previewSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   levelTarget: "\u51FB\u8D25\u201C\u8BD7\u4EBA\u201D"
   maxEnergy: 10
-  baseEnergy: 0
-  energyPerTurn: 0
+  baseEnergy: 6
+  energyPerTurn: 4
   allyUnits:
   - {fileID: 3075829042547491733, guid: 53a0b888cc7f949ca9898801204b9bbe, type: 3}
   - {fileID: 5430961850942367142, guid: 6856d873129fe4824b6b6e9073b898fc, type: 3}

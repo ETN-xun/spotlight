@@ -322,6 +322,8 @@ private void HandleSectionEndEvent(string eventName)
         _currentTurn = 1;
         // 重置能量系统，确保重新进入关卡时从初始能量开始
         ActionManager.EnergySystem.ResetForNewLevel();
+        // 立即读取一次以触发初始化与 UI 更新（发布能量变更事件）
+        _ = ActionManager.EnergySystem.GetCurrentEnergy();
         
         // 初始化状态实例
         InitializeStates();
@@ -346,6 +348,8 @@ private void HandleSectionEndEvent(string eventName)
     {
         // 每次真正开始战斗前重置能量，防止继承上一局
         ActionManager.EnergySystem.ResetForNewLevel();
+        // 立即读取一次以触发初始化与 UI 更新（发布能量变更事件）
+        _ = ActionManager.EnergySystem.GetCurrentEnergy();
         // 根据当前关卡选择对应的地图（第二关使用 Grid2，第三关使用 Grid3）
         int idx = Level.LevelManager.Instance != null ? Level.LevelManager.Instance.GetCurrentLevelIndex() : 1;
         string gridName = idx == 3 ? "Grid3" : (idx == 2 ? "Grid2" : "Grid");
