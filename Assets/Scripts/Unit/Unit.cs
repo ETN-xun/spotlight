@@ -27,6 +27,22 @@ public class Unit : MonoBehaviour
     /// 状态效果管理器
     /// </summary>
     public StatusEffectManager StatusEffectManager { get; private set; }
+    
+    /// <summary>
+    /// 递归幻影无敌判定：场上存在除自身外的其他敌方单位时，无敌
+    /// </summary>
+    /// <returns>是否处于无敌状态</returns>
+    private bool IsRecursivePhantomInvincible()
+    {
+        if (!data.isEnemy) return false;
+        if (data.unitType != UnitType.RecursivePhantom) return false;
+
+        var enemyMgr = Enemy.EnemyManager.Instance;
+        if (enemyMgr == null) return false;
+
+        var othersAlive = enemyMgr.GetAliveEnemies().Any(u => u != null && u != this && u.currentHP > 0);
+        return othersAlive;
+    }
 
     public void Update()
     {
@@ -169,6 +185,13 @@ public class Unit : MonoBehaviour
     {
         if (currentHP<=0) return;
 
+        // 递归幻影：场上仍有其他敌方单位时，免疫伤害
+        if (IsRecursivePhantomInvincible())
+        {
+            Debug.Log($"{data.unitName} 当前无敌：场上还有其他敌方单位，伤害无效");
+            return;
+        }
+
         // 检查是否是友方非虚影角色
         if (!data.isEnemy && GetComponent<FlashbackCopyTag>() == null)
         {
@@ -220,6 +243,12 @@ public class Unit : MonoBehaviour
     /// </summary>
     public void SetToZeroHP()
     {
+        // 递归幻影：场上仍有其他敌方单位时，免疫秒杀效果
+        if (IsRecursivePhantomInvincible())
+        {
+            Debug.Log($"{data.unitName} 当前无敌：场上还有其他敌方单位，秒杀无效");
+            return;
+        }
         currentHP = 0;
         data.Hits = 0;
         MessageCenter.Publish(Defines.UnitTakeDamageEvent, data.unitID);
