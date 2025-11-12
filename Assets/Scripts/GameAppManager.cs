@@ -29,6 +29,8 @@ public class GameAppManager : MonoBehaviour
             return;
         }
         DontDestroyOnLoad(gameObject);
+        // 提前初始化数据管理器，确保关卡数据在任何场景/按钮点击前已就绪
+        DataManager.Instance.InitializeData();
         // 进入游戏时初始化 AppData 存档：若不存在则创建（只解锁第一关），并进行一次迁移
         UnlockProgressStorage.Initialize();
     }

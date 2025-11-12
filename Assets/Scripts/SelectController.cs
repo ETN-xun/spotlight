@@ -11,6 +11,7 @@ public class SelectController : MonoBehaviour
 {
     private List<Button> _levelButtons = new List<Button>();
     private readonly List<GraphicRaycaster> _raycasters = new List<GraphicRaycaster>();
+    private GraphicRaycaster _primaryRaycaster;
 
     private void Start()
     {
@@ -20,6 +21,7 @@ public class SelectController : MonoBehaviour
         if (buttonsRoot != null)
         {
             _levelButtons.AddRange(buttonsRoot.GetComponentsInChildren<Button>(true));
+            _primaryRaycaster = buttonsRoot.GetComponentInParent<GraphicRaycaster>();
         }
 
         var raycastersInScene = FindObjectsOfType<GraphicRaycaster>();
@@ -48,6 +50,16 @@ public class SelectController : MonoBehaviour
         var levelData = Level.LevelManager.Instance != null
             ? Level.LevelManager.Instance.GetLevelDataByIndex(levelIndex)
             : null;
+        // 构建版偶现：若数据尚未初始化导致取不到关卡数据，强制初始化一次再重试
+        if (levelData == null)
+        {
+            var dm = DataManager.Instance;
+            if (dm != null)
+            {
+                dm.InitializeData();
+                levelData = LevelManager.Instance.GetLevelDataByIndex(levelIndex);
+            }
+        }
         if (levelData != null)
         {
             LevelManager.Instance.SetCurrentLevel(levelData);
@@ -83,22 +95,39 @@ public class SelectController : MonoBehaviour
             };
 
             var results = new List<RaycastResult>();
-            foreach (var gr in _raycasters)
+            if (_primaryRaycaster != null)
             {
-                results.Clear();
-                gr.Raycast(eventData, results);
-                if (results.Count > 0)
+                _primaryRaycaster.Raycast(eventData, results);
+                for (int i = 0; i < results.Count; i++)
                 {
-                    foreach (var r in results)
+                    var r = results[i];
+                    clickedButton = r.gameObject.GetComponent<Button>() ?? r.gameObject.GetComponentInParent<Button>();
+                    if (clickedButton != null)
                     {
-                        clickedButton = r.gameObject.GetComponent<Button>() ?? r.gameObject.GetComponentInParent<Button>();
-                        if (clickedButton != null)
-                        {
-                            break;
-                        }
+                        break;
                     }
                 }
-                if (clickedButton != null) break;
+            }
+            // 兜底：若主画布未找到按钮，尝试其他 GraphicRaycaster（与旧逻辑一致）
+            if (clickedButton == null)
+            {
+                foreach (var gr in _raycasters)
+                {
+                    results.Clear();
+                    gr.Raycast(eventData, results);
+                    if (results.Count > 0)
+                    {
+                        foreach (var r in results)
+                        {
+                            clickedButton = r.gameObject.GetComponent<Button>() ?? r.gameObject.GetComponentInParent<Button>();
+                            if (clickedButton != null)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    if (clickedButton != null) break;
+                }
             }
         }
 

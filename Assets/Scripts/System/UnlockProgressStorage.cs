@@ -15,7 +15,8 @@ public static class UnlockProgressStorage
     /// </summary>
     public static void Initialize()
     {
-        MigrateFromPlayerPrefsIfNeeded();
+        // 需求修正：默认始终从 1 开始，避免受到旧 PlayerPrefs 的影响
+        // 若文件不存在则直接写入 1；不再进行自动迁移。
         if (!File.Exists(FilePath))
         {
             SaveUnlockedLevels(1);
