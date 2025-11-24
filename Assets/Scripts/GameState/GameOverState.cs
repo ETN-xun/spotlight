@@ -13,63 +13,57 @@ public class GameOverState : GameStateBase
     {
     }
     
-    public override void Enter()
+public override void Enter()
+{
+    base.Enter();
+
+    int aliveEnemies = EnemyManager.Instance != null ? EnemyManager.Instance.GetAliveEnemies().Count : 0;
+    int aliveAllies = AllyManager.Instance != null ? AllyManager.Instance.GetAliveAllies().Count : 0;
+
+    int currentLevelIndex = Level.LevelManager.Instance != null
+        ? Level.LevelManager.Instance.GetCurrentLevelIndex()
+        : -1;
+
+    if (currentLevelIndex == 2)
     {
-        base.Enter();
-        
-        // 判断胜负
-        int aliveEnemies = EnemyManager.Instance != null ? EnemyManager.Instance.GetAliveEnemies().Count : 0;
-        int aliveAllies = AllyManager.Instance != null ? AllyManager.Instance.GetAliveAllies().Count : 0;
-
-        // 第二关特殊胜利条件：零到达右下角（x最大，y最小）即胜利；其它关卡沿用原逻辑
-        int currentLevelIndex = Level.LevelManager.Instance != null
-            ? Level.LevelManager.Instance.GetCurrentLevelIndex()
-            : -1;
-
-        if (currentLevelIndex == 2)
+        bool zeroAtBottomRight = false;
+        var allies = AllyManager.Instance != null ? AllyManager.Instance.GetAliveAllies() : null;
+        if (allies != null)
         {
-            bool zeroAtBottomRight = false;
-            var allies = AllyManager.Instance != null ? AllyManager.Instance.GetAliveAllies() : null;
-            if (allies != null)
+            var zero = allies.Find(a => a.data.unitType == UnitType.Zero);
+            if (zero != null && zero.CurrentCell != null && GridManager.Instance != null)
             {
-                var zero = allies.Find(a => a.data.unitType == UnitType.Zero);
-                if (zero != null && zero.CurrentCell != null && GridManager.Instance != null)
-                {
-                    int targetX = GridManager.Instance.GetMaxX();
-                    int targetY = GridManager.Instance.GetMinY();
-                    var coord = zero.CurrentCell.Coordinate;
-                    zeroAtBottomRight = coord.x == targetX && coord.y == targetY;
-                }
+                int targetX = GridManager.Instance.GetMaxX();
+                int targetY = GridManager.Instance.GetMinY();
+                var coord = zero.CurrentCell.Coordinate;
+                zeroAtBottomRight = coord.x == targetX && coord.y == targetY;
             }
-            isVictory = zeroAtBottomRight;
         }
-        else
-        {
-            isVictory = aliveEnemies == 0 && aliveAllies > 0;
-        }
-        
-        // 将结果汇报给 GameManager，用于后续剧情与解锁逻辑
-        gameManager.ReportGameResult(isVictory);
-        
-        // 若胜利则触发收束剧情（用于解锁下一关与返回选关）
-        if (isVictory)
-        {
-            int levelIndex = Level.LevelManager.Instance != null
-                ? Level.LevelManager.Instance.GetCurrentLevelIndex()
-                : 1;
-            gameManager.PlayerCompletedLevel(levelIndex);
-        }
-        
-        // 显示游戏结束UI
-        ShowGameOverUI();
-        
-        // 停止游戏时间
-        //Time.timeScale = 0f;
-        
-        //GameManager.Instance.PlayerCompletedLevel(1);
-        
-        Debug.Log($"游戏结束 - {(isVictory ? "胜利" : "失败")}");
+        isVictory = zeroAtBottomRight;
     }
+    else
+    {
+        isVictory = aliveEnemies == 0 && aliveAllies > 0;
+    }
+
+    gameManager.ReportGameResult(isVictory);
+
+    if (!isVictory)
+    {
+        Scene.SceneLoadManager.Instance.LoadScene(Scene.SceneType.LevelSelect);
+        Debug.Log("游戏结束 - 失败，返回选关界面");
+        return;
+    }
+
+    int levelIndex = Level.LevelManager.Instance != null
+        ? Level.LevelManager.Instance.GetCurrentLevelIndex()
+        : 1;
+    gameManager.PlayerCompletedLevel(levelIndex);
+
+    ShowGameOverUI();
+
+    Debug.Log("游戏结束 - 胜利");
+}
     
     public override void Update()
     {

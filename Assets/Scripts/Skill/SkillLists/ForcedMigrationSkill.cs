@@ -9,55 +9,48 @@ public class ForcedMigrationSkill : Skill
 {
     public ForcedMigrationSkill(SkillDataSO data, Unit caster) : base(data, caster) {}
 
-    public override void Execute(GridCell targetCell, GridManager gridManager)
+public override void Execute(GridCell targetCell, GridManager gridManager)
+{
+    if (targetCell == null || caster == null || caster.CurrentCell == null)
     {
-        if (targetCell == null || caster == null || caster.CurrentCell == null)
+        Debug.LogWarning("强制迁移技能：目标或施法者无效");
+        return;
+    }
+
+    var target = targetCell.CurrentUnit;
+    if (target == null)
+    {
+        Debug.LogWarning("强制迁移技能：目标格子没有单位");
+        return;
+    }
+
+    if (!CanTargetUnit(target))
+    {
+        Debug.LogWarning("强制迁移技能：不可对该目标使用");
+        return;
+    }
+
+    var originalCasterCell = caster.CurrentCell;
+    var casterPos = originalCasterCell.Coordinate;
+    var targetPos = targetCell.Coordinate;
+
+    var awayDir = NormalizeDirection(casterPos - targetPos);
+    var backPos = casterPos + awayDir;
+
+    bool backStepSucceeded = false;
+    GridCell backCell = null;
+    if (gridManager.IsValidPosition(backPos))
+    {
+        backCell = gridManager.GetCell(backPos);
+        if (backCell != null && backCell.CurrentUnit == null && backCell.DestructibleObject == null && backCell.ObjectOnCell == null)
         {
-            Debug.LogWarning("强制迁移技能：目标格子或施法者无效");
-            return;
+            caster.MoveTo(backCell);
+            backStepSucceeded = true;
         }
+    }
 
-        Unit target = targetCell.CurrentUnit;
-        if (target == null)
-        {
-            Debug.LogWarning("强制迁移技能：目标位置没有单位");
-            return;
-        }
-
-        // 验证目标是否为敌方（输入流程已做范围校验，这里做类型校验）
-        if (!CanTargetUnit(target))
-        {
-            Debug.LogWarning("强制迁移技能：目标不合法（非敌方或不可选）");
-            return;
-        }
-
-        Vector2Int casterPos = caster.CurrentCell.Coordinate;
-        Vector2Int targetPos = targetCell.Coordinate;
-
-        // 记录施法者原位置
-        GridCell originalCasterCell = caster.CurrentCell;
-
-        // 计算施法者后退方向（远离目标）
-        Vector2Int awayDir = NormalizeDirection(casterPos - targetPos);
-        Vector2Int backPos = casterPos + awayDir;
-
-        // 检查后退位置有效且可进入
-        if (!gridManager.IsValidPosition(backPos))
-        {
-            Debug.Log("强制迁移技能：后退失败，目标位置越界");
-            return;
-        }
-        GridCell backCell = gridManager.GetCell(backPos);
-        if (backCell == null || backCell.CurrentUnit != null || backCell.DestructibleObject != null)
-        {
-            Debug.Log("强制迁移技能：后退失败，目标格被占用或有建筑");
-            return;
-        }
-
-        // 施法者后退一格
-        caster.MoveTo(backCell);
-
-        // 将敌方单位移动到施法者原位置
+    if (backStepSucceeded)
+    {
         if (originalCasterCell != null && originalCasterCell.CurrentUnit == null)
         {
             var oldTargetCell = target.CurrentCell;
@@ -69,14 +62,30 @@ public class ForcedMigrationSkill : Skill
         {
             Debug.LogWarning("强制迁移技能：施法者原位置不可用，迁移失败");
         }
-
-        // 如果技能配置中有额外伤害，造成伤害
-        if (data.baseDamage > 0)
+    }
+    else
+    {
+        var preferredDir = NormalizeDirection(casterPos - targetPos);
+        var pullCell = FindNearestAvailableCellAround(casterPos, gridManager, preferredDir);
+        if (pullCell != null)
         {
-            target.TakeDamage(data.baseDamage);
-            Debug.Log($"强制迁移对 {target.data.unitName} 造成 {data.baseDamage} 点伤害");
+            var oldTargetCell = target.CurrentCell;
+            target.MoveTo(pullCell);
+            PlayForcedMigrationEffect(oldTargetCell, pullCell);
+            Debug.Log($"强制迁移技能：后退失败，改为将目标拉到距施法者最近格子 ({pullCell.Coordinate.x}, {pullCell.Coordinate.y})");
+        }
+        else
+        {
+            Debug.LogWarning("强制迁移技能：周围无可用格子，无法拉近");
         }
     }
+
+    if (data.baseDamage > 0)
+    {
+        target.TakeDamage(data.baseDamage);
+        Debug.Log($"强制迁移对 {target.data.unitName} 造成 {data.baseDamage} 点伤害");
+    }
+}
 
     /// <summary>
     /// 执行强制迁移效果
@@ -164,6 +173,36 @@ public class ForcedMigrationSkill : Skill
         
         return new Vector2Int(x, y);
     }
+
+private GridCell FindNearestAvailableCellAround(Vector2Int center, GridManager gridManager, Vector2Int preferredDirection)
+{
+    int maxRadius = Mathf.Max(gridManager.rows, gridManager.cols);
+    for (int d = 1; d <= maxRadius; d++)
+    {
+        var prefPos = center + preferredDirection * d;
+        if (gridManager.IsValidPosition(prefPos))
+        {
+            var cell = gridManager.GetCell(prefPos);
+            if (cell != null && cell.CurrentUnit == null && cell.DestructibleObject == null && cell.ObjectOnCell == null)
+                return cell;
+        }
+        for (int dx = -d; dx <= d; dx++)
+        {
+            for (int dy = -d; dy <= d; dy++)
+            {
+                if (Mathf.Abs(dx) + Mathf.Abs(dy) != d) continue;
+                var pos = center + new Vector2Int(dx, dy);
+                if (pos == prefPos) continue;
+                if (!gridManager.IsValidPosition(pos)) continue;
+                var c = gridManager.GetCell(pos);
+                if (c != null && c.CurrentUnit == null && c.DestructibleObject == null && c.ObjectOnCell == null)
+                    return c;
+            }
+        }
+    }
+    return null;
+}
+
 
     /// <summary>
     /// 播放强制迁移效果

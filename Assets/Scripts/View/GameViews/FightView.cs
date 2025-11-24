@@ -32,12 +32,18 @@ namespace View.GameViews
         // 引导提示文本组件（阶段提示）
         private TextMeshProUGUI hintText;
         // 技能悬停提示文本组件
-        private TextMeshProUGUI skillText;
+        private TextMeshProUGUI level2TipText;
+private Image level2TipBackground;
+private Button level2TipCloseButton;
+private TextMeshProUGUI skillText;
         
         // 淡入淡出效果相关
         private Coroutine stageTextFadeCoroutine;
         private Coroutine hintTextFadeCoroutine;
-        private const float fadeInDuration = 0.3f;
+        private bool level2HintActive;
+private Coroutine level2HintCoroutine;
+private const float level2HintDuration = 30f;
+private const float fadeInDuration = 0.3f;
         private const float fadeOutDuration = 0.2f;
         
         protected override void InitView()
@@ -94,7 +100,10 @@ namespace View.GameViews
             // 初始化提示文本组件
             hintText = Find<TextMeshProUGUI>("Background/HintText");
             skillText = Find<TextMeshProUGUI>("Background/SkillText");
-            UpdateHintText(GameManager.Instance.CurrentGameState);
+level2TipText = Find<TextMeshProUGUI>("Background/第二关提示");
+if (level2TipText == null) level2TipText = Find<TextMeshProUGUI>("第二关提示");
+            ShowLevel2HintIfApplicable();
+UpdateHintText(GameManager.Instance.CurrentGameState);
             
             // InitializeOverloadModeButton();
         }
@@ -419,19 +428,15 @@ namespace View.GameViews
         /// 更新引导提示文本（HintText），根据不同阶段显示不同内容
         /// </summary>
         /// <param name="gameState">当前游戏阶段</param>
-        private void UpdateHintText(GameState gameState)
-        {
-            if (hintText == null) return;
-
-            // 若已有淡入淡出协程，先停止
-            if (hintTextFadeCoroutine != null)
-            {
-                StopCoroutine(hintTextFadeCoroutine);
-            }
-
-            // 启动淡入淡出效果
-            hintTextFadeCoroutine = StartCoroutine(FadeHintText(gameState));
-        }
+private void UpdateHintText(GameState gameState)
+{
+    if (hintText == null) return;
+    if (hintTextFadeCoroutine != null)
+    {
+        StopCoroutine(hintTextFadeCoroutine);
+    }
+    hintTextFadeCoroutine = StartCoroutine(FadeHintText(gameState));
+}
 
         /// <summary>
         /// 引导提示文本淡入淡出效果协程
@@ -551,5 +556,89 @@ namespace View.GameViews
 
             return string.Empty;
         }
+    
+
+private IEnumerator Level2HintRoutine()
+{
+    level2HintActive = true;
+    level2TipText.gameObject.SetActive(true);
+    level2TipText.alpha = 1f;
+    var color = level2TipText.color;
+    level2TipText.color = new Color(color.r, color.g, color.b, 1f);
+    if (level2TipBackground != null) level2TipBackground.gameObject.SetActive(true);
+    float elapsed = 0f;
+    while (elapsed < level2HintDuration)
+    {
+        elapsed += Time.deltaTime;
+        yield return null;
     }
+    level2TipText.gameObject.SetActive(false);
+    if (level2TipBackground != null) level2TipBackground.gameObject.SetActive(false);
+    level2HintActive = false;
+}
+
+
+private void ShowLevel2HintIfApplicable()
+{
+    int levelIndex = LevelManager.Instance != null ? LevelManager.Instance.GetCurrentLevelIndex() : 1;
+    if (level2TipText == null)
+    {
+        level2TipText = Find<TextMeshProUGUI>("Background/第二关提示");
+        if (level2TipText == null) level2TipText = Find<TextMeshProUGUI>("第二关提示");
+    }
+    if (level2TipBackground == null)
+    {
+        level2TipBackground = Find<Image>("Background/第二关提示背景");
+        if (level2TipBackground == null) level2TipBackground = Find<Image>("第二关提示背景");
+    }
+    if (level2TipCloseButton == null)
+    {
+        level2TipCloseButton = Find<Button>("Background/第二关提示关闭按钮");
+        if (level2TipCloseButton == null) level2TipCloseButton = Find<Button>("第二关提示关闭按钮");
+    }
+
+    if (levelIndex != 2)
+    {
+        if (level2TipText != null) level2TipText.gameObject.SetActive(false);
+        if (level2TipBackground != null) level2TipBackground.gameObject.SetActive(false);
+        if (level2TipCloseButton != null) level2TipCloseButton.gameObject.SetActive(false);
+        return;
+    }
+
+    if (level2TipText == null) return;
+
+    level2TipText.gameObject.SetActive(true);
+    var c = level2TipText.color;
+    level2TipText.color = new Color(c.r, c.g, c.b, 1f);
+    #if TMP_PRESENT
+    level2TipText.alpha = 1f;
+    #endif
+    var cg = level2TipText.GetComponent<CanvasGroup>();
+    if (cg != null) cg.alpha = 1f;
+
+    if (level2TipBackground != null) level2TipBackground.gameObject.SetActive(true);
+    if (level2TipCloseButton != null) level2TipCloseButton.gameObject.SetActive(true);
+
+    level2HintActive = true;
+    // 不再启动30秒协程，提示保持显示，直到用户操作关闭
+}
+
+
+private void EnsureLevel2TipBackground()
+{
+    if (level2TipText == null) return;
+    if (level2TipBackground != null) return;
+    var go = new GameObject("第二关提示底");
+    go.transform.SetParent(level2TipText.transform, false);
+    level2TipBackground = go.AddComponent<Image>();
+    level2TipBackground.color = new Color(0f, 0f, 0f, 0.5f);
+    level2TipBackground.raycastTarget = false;
+    var bgRt = level2TipBackground.rectTransform;
+    bgRt.anchorMin = new Vector2(0f, 0f);
+    bgRt.anchorMax = new Vector2(1f, 1f);
+    bgRt.offsetMin = new Vector2(-8f, -4f);
+    bgRt.offsetMax = new Vector2(8f, 4f);
+    go.transform.SetAsFirstSibling();
+}
+}
 }
