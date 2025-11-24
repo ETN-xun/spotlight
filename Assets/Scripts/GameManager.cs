@@ -391,7 +391,8 @@ private void HandleSectionEndEvent(string eventName)
         }
         GridManager.Instance.InitGrid();
         EnemyManager.Instance.InitEnemies();
-        ViewManager.Instance.OpenView(ViewType.FightView);
+        Sound.SoundManager.Instance?.PlayBattleBGM();
+ViewManager.Instance.OpenView(ViewType.FightView);
         _currentStateInstance?.Enter();
         Debug.Log("000000Game Started");
     }

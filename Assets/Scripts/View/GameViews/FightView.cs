@@ -103,6 +103,7 @@ private const float fadeInDuration = 0.3f;
 level2TipText = Find<TextMeshProUGUI>("Background/第二关提示");
 if (level2TipText == null) level2TipText = Find<TextMeshProUGUI>("第二关提示");
             ShowLevel2HintIfApplicable();
+Sound.SoundManager.Instance?.PlayBattleBGM();
 UpdateHintText(GameManager.Instance.CurrentGameState);
             
             // InitializeOverloadModeButton();
@@ -121,20 +122,21 @@ UpdateHintText(GameManager.Instance.CurrentGameState);
             GameManager.Instance.PlayerCompletedLevel(levelIndex);
         }
 
-        public override void Close(params object[] args)
-        {
-            base.Close();
-            Debug.Log("Close");
-            MessageCenter.Unsubscribe(Defines.EnergyChangedEvent, OnEnergyChanged);
-            MessageCenter.Unsubscribe(Defines.UnitTakeDamageEvent, OnUnitTakeDamage);
-            MessageCenter.Unsubscribe(Defines.SkillHoverEnterEvent, OnSkillHoverEnter);
-            MessageCenter.Unsubscribe(Defines.SkillHoverExitEvent, OnSkillHoverExit);
-            Find<Button>("Background/Settings_Btn").onClick.RemoveListener(OnClickSettingsButton);
-            Find<Button>("Background/EndTurn_Btn").onClick.RemoveListener(OnClickEndTurnButton);
-            Find<Button>("Background/PopupSettings/ContineGame").onClick.RemoveListener(OnClickContinueGameButton);
-            Find<Button>("Background/PopupSettings/SkipFight").onClick.RemoveListener(OnClickSkipFightButton);
-            Find<Button>("Background/PopupSettings/ReturnMainMenu").onClick.RemoveListener(OnClickReturnMainMenuButton);
-        }
+public override void Close(params object[] args)
+{
+    base.Close();
+    Sound.SoundManager.Instance?.PlayInGameBGM();
+    Debug.Log("Close");
+    MessageCenter.Unsubscribe(Defines.EnergyChangedEvent, OnEnergyChanged);
+    MessageCenter.Unsubscribe(Defines.UnitTakeDamageEvent, OnUnitTakeDamage);
+    MessageCenter.Unsubscribe(Defines.SkillHoverEnterEvent, OnSkillHoverEnter);
+    MessageCenter.Unsubscribe(Defines.SkillHoverExitEvent, OnSkillHoverExit);
+    Find<Button>("Background/Settings_Btn").onClick.RemoveListener(OnClickSettingsButton);
+    Find<Button>("Background/EndTurn_Btn").onClick.RemoveListener(OnClickEndTurnButton);
+    Find<Button>("Background/PopupSettings/ContineGame").onClick.RemoveListener(OnClickContinueGameButton);
+    Find<Button>("Background/PopupSettings/SkipFight").onClick.RemoveListener(OnClickSkipFightButton);
+    Find<Button>("Background/PopupSettings/ReturnMainMenu").onClick.RemoveListener(OnClickReturnMainMenuButton);
+}
         
         private void OnClickContinueGameButton()
         {

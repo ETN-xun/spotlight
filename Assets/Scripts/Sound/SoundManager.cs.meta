@@ -3,7 +3,11 @@ guid: 4986c39dea2c445c6b324896f590ee2a
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - bgmPlayer: {instanceID: 0}
+  - inGameBGM: {fileID: 8300000, guid: 3ac7e8d34b54b457b8218b02771831f5, type: 3}
+  - battleBGM: {fileID: 8300000, guid: 86782554bffbb4daf9030dcc6117d118, type: 3}
+  - sfxPlayer: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

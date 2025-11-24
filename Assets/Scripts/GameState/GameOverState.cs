@@ -46,7 +46,8 @@ public override void Enter()
         isVictory = aliveEnemies == 0 && aliveAllies > 0;
     }
 
-    gameManager.ReportGameResult(isVictory);
+    Sound.SoundManager.Instance?.PlayInGameBGM();
+gameManager.ReportGameResult(isVictory);
 
     if (!isVictory)
     {
